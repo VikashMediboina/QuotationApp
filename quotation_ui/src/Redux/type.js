@@ -1,0 +1,17 @@
+//Genric
+
+export const SET_ALERT="SET_ALERT"
+export const CLEAR_ALERT="CLEAR_ALERT"
+export const SET_MODAL_ALERT="SET_MODAL_ALERT"
+export const CLEAR_MODAL_ALERT="CLEAR_MODAL_ALERT"
+export const LOAD_DATA="LOAD_DATA"
+export const STOP_LOAD_DATA="STOP_LOAD_DATA"
+export const LOAD_MODAL_DATA="LOAD_MODAL_DATA"
+export const STOP_LOAD_MODAL_DATA="STOP_LOAD_MODAL_DATA"
+
+
+export const SET_TOKEN="SET_TOKEN" 
+export const RECEVIED="RECEVIED"
+
+
+
