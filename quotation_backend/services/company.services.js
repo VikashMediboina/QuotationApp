@@ -41,13 +41,8 @@ const update_company_service = (body) => new Promise((resolve, reject) => {
     return pool.query(`UPDATE company_dtl SET "company_code"=$1 , "company_name"=$2,"location"=$3,"updated_by"=$4,"updated_date"=$5 WHERE "company_id" = $6`,
     [ body.company_code, body.company_name, body.location, body.updated_by, body.updated_date,body.company_id],)
     .then((results) => {
-
         console.log(results)
-        
-
             resolve("Update SucessFully")
-
-      
     }).catch(err => {
         console.log(err)
         reject( err)
