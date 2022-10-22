@@ -1,20 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./Components/Dashboard/Dashboard";
-import Error from "./Components/Error/Error";
-import AddCustomer from "./Components/Forms/Customer/AddCustomer";
-import ViewCustomer from "./Components/Forms/Customer/ViewCustomer";
-import AddQuotation from "./Components/Forms/Qutoations/AddQuotation";
-import ViewQuotation from "./Components/Forms/Qutoations/ViewQuotation";
-import Reports from "./Components/Forms/Reports/Reports";
-import Login from "./Components/Login/Login";
-import AddEmployee from "./Components/Master/Employees/AddEmployee";
-import ViewEmployee from "./Components/Master/Employees/ViewEmployee";
-import AddItems from "./Components/Master/Items/AddItems";
-import ViewItems from "./Components/Master/Items/ViewItems";
-import AddLineItems from "./Components/Master/LineItems/AddLineItems";
-import ViewLineItems from "./Components/Master/LineItems/ViewLineItems";
-import AddMainItems from "./Components/Master/MainItems/AddMainItems";
-import ViewMainItems from "./Components/Master/MainItems/ViewMainItems";
+import Dashboard from "./Components1/Dashboard/Dashboard";
+import Error from "./Components1/Error/Error";
+import AddCustomer from "./pages/Forms/Customer/AddCustomer";
+import ViewCustomer from "./pages/Forms/Customer/ViewCustomer";
+import AddQuotation from "./pages/Forms/Qutoations/AddQuotation";
+import ViewQuotation from "./pages/Forms/Qutoations/ViewQuotation";
+import Reports from "./pages/Forms/Reports/Reports";
+import Login from "./Components1/Login/Login";
+import AddEmployee from "./pages/Master/Employees/AddEmployee";
+import ViewEmployee from "./pages/Master/Employees/ViewEmployee";
+import AddItems from "./pages/Master/Catogeries/AddCatogeries";
+import ViewItems from "./pages/Master/Catogeries/ViewCatogeries";
+import AddLineItems from "./pages/Master/LineItems/AddLineItems";
+import ViewLineItems from "./pages/Master/LineItems/ViewLineItems";
+import AddMainItems from "./pages/Master/MainItems/AddMainItems";
+import ViewMainItems from "./pages/Master/MainItems/ViewMainItems";
 
 
 export default function QUotationRouter() {
