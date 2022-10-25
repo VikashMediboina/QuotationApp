@@ -285,6 +285,23 @@ const create_catogeries=`CREATE TABLE catogeries (
 )`;
 
 
+const create_customer=`
+CREATE TABLE customer (
+	customer_id numeric NOT NULL,
+	address_id  NUMERIC Not null,
+	customer_name varchar(250) NULL,
+	customer_email varchar(150) NOT NULL,
+    customer_phone_number varchar(12) NOT NULL,
+    customer_alt_phone_number varchar(12) NULL,
+	inserted_by varchar(50) NULL,
+	inserted_date timestamp NULL,
+	updated_by varchar(50) NULL,
+	updated_date timestamp NULL,
+	CONSTRAINT customer_pk PRIMARY KEY (customer_id),
+	CONSTRAINT cust_comp_fk FOREIGN KEY (address_id) REFERENCES address(address_id)
+)
+`
+
 
 
 module.exports={

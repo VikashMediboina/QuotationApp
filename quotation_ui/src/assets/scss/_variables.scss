@@ -23,7 +23,7 @@ $sidebar-dark-menu-item-icon-color: #6a7187;
 $sidebar-dark-menu-item-hover-color: #ffffff;
 $sidebar-dark-menu-item-active-color: #ffffff;
 
-$bg-gradient: linear-gradient(to right, #273c92, #293e92);
+$bg-gradient: linear-gradient(to right, #982d2d, #9a2f2d);
 
 // Topbar - Deafult Light
 $header-height: 70px;
@@ -118,7 +118,7 @@ $yellow: #eeb902;
 $green: #45cb85;
 $teal: #050505;
 $cyan: #0caadc;
-
+$coustom:#DF4646;
 $colors: ();
 // stylelint-disable-next-line scss/dollar-variable-default
 $colors: map-merge(
@@ -136,11 +136,12 @@ $colors: map-merge(
     "white": $white,
     "gray": $gray-600,
     "gray-dark": $gray-800,
+    "custom":$coustom
   ),
   $colors
 );
 
-$primary: $blue;
+$primary: $coustom;
 $secondary: $gray-600;
 $success: $green;
 $info: $cyan;

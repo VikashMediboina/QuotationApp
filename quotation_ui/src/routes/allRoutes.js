@@ -30,6 +30,8 @@ import AddLineItems from "../pages/Master/LineItems/AddLineItems"
 import ViewLineItems from "../pages/Master/LineItems/ViewLineItems"
 import ViewMainItems from "../pages/Master/MainItems/ViewMainItems"
 import AddMainItems from "../pages/Master/MainItems/AddMainItems"
+import ViewCompany from "../pages/Master/Company/ViewCompany"
+import AddCompany from "../pages/Master/Company/AddCompany"
 
 
 const userRoutes = [
@@ -56,7 +58,8 @@ const userRoutes = [
   { path: "/viewLineItems", component: ViewLineItems },
   { path: "/viewMainItems", component: ViewMainItems },
   { path: "/addMainItems", component: AddMainItems },
-
+  { path: "/viewCompany", component: ViewCompany },
+  { path: "/addCompany", component: AddCompany },
   
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

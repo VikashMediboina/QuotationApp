@@ -102,7 +102,7 @@ const SidebarContent = props => {
               <ul className="sub-menu">
                 <li><Link to="/viewQuotation">{props.t("Quotation")}</Link></li>
                 <li><Link to="/addQuotation">{props.t("Add New Quotation")}</Link></li>
-                <li><Link to="/addCustomer">{props.t("Add Customer")}</Link></li>
+                <li><Link to="/viewCustomer">{props.t("Customers")}</Link></li>
                 <li><Link to="/reports">{props.t("Reports")}</Link></li>
               </ul>
             </li>
@@ -117,6 +117,7 @@ const SidebarContent = props => {
                 <li><Link to="/viewLineItems">{props.t("Line Items")}</Link></li>
                 <li><Link to="/viewCatogeries">{props.t("Catogeries")}</Link></li>
                 <li><Link to="/viewEmployee">{props.t("Employees")}</Link></li>
+                <li><Link to="/viewCompany">{props.t("Company")}</Link></li>
               </ul>
             </li>
             

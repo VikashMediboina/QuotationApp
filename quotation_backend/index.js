@@ -9,11 +9,12 @@ const user_router = require("./routes/user")
 const errorHandler = require("./middleware/error_handler")
 const { validationErrorMiddleware } = require("./middleware/validation_error_handler")
 const { cache_details } = require("./constants/cache_details")
+const customer_router = require("./routes/customer")
 
 
 const app=express()
 app.use(bodyParser.json())
-
+// app.use(cors)
 app.get("/",(req,res,next)=>{
     res.send("This is Test Page")
 })
@@ -25,6 +26,7 @@ app.use('/lineitems/',line_router)
 app.use('/catgories/',catgories_router)
 app.use('/quotation/',quotation_router)
 app.use('/company/',company_router)
+app.use('/customer/',customer_router)
 
 
 app.get("/cache",(req,res,next)=>{
