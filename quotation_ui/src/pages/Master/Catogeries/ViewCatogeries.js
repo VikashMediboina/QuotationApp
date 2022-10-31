@@ -1,103 +1,134 @@
 
-import { MDBDataTable } from "mdbreact"
-import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap"
-import React from "react"
+import React, { useState } from "react"
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
+import TableCard from "../../../components/InsideComponents/TableCard"
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from "reactstrap"
+import AddCatogeries from "./AddCatogeries"
 
 const ViewCatogeries = () => {
- 
+  const [modal, setmodal] = useState(false)
+  const [formType, setFormType] = useState("Add")
+ const  [defaultval,setDefaultVal]=useState({})
 	 const data = {
     columns: [
       {
-        label: "Name",
-        field: "name",
+        label: "Id",
+        field: "company_id",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Position",
-        field: "position",
+        label: "Company Code",
+        field: "company_code",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Office",
-        field: "office",
+        label: "Company Name",
+        field: "company_name",
         sort: "asc",
         width: 200,
       },
       {
-        label: "Age",
-        field: "age",
-        sort: "asc",
-        width: 100,
-      },
-      {
-        label: "Start date",
-        field: "date",
+        label: "Location",
+        field: "location",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Salary",
-        field: "salary",
+        label: "Action",
+        field: "action",
         sort: "asc",
-        width: 100,
-      },
+        width: 250
+      }
     ],
     rows: [
       {
-        name: "Tiger Nixon",
-        position: "System Architect",
-        office: "Edinburgh",
-        age: "61",
-        date: "2011/04/25",
-        salary: "$320",
+        company_id: "Tiger Nixon",
+        company_code: "System Architect",
+        company_name: "Edinburgh",
+        location: "61",
       },
       {
-        name: "Garrett Winters",
-        position: "Accountant",
-        office: "Tokyo",
-        age: "63",
-        date: "2011/07/25",
-        salary: "$170",
+        company_id: "Tiger Nixon",
+        company_code: "System Architect",
+        company_name: "Edinburgh",
+        location: "61",
       },
       {
-        name: "Ashton Cox",
-        position: "Junior Technical Author",
-        office: "San Francisco",
-        age: "66",
-        date: "2009/01/12",
-        salary: "$86",
-      }, 
+        company_id: "Tiger Nixon",
+        company_code: "System Architect",
+        company_name: "Edinburgh",
+        location: "61",
+      }
 
     ],
   }
-	
+	const onAddButton=()=>{
+    console.log("fwefewf")
+    setDefaultVal({})
+    setFormType("Add")
+    setmodal(!modal)
+  }
+  const onEditButton=(row)=>{
+    console.log("fwefewf",row)
+    setDefaultVal(row)
+    setFormType("Edit")
+    setmodal(!modal)
+  }
 	
   return (
     <React.Fragment>
       <div className="page-content">
 
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Pages" breadcrumbItem="View Employee" />
-			
-        <Row>
-          <Col className="col-12">
-            <Card>
-              <CardBody>
-                <CardTitle>Category</CardTitle>
-                <CardSubtitle className="mb-3">
-                   
-                  </CardSubtitle>
+          <Breadcrumbs title="Pages" breadcrumbItem="View Categories" />
 
-                <MDBDataTable responsive striped bordered data={data} />
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
+
+          <TableCard 
+          data={data} 
+          addButton={"Add Category Details"} 
+          tittle={'Company Details'} 
+          onAddButton={onAddButton}
+          editIcon={true}
+          deleteIcon={true}
+          onEditButton={onEditButton}
+          />
+			
+
+
+          <Modal
+                  size="lg"
+                  isOpen={modal}
+                  toggle={() => {
+                    setmodal(!modal)
+                  }}
+                >
+                  <ModalHeader
+                    toggle={() => {
+                      setmodal(!modal)
+                    }}
+                    className="h4 mt-0 mb-4"
+                  >
+                    Add Category
+                    </ModalHeader>
+                  <ModalBody>
+                   <AddCatogeries formType={formType} defaultval={defaultval}/>
+                  </ModalBody>
+                </Modal>
       </div>
     </React.Fragment>
   )

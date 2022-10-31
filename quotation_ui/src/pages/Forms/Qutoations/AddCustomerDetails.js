@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
     Card,
@@ -6,18 +6,64 @@ import {
     Col,
     Form,
     Input,
+    Label,
     NavItem,
     NavLink,
     Row,
     TabContent,
     TabPane
   } from "reactstrap"
-  
+  import Select from "react-select";
+import { customers } from '../../../Constonts/dummy';
+
 export default function AddCustomerDetails() {
+  const [selectedGroup, setselectedGroup] = useState(null);
+  const [customerGroup, setcustomerGroup] = useState(null);
+  const handleSelectGroup=(selectedGroup)=> {
+    console.log(selectedGroup)
+    setselectedGroup(selectedGroup);
+  }
+  useEffect(()=>{
+    let custgrup=customers.values.map((customer,index)=>{
+        return{
+            ...customer,
+            label:customer.customer_name,
+            value:customer.customer_id
+        }
+    })
+    setcustomerGroup(custgrup)
+
+  },[])
+  const optionGroup = [
+    {
+      label: "Customers",
+      options: [
+        { label: "Mustard", value: "Mustard" },
+        { label: "Ketchup", value: "Ketchup" },
+        { label: "Relish", value: "Relish" },
+      ],
+    }];
   return (
     <Form>
-
+        
     <Row>
+      <Col>
+
+      <Row className="mb-3">
+
+                    <Label>Customer</Label>
+                    <Select
+                      value={selectedGroup}
+                      onChange={
+                        handleSelectGroup
+                      }
+                      options={customerGroup}
+                      classNamePrefix="select2-selection"
+                    />
+                  </Row>
+        </Col>
+        {/* </Row>
+        <Row> */}
       <Col md={6}>
         <Row className="mb-3">
           <label htmlFor="txtFirstNameBilling"

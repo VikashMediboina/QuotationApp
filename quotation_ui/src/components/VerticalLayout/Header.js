@@ -126,15 +126,15 @@ const Header = (props) => {
                   <i className="mdi mdi-fullscreen"></i>
                 </button>
               </Dropdown>{" "}
-              <NotificationDropdown /> <ProfileMenu />{" "}
+          
               <button
                 type="button"
                 className="btn header-item noti-icon right-bar-toggle waves-effect"
-                onClick={() => {
-                  props.showRightSidebarAction(!props.showRightSidebar);
-                }}
               >
-                <i className="mdi mdi-settings-outline"></i>
+                 <Link to="/logout" className="dropdown-item ">
+            <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>{" "}
+            <span>{props.t("Logout")}</span>
+          </Link>
               </button>
             </div>
             <div>
