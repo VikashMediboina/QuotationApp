@@ -1,13 +1,13 @@
 
 const catgories_create_schema = {
 	type: "object",
-	required: ["catogerie_title", "catgories_desc","inserted_by"],
+	required: ["catogerie_title", "catogerie_desc","inserted_by"],
 	properties: {
 		catogerie_title: {
 			type: "string",
 			minLength: 1,
 		},
-		catgories_desc: {
+		catogerie_desc: {
 			type: "string",
 			minLength: 1,
 		},
@@ -22,13 +22,13 @@ const catgories_create_schema = {
 
 const catgories_update_schema = {
 	type: "object",
-	required: ["catogerie_title", "catgories_desc","location","updated_by"],
+	required: ["catogerie_title", "catogerie_desc","updated_by"],
 	properties: {
 		catogerie_title: {
 			type: "string",
 			minLength: 1,
 		},
-		catgories_desc: {
+		catogerie_desc: {
 			type: "string",
 			minLength: 1,
 		},

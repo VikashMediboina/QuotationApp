@@ -1,7 +1,7 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
-  host: 'quotationdb.ccavjtmuk034.us-east-1.rds.amazonaws.com',
+  host: 'localhost',
   port: 5432,
   password:"12345678",
   database:"QuotationDB"
