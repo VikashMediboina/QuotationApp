@@ -18,9 +18,15 @@ import { Link } from "react-router-dom"
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 import AddCustomerDetails from "./AddCustomerDetails"
+import Invoice from "./invoice"
+import AddDetails from "./AddDetails"
 
 const AddQuotation = () => {
   const [activeTab, setactiveTab] = useState(1)
+  const [selectedcustGroup, setselectedcustGroup] = useState(null);
+  const [selectedempGroup, setselectedempGroup] = useState(null);
+  const [projectAdd, setprojectAdd] = useState("");
+  const [items,setItems]=useState([])
 
   function toggleTab(tab) {
     if (activeTab !== tab) {
@@ -79,100 +85,19 @@ const AddQuotation = () => {
                       className="body"
                     >
                       <TabPane tabId={1}>
-                      <AddCustomerDetails/>
+                      <AddCustomerDetails projectAdd={projectAdd} setprojectAdd={setprojectAdd} selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} />
                       </TabPane>
                       <TabPane tabId={2}>
 
-                        <Form>
-                          <Row>
-                            <Col md={6}>
-                              <Row className="mb-3">
-                                <label htmlFor="txtFirstNameShipping"
-                                  className="col-lg-3 col-form-label">PAN Card</label>
-                                <div className="col-lg-9">
-                                  <Input id="txtFirstNameShipping" name="txtFirstNameShipping"
-                                    type="text" className="form-control" />
-                                </div>
-                              </Row>
-                            </Col>
-                            <Col md={6}>
-                              <Row className="mb-3">
-                                <label htmlFor="txtLastNameShipping"
-                                  className="col-lg-3 col-form-label">VAT/TIN No.</label>
-                                <div className="col-lg-9">
-                                  <Input id="txtLastNameShipping" name="txtLastNameShipping"
-                                    type="text" className="form-control" />
-                                </div>
-                              </Row>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col md={6}>
-                              <Row className="mb-3">
-                                <label htmlFor="txtCompanyShipping" className="col-lg-3 col-form-label">CST
-                                                        No.</label>
-                                <div className="col-lg-9">
-                                  <Input id="txtCompanyShipping" name="txtCompanyShipping"
-                                    type="text" className="form-control" />
-                                </div>
-                              </Row>
-                            </Col>
-                            <Col md={6}>
-                              <Row className="mb-3">
-                                <label htmlFor="txtEmailAddressShipping"
-                                  className="col-lg-3 col-form-label">Service Tax No.</label>
-                                <div className="col-lg-9">
-                                  <Input id="txtEmailAddressShipping"
-                                    name="txtEmailAddressShipping" type="text"
-                                    className="form-control" />
-                                </div>
-                              </Row>
-                            </Col>
-                          </Row>
-
-                          <Row>
-                            <Col md={6}>
-                              <Row className="mb-3">
-                                <label htmlFor="txtCityShipping" className="col-lg-3 col-form-label">Company
-                                                        UIN</label>
-                                <div className="col-lg-9">
-                                  <Input id="txtCityShipping" name="txtCityShipping" type="text"
-                                    className="form-control" />
-                                </div>
-                              </Row>
-                            </Col>
-                            <Col md={6}>
-                              <Row className="mb-3">
-                                <label htmlFor="txtStateProvinceShipping"
-                                  className="col-lg-3 col-form-label">Declaration</label>
-                                <div className="col-lg-9">
-                                  <Input id="txtStateProvinceShipping"
-                                    name="txtStateProvinceShipping" type="text"
-                                    className="form-control" />
-                                </div>
-                              </Row>
-                            </Col>
-                          </Row>
-                        </Form>
+                       <AddDetails  projectAdd={projectAdd} setprojectAdd={setprojectAdd} selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup}  />
                       </TabPane>
                      
                       <TabPane tabId={3}>
-                        <div className="row justify-content-center">
-                          <Col lg="6">
-                            <div className="text-center">
-                              <div className="mb-4">
-                                <i className="mdi mdi-check-circle-outline text-success display-4" />
-                              </div>
-                              <div>
-                                <h5>Confirm Detail</h5>
-                                <p className="text-muted">
-                                  If several languages coalesce, the grammar of
-                                  the resulting
-                                </p>
-                              </div>
-                            </div>
-                          </Col>
-                        </div>
+                      <AddDetails projectAdd={projectAdd} setprojectAdd={setprojectAdd} selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} confirmDetails={activeTab===3}/>
+                      {/* <Invoice/> */}
                       </TabPane>
                     </TabContent>
                   </div>

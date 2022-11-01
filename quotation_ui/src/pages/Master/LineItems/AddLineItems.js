@@ -26,10 +26,10 @@ useEffect(()=>{
     
       
         <div className="mb-3">
-          <label htmlFor="company_code">Enter Title</label>
+          <label htmlFor="lineitem_code">Enter Title</label>
           <input
             type="text"
-            defaultValue={defalutValues?.line_title}
+            defaultValue={defalutValues?.lineitem_title}
             className="form-control"
             id="line_title"
             placeholder="Enter Title"
@@ -37,20 +37,20 @@ useEffect(()=>{
         </div>
      
         <div className="mb-3">
-          <label htmlFor="company_name">Enter Description</label>
+          <label htmlFor="lineitem_name">Enter Description</label>
           <input
             type="text"
-            defaultValue={defalutValues?.line_description}
+            defaultValue={defalutValues?.lineitem_description}
             className="form-control"
             id="line_description"
             placeholder="Enter Description"
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="company_name">Enter Unit Price</label>
+          <label htmlFor="lineitem_name">Enter Unit Price</label>
           <input
             type="text"
-            defaultValue={defalutValues?.line_price}
+            defaultValue={defalutValues?.lineitem_price}
             className="form-control"
             id="line_price"
             placeholder="Enter Unit Price"

@@ -26,27 +26,26 @@ const ViewLineItems = () => {
     columns: [
       {
         label: "Id",
-        field: "company_id",
+        field: "lineitem_id",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Company Code",
-        field: "company_code",
+        label: "Title",
+        field: "lineitem_title",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Company Name",
-        field: "company_name",
+        label: "Description",
+        field: "lineitem_description",
         sort: "asc",
         width: 200,
-      },
-      {
-        label: "Location",
-        field: "location",
+      }, {
+        label: "Price",
+        field: "lineitem_price",
         sort: "asc",
-        width: 150,
+        width: 250
       },
       {
         label: "Action",
@@ -57,23 +56,25 @@ const ViewLineItems = () => {
     ],
     rows: [
       {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
+        lineitem_id: "kitchen",
+        lineitem_title: "kitchen line1 ",
+        lineitem_description: "kitchen line1  description",
+        lineitem_price:"$5000",
         location: "61",
       },
-      {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
+       {
+        lineitem_id: "kitchen",
+        lineitem_title: "kitchen line2 ",
+        lineitem_description: "kitchen line2  description",
+        lineitem_price:"$5000",
+        location: "61",
+      }, {
+        lineitem_id: "kitchen",
+        lineitem_title: "kitchen line3",
+        lineitem_description: "kitchen line3  description",
+        lineitem_price:"$5000",
         location: "61",
       },
-      {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
-        location: "61",
-      }
 
     ],
   }

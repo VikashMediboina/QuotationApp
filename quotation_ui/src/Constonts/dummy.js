@@ -21,6 +21,7 @@ export const customers=
                 "city": "Sechendrabad",
                 "state": "Telngana",
                 "country": "IN",
+                "pincode":561129,
                 "start_date": null,
                 "stop_date": null
             },
@@ -31,6 +32,59 @@ export const customers=
                 "customer_email": "Rochana@gmail.com",
                 "customer_phone_number": "9495969798",
                 "customer_alt_phone_number": "9495969798",
+                "inserted_by": "inserted_by",
+                "inserted_date": "2022-10-25T05:06:56.301Z",
+                "updated_by": null,
+                "updated_date": null,
+                "address_type": null,
+                "address_category": null,
+                "category_key": null,
+                "address_1": "rochana ltd",
+                "address_2": "",
+                "address_3": "",
+                "city": "Hyderabad",
+                "state": "Telengana",
+                "country": "IN",
+                "pincode":563329,
+                "start_date": null,
+                "stop_date": null
+            }
+        ]
+    }
+
+export const employes=
+    {
+        "values": [
+            {
+                "emp_id": "0",
+                "address_id": "27",
+                "employee_name": "Sales_person_1",
+                "employee_email": "sales@gmail.com",
+                "employee_phone_number": "9192939495",
+                "employee_alt_phone_number": "9192939495",
+                "inserted_by": "inserted_by1",
+                "inserted_date": "2022-10-25T05:06:37.826Z",
+                "updated_by": null,
+                "updated_date": null,
+                "address_type": null,
+                "address_category": null,
+                "category_key": null,
+                "address_1": "Door no-4",
+                "address_2": "oop appolo medical store",
+                "address_3": "nagaram",
+                "city": "Sechendrabad",
+                "state": "Telngana",
+                "country": "IN",
+                "start_date": null,
+                "stop_date": null
+            },
+            {
+                "employee_id": "1",
+                "address_id": "28",
+                "employee_name": "sales_person_2",
+                "employee_email": "sales_person_2@gmail.com",
+                "employee_phone_number": "9495969798",
+                "employee_alt_phone_number": "9495969798",
                 "inserted_by": "inserted_by",
                 "inserted_date": "2022-10-25T05:06:56.301Z",
                 "updated_by": null,

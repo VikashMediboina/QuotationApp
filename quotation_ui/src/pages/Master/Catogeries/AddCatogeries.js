@@ -26,23 +26,23 @@ useEffect(()=>{
     
       
         <div className="mb-3">
-          <label htmlFor="company_code">Enter Category Name</label>
+          <label htmlFor="category_code">Enter Category Name</label>
           <input
             type="text"
-            defaultValue={defalutValues?.company_code}
+            defaultValue={defalutValues?.category_code}
             className="form-control"
-            id="company_code"
+            id="category_code"
             placeholder="Enter Category Code"
           />
         </div>
      
         <div className="mb-3">
-          <label htmlFor="company_name">Enter Category Description</label>
+          <label htmlFor="category_name">Enter Category Description</label>
           <input
             type="text"
-            defaultValue={defalutValues?.company_name}
+            defaultValue={defalutValues?.category_name}
             className="form-control"
-            id="company_name"
+            id="category_name"
             placeholder="Enter Category Name"
           />
         </div>

@@ -29,9 +29,9 @@ useEffect(()=>{
           <label htmlFor="company_code">Enter Title</label>
           <input
             type="text"
-            defaultValue={defalutValues?.main_title}
+            defaultValue={defalutValues?.mainitem_title}
             className="form-control"
-            id="main_title"
+            id="mainitem_title"
             placeholder="Enter Title"
           />
         </div>
@@ -40,9 +40,9 @@ useEffect(()=>{
           <label htmlFor="company_name">Enter Description</label>
           <input
             type="text"
-            defaultValue={defalutValues?.main_description}
+            defaultValue={defalutValues?.mainitem_description}
             className="form-control"
-            id="main_description"
+            id="mainitem_description"
             placeholder="Enter Description"
           />
         </div>
@@ -50,9 +50,9 @@ useEffect(()=>{
           <label htmlFor="company_name">Enter Unit Price</label>
           <input
             type="text"
-            defaultValue={defalutValues?.main_price}
+            defaultValue={defalutValues?.mainitem_price}
             className="form-control"
-            id="main_price"
+            id="mainitem_price"
             placeholder="Enter Unit Price"
           />
         </div>

@@ -26,19 +26,19 @@ const ViewCatogeries = () => {
     columns: [
       {
         label: "Id",
-        field: "company_id",
+        field: "category_id",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Company Code",
-        field: "company_code",
+        label: "category Code",
+        field: "category_code",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Company Name",
-        field: "company_name",
+        label: "category Name",
+        field: "category_name",
         sort: "asc",
         width: 200,
       },
@@ -57,21 +57,21 @@ const ViewCatogeries = () => {
     ],
     rows: [
       {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
+        category_id: "Tiger Nixon",
+        category_code: "System Architect",
+        category_name: "Edinburgh",
         location: "61",
       },
       {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
+        category_id: "Tiger Nixon",
+        category_code: "System Architect",
+        category_name: "Edinburgh",
         location: "61",
       },
       {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
+        category_id: "Tiger Nixon",
+        category_code: "System Architect",
+        category_name: "Edinburgh",
         location: "61",
       }
 
@@ -101,7 +101,7 @@ const ViewCatogeries = () => {
           <TableCard 
           data={data} 
           addButton={"Add Category Details"} 
-          tittle={'Company Details'} 
+          tittle={'category Details'} 
           onAddButton={onAddButton}
           editIcon={true}
           deleteIcon={true}

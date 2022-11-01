@@ -20,33 +20,32 @@ import AddMainItems from "./AddMainItems"
 
 const ViewMainItems = () => {
   const [modal, setmodal] = useState(false)
-  const [formType, setFormType] = useState("Add")
- const  [defaultval,setDefaultVal]=useState({})
-	 const data = {
+  const [formType, setFormType] = useState("Add");
+ const  [defaultval,setDefaultVal]=useState({});
+     const data = {
     columns: [
       {
         label: "Id",
-        field: "company_id",
+        field: "mainitem_id",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Company Code",
-        field: "company_code",
+        label: "Title",
+        field: "mainitem_title",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Company Name",
-        field: "company_name",
+        label: "Description",
+        field: "mainitem_description",
         sort: "asc",
         width: 200,
-      },
-      {
-        label: "Location",
-        field: "location",
+      }, {
+        label: "Price",
+        field: "mainitem_price",
         sort: "asc",
-        width: 150,
+        width: 250
       },
       {
         label: "Action",
@@ -57,23 +56,25 @@ const ViewMainItems = () => {
     ],
     rows: [
       {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
+        mainitem_id: "kitchen",
+        mainitem_title: "kitchen main1 ",
+        mainitem_description: "kitchen main1  description",
+        mainitem_price:"$5000",
         location: "61",
       },
-      {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
+       {
+        mainitem_id: "kitchen",
+        mainitem_title: "kitchen line2 ",
+        mainitem_description: "kitchen main2  description",
+        mainitem_price:"$5000",
+        location: "61",
+      }, {
+        mainitem_id: "kitchen",
+        mainitem_title: "kitchen main3 ",
+        mainitem_description: "kitchen main3  description",
+        mainitem_price:"$5000",
         location: "61",
       },
-      {
-        company_id: "Tiger Nixon",
-        company_code: "System Architect",
-        company_name: "Edinburgh",
-        location: "61",
-      }
 
     ],
   }
