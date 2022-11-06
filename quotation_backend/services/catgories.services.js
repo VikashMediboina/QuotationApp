@@ -13,7 +13,7 @@ pool.query("SELECT catogerie_id from catogeries ORDER BY catogerie_id DESC LIMIT
         VALUES ($1, $2,$3,$4,$5)`,
         [new_cat_id, body.catogerie_title, body.catogerie_desc, body.inserted_by, body.inserted_date],
     ).then((val) => {
-       resolve({add_id:new_cat_id})
+       resolve("Inserted Sucessfully")
     }).catch(err => {
         console.log(err)
         reject(err)

@@ -16,6 +16,7 @@ import NonAuthLayout from "./components/NonAuthLayout"
 // Import scss
 import "./assets/scss/theme.scss"
 import VerticalLayout from './components/VerticalLayout'
+import Alerts from './pages/Utility/Alerts'
 
 
 
@@ -31,7 +32,7 @@ const App = props => {
   return (
     <React.Fragment>
       <Router>
-
+    <Alerts/>
         <Switch>
         {authRoutes.map((route, idx) => (
             <Authmiddleware

@@ -1,8 +1,8 @@
-import { LOAD_DATA, STOP_LOAD_DATA, CLEAR_ALERT, SET_ALERT, CLEAR_MODAL_ALERT, SET_MODAL_ALERT, LOAD_MODAL_DATA, STOP_LOAD_MODAL_DATA } from '../type'
+import { LOAD_DATA, STOP_LOAD_DATA, CLEAR_ALERT, SET_ALERT, CLEAR_MODAL_ALERT, SET_MODAL_ALERT, LOAD_MODAL_DATA, STOP_LOAD_MODAL_DATA, SET_CACHEL_DETAILS } from '../type'
 
 
 
-export const genricReducer = (state = { lodding: false }, action) => {
+export const genricReducer = (state = { lodding: false,alertDetails:{},cacheDetails:{} }, action) => {
     switch (action.type) {
         case LOAD_DATA: {
             return { ...state, lodding: true }
@@ -28,6 +28,10 @@ export const genricReducer = (state = { lodding: false }, action) => {
         case CLEAR_MODAL_ALERT: {
             return { ...state, modalAlertDetails: action.modalAlertDetails }
         }
+        case SET_CACHEL_DETAILS: {
+            return { ...state, cacheDetails: action.cacheDetails }
+        }
+        
         default: return state
     }
 }

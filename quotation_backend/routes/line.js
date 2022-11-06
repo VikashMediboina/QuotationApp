@@ -64,7 +64,7 @@ line_router.put("/update/:id",validate({ body: line_item_update_schema }),(req,r
     update_line_item_service(request_body)
         .then(values=>{
             // console.log(values)
-            res.status(200).json({'values':values})
+            res.status(200).json({'msg':values})
         })
         .catch(err=>{
         next(err)

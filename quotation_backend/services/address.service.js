@@ -25,7 +25,7 @@ pool.query("SELECT address_id from address ORDER BY address_id DESC LIMIT 1").th
     const update_address_service = (body) => new Promise((resolve, reject) => {
 
         return pool.query(`UPDATE address SET "address_1"=$1 , "address_2"=$2,"address_3"=$3,"city"=$4 , "state"=$5,"country"=$6,"updated_by"=$7,"updated_date"=$8 WHERE "address_id" = $9`,
-        [ body.address_1, body.address_2, body.address_3, body.city, body.state, body.country, body.inserted_by, body.inserted_date,body.address_id],
+        [ body.address_1, body.address_2, body.address_3, body.city, body.state, body.country, body.updated_by, body.updated_date,body.address_id],
         )
         .then((results) => {
             console.log(results)

@@ -1,19 +1,28 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { Route, Redirect } from "react-router-dom"
+import { connect } from "react-redux"
 
 const Authmiddleware = ({
   component: Component,
   layout: Layout,
   isAuthProtected,
+  login,
   ...rest
-}) => (
+}) => {
+  const [loginState, setLogin]=useState({})
+  useEffect(()=>{
+    console.log(login)
+    setLogin(login)
+  },[login])
+  return(
   <Route
     // {...rest}
     
     render={props => {
 
-      if (isAuthProtected && !localStorage.getItem("authUser")) {
+      if (isAuthProtected && !loginState) {
+    console.log(loginState)
         return (
           <Redirect
             to={{ pathname: "/login", state: { from: props.location } }}
@@ -29,7 +38,7 @@ const Authmiddleware = ({
       )
     }}
   />
-)
+)}
 
 Authmiddleware.propTypes = {
   isAuthProtected: PropTypes.bool,
@@ -37,5 +46,10 @@ Authmiddleware.propTypes = {
   location: PropTypes.object,
   layout: PropTypes.any,
 }
+const mapStateToProps = state => {
+  // console.log(state.Login.login)
+const { login } = state?.Login
+  return {login}
+}
 
-export default Authmiddleware
+export default connect(mapStateToProps)(Authmiddleware)

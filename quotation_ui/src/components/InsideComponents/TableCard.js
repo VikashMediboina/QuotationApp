@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { MDBDataTable } from "mdbreact"
 import { Row, Col, Card, CardBody, CardTitle, CardSubtitle,Button } from "reactstrap"
 
-function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEditButton}) {
+function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEditButton,onDeleteButton}) {
     const [newData,setNewData]=useState({})
     useEffect(()=>{
         if(data.rows){
@@ -16,7 +16,7 @@ function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEdit
                 {/* <> */}
                 <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                 </button>}{" "}
-                {deleteIcon&&<button  className="btn ">
+                {deleteIcon&&<button  className="btn " onClick={()=>onDeleteButton(row)}>
                 <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
                 </button>}
                     </>

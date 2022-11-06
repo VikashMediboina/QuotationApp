@@ -8,6 +8,8 @@ import Login from "./auth/login/reducer"
 import Account from "./auth/register/reducer"
 import ForgetPassword from "./auth/forgetpwd/reducer"
 import Profile from "./auth/profile/reducer"
+import genricReducer from "./genric/genricReducer"
+
 
 const rootReducer = combineReducers({
   // public
@@ -15,7 +17,9 @@ const rootReducer = combineReducers({
   Login,
   Account,
   ForgetPassword,
-  Profile
+  Profile,
+  genricReducer,
+
 })
 
 export default rootReducer

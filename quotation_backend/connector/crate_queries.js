@@ -1,4 +1,5 @@
 // -- Database: QuotationDB
+// CREATE EXTENSION pgcrypto;
 
 const drop_QuotationDB='DROP DATABASE IF EXISTS "QuotationDB"';
 
@@ -59,6 +60,8 @@ const create_company_dtl=`CREATE TABLE company_dtl (
 // -- employee definition
 
 // const drop_employee=`Drop tabl`e
+
+
 
 const drop_employee=`DROP TABLE employee`;
 

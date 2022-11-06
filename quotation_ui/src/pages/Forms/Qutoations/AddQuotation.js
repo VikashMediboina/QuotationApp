@@ -18,7 +18,6 @@ import { Link } from "react-router-dom"
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 import AddCustomerDetails from "./AddCustomerDetails"
-import Invoice from "./invoice"
 import AddDetails from "./AddDetails"
 
 const AddQuotation = () => {

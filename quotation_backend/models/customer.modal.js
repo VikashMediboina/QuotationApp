@@ -40,6 +40,9 @@ const customer_create_schema = {
             type: "string",
 			minLength: 1,
         },
+        cust_profile:{
+            type: "string",
+        },
         inserted_by:{
             type: "string",
 			minLength: 1,

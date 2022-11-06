@@ -10,7 +10,7 @@ function* loginUser({ payload: { user, history } }) {
   
   try {
     
-      localStorage.setItem("authUser", JSON.stringify(user))
+      // localStorage.setItem("authUser", JSON.stringify(user))
       yield put(loginSuccess(user))
     history.push("/dashboard")
   } catch (error) {
@@ -20,7 +20,7 @@ function* loginUser({ payload: { user, history } }) {
 
 function* logoutUser({ payload: { history } }) {
   try {
-    localStorage.removeItem("authUser")
+    // localStorage.removeItem("authUser")
 
    
       yield put(logoutUserSuccess(false))
@@ -30,20 +30,10 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 
-function* socialLogin({ payload: { data, history, type } }) {
-  try {
-    
-      localStorage.setItem("authUser", JSON.stringify(data))
-      yield put(loginSuccess(data))
-    history.push("/dashboard")
-  } catch (error) {
-    yield put(apiError(error))
-  }
-}
+
 
 function* authSaga() {
   yield takeEvery(LOGIN_USER, loginUser)
-  yield takeLatest(SOCIAL_LOGIN, socialLogin)
   yield takeEvery(LOGOUT_USER, logoutUser)
 }
 

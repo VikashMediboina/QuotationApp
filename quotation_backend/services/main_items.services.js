@@ -13,7 +13,7 @@ pool.query("SELECT main_item_id from main_item ORDER BY main_item_id DESC LIMIT 
         VALUES ($1, $2,$3,$4,$5,$6,$7)`,
         [new_main_item_id, body.main_item_title, body.main_item_desc,body.room_type,body.unit_price, body.inserted_by, body.inserted_date],
     ).then((val) => {
-       resolve({add_id:new_main_item_id})
+       resolve("Inserted Sucessfully")
     }).catch(err => {
         console.log(err)
         reject(err)

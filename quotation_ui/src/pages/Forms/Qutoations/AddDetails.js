@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CardBody, Row, Col, Card, Table, Button } from 'reactstrap';
 import { Link } from "react-router-dom"
 
@@ -11,6 +11,8 @@ import logoLight from "../../../assets/images/logo-light.png";
 const AddDetails = ({projectAdd,setprojectAdd,setselectedcustGroup,selectedcustGroup,selectedempGroup,setselectedempGroup,confirmDetails}) => {
     
     // useEffect(()=>{
+  const [items,setItems]=useState([])
+
 
     // },[projectAdd,selectedcustGroup])
     const printOrder = () => {
@@ -24,35 +26,37 @@ const AddDetails = ({projectAdd,setprojectAdd,setselectedcustGroup,selectedcustG
     const itemas=[
         {
             name:"Kitchen Room",
-
-           
                     type:"MainItem",
                     main_item_name:"Main Item",
                     main_item_desc:"Description",
-                    area:12,
+                    tot_area:12,
                     qty:1,
                     unitPrice:2000,
                     totalAmount:12*2000,
                     lineItems:[
                         {
                             type:"LineItem",
-                            name:"Line Item",
-                            desc:"Description1",
+                            line_item_name:"Line Item",
+                            line_item_desc:"Description1",
                             qty:2,
+                            tot_area:2000,
                             unitPrice:2000,
 
                         },
                         {
                             type:"LineItem",
-                            name:"Line Item",
-                            desc:"Description1",
+                            line_item_name:"Line Item",
+                            line_item_desc:"Description1",
+                            tot_area:2000,
                             qty:2,
                             unitPrice:2000,
                         }
                     ]
         }
     ]
-
+const addMainItems=()=>{
+    
+}
     return (
         <React.Fragment>
             {/* <div className="page-content"> */}
@@ -77,7 +81,7 @@ const AddDetails = ({projectAdd,setprojectAdd,setselectedcustGroup,selectedcustG
                                        Ravirala Village, Ranga Reddy District, Telngana, India-501510.</b>
                                     </div>
                                     </div>
-                                    <div className="col-5">
+                                    <div className="col-5 text-end">
                                     <div className="mb-4">
                                         <b>
                                             Info@rochanaIndustries.com,<br></br>
@@ -147,66 +151,58 @@ const AddDetails = ({projectAdd,setprojectAdd,setselectedcustGroup,selectedcustG
                                                 <th>QTY</th>
                                                 <th>Unit Price</th>
                                                 <th className="text-end">Price</th>
+                                                <th className="text-end">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>01</td>
-                                                <td>Bed Room</td>
-                                                <td>Bed Room</td>
-                                                <td>12 Sqft</td>
-                                                <td>1</td>
-                                                <td>$499.0</td>
-                                                <td className="text-end">$499.00</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>02</td>
-                                                <td>Bed Room</td>
-                                                <td>Bed Room</td>
-                                                <td>12 Sqft</td>
-                                                <td>1</td>
-                                                <td>$499.0</td>
-                                                <td className="text-end">$399.00</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>03</td>
-                                                <td>Bed Room</td>
-                                                <td>Bed Room</td>
-                                                <td>12 Sqft</td>
-                                                <td>1</td>
-                                                <td>$499.0</td>
-                                                <td className="text-end">$499.00</td>
-                                            </tr>
-                                            {/* {itemas.map((item,index)=>{
+                                           
+                                            {itemas.map((item,index)=>{
                                                 return(
+                                                    <>
                                                 <tr>
-                                                <td>{index+1}</td>
-                                                <td >{item.name}</td>
-                                                <td>Bed Room</td>
-                                                <td>12 Sqft</td>
-                                                <td>1</td>
-                                                <td>$499.0</td>
-                                                <td className="text-end">$499.00</td>
+                                                <td rowSpan={item.lineItems.length+1}>{index+1}</td>
+                                                <td rowSpan={item.lineItems.length+1}>{item?.name}</td>
+                                                <td>
+                                                    <b>{item?.main_item_name}</b><br></br>
+                                                    {item?.main_item_desc}</td>
+                                                <td>{item?.tot_area} Sqft</td>
+                                                <td>{item?.qty}</td>
+                                                <td>Rs.{item.unitPrice}</td>
+                                                <td className="text-end">Rs.{item?.tot_area*item?.qty*item?.unitPrice}</td>
+                                                <td className="text-end">edit  delete +Line</td>
+
                                             </tr>
+                                            {
+                                                item.lineItems.map((line,index)=>{
+                                                    return(
+                                                    <tr>
+                                                <td>{index+1}. {line?.line_item_name}</td>
+                                                <td>{line?.tot_area} Sqft</td>
+                                                <td>{line?.qty}</td>
+                                                <td>Rs.{line.unitPrice}</td>
+                                                <td className="text-end">Rs.{line?.tot_area*line?.qty*line?.unitPrice}</td>
+                                                <td className="text-end">edit   delete</td>
+                                            </tr>)
+                                                })
+                                            }
+                                            </>
                                                 )
-                                            })} */}
+                                            })}
                                             <tr>
 
                                             </tr>
                                             <tr>
-                                                <td colSpan="5" className="text-end">Sub Total</td>
+                                                <td colSpan="6" className="text-end">Sub Total</td>
                                                 <td className="text-end">$1397.00</td>
                                             </tr>
                                             <tr>
-                                                <td colSpan="5" className="border-0 text-end">
+                                                <td colSpan="6" className="border-0 text-end">
                                                     <strong>Shipping</strong>
                                                 </td>
                                                 <td className="border-0 text-end">$13.00</td>
                                             </tr>
                                             <tr>
-                                                <td colSpan="5" className="border-0 text-end">
+                                                <td colSpan="6" className="border-0 text-end">
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td className="border-0 text-end">

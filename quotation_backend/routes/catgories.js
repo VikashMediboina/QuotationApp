@@ -61,7 +61,7 @@ catgories_router.put("/update/:id",validate({ body: catgories_update_schema }),(
     update_catogerie_service(request_body)
         .then(values=>{
             // console.log(values)
-            res.status(200).json({'values':values})
+            res.status(200).json({'msg':values})
         })
         .catch(err=>{
         next(err)

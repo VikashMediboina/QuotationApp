@@ -11,10 +11,12 @@ import { withRouter, Link } from "react-router-dom"
 import { AvForm, AvField } from "availity-reactstrap-validation"
 
 // actions
-import { loginUser, apiError, socialLogin } from "../../store/actions"
-
+import { loginUser, apiError } from "../../store/actions"
+import {setAlert,setCacheDetails} from "../../store/genric/genericAction.js"
 // import images
 import logo from "../../assets/images/logo-sm-dark.png"
+import axios from "axios"
+import {LOGIN_URL,CACHE_URL} from "../../Constonts/api"
 
 const Login = (props) => {
   useEffect(() => {
@@ -25,9 +27,55 @@ const Login = (props) => {
     };
   });
 
+  const getCacheDetails=()=>{
+    axios.get(CACHE_URL).then((val)=>{
+      console.log(val.data)
+      if(val.data){
+        props.setCacheDetails(val.data, props.history)
+        
+        props.setAlert({
+          message:val.data.msg,
+          type:"SUCCESS"
+        })
+      }else{
+        props.setAlert({
+          message:val.data.msg,
+          type:"ERROR"
+        })
+      }
+    }).catch(err=>{
+      console.log(err)
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    })
+  }
   // handleValidSubmit
   const handleValidSubmit = (event, values) => {
-    props.loginUser(values, props.history)
+    var body={
+        "employee_email":values.email,
+        "employee_password":values.password
+    }
+    axios.post(LOGIN_URL,body).then((val)=>{
+      console.log(val.data)
+      if(val.data.values){
+        props.loginUser(val.data.values, props.history)
+        getCacheDetails()
+        props.setAlert({
+          message:val.data.msg,
+          type:"SUCCESS"
+        })
+      }else{
+        props.setAlert({
+          message:val.data.msg,
+          type:"ERROR"
+        })
+      }
+    }).catch(err=>{
+      console.log(err)
+      
+    })
   }
 
   return (
@@ -46,7 +94,7 @@ const Login = (props) => {
                   <div className="bg-login-overlay"></div>
                   <div className="position-relative">
                     <h5 className="text-white font-size-20">Welcome Back !</h5>
-                    <p className="text-white-50 mb-0">Sign in to continue to Qovex.</p>
+                    <p className="text-white-50 mb-0">Sign in to continue to Rochana LTD.</p>
                     <Link to="/" className="logo logo-admin mt-4">
                       <img src={logo} alt="" height="30" />
                     </Link>
@@ -68,7 +116,7 @@ const Login = (props) => {
                         <AvField
                           name="email"
                           label="Email"
-                          value="admin@themesbrand.com"
+                          // value="admin@themesbrand.com"
                           className="form-control"
                           placeholder="Enter email"
                           type="email"
@@ -80,14 +128,14 @@ const Login = (props) => {
                         <AvField
                           name="password"
                           label="Password"
-                          value="123456"
+                          // value="123456"
                           type="password"
                           required
                           placeholder="Enter Password"
                         />
                       </div>
 
-                      <div className="form-check">
+                      {/* <div className="form-check">
                         <input
                           type="checkbox"
                           className="form-check-input"
@@ -99,7 +147,7 @@ const Login = (props) => {
                         >
                           Remember me
                         </label>
-                      </div>
+                      </div> */}
 
                       <div className="mt-3">
                         <button
@@ -119,13 +167,13 @@ const Login = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="mt-5 text-center">
+              {/* <div className="mt-5 text-center">
                 <p>Don't have an account ? <Link to="/register"
                   className="fw-medium text-primary"> Signup now </Link> </p>
                 <p>© {new Date().getFullYear()} Qovex. Crafted with <i
                   className="mdi mdi-heart text-danger"></i> by Themesbrand
                         </p>
-              </div>
+              </div> */}
             </Col>
           </Row>
 
@@ -136,17 +184,18 @@ const Login = (props) => {
 }
 
 const mapStateToProps = state => {
+  console.log(state)
   const { error } = state.Login
   return { error }
 }
 
 export default withRouter(
-  connect(mapStateToProps, { loginUser, apiError, socialLogin })(Login)
+  connect(mapStateToProps, { loginUser, apiError,setAlert,setCacheDetails })(Login)
 )
 
 Login.propTypes = {
   error: PropTypes.any,
   history: PropTypes.object,
   loginUser: PropTypes.func,
-  socialLogin: PropTypes.func
+  setCacheDetails:PropTypes.func
 }
