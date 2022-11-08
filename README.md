@@ -5,11 +5,13 @@
 
 For Backend
 npm i
+
 node index.js
 
 
 For Frontend
 npm i
+
 npm run start
 
 
