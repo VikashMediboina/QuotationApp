@@ -42,3 +42,8 @@ export const ADD_CUSTOMERS_URL=devURL+"/customer/insert/"
 export const VIEW_CUSTOMERS_URL=devURL+"/customer/get/"
 export const UPDATE_CUSTOMERS_URL=devURL+"/customer/update/"
 export const DELETE_CUSTOMERS_URL=devURL+"/customer/delete/"
+
+
+
+export const ADD_CUSTOMER_QUTOATION_URL=devURL+"/quotation/insertCustomer/"
+export const GET_CUSTOMER_QUTOATION_URL=devURL+"/quotation/get/"

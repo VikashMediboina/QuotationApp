@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import {
   Card,
@@ -24,7 +24,9 @@ const AddQuotation = () => {
   const [activeTab, setactiveTab] = useState(1)
   const [selectedcustGroup, setselectedcustGroup] = useState(null);
   const [selectedempGroup, setselectedempGroup] = useState(null);
-  const [projectAdd, setprojectAdd] = useState("");
+  // const [projectAdd, setprojectAdd] = useState("");
+  const [details, setDetails] = useState({});
+  const [quotation_id, setquotation_id] = useState("");
   const [items,setItems]=useState([])
 
   function toggleTab(tab) {
@@ -84,18 +86,18 @@ const AddQuotation = () => {
                       className="body"
                     >
                       <TabPane tabId={1}>
-                      <AddCustomerDetails projectAdd={projectAdd} setprojectAdd={setprojectAdd} selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} />
+                      <AddCustomerDetails   selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} changeTab={toggleTab} formType={"Add"} setquotation_id={setquotation_id} quotation_id={quotation_id}/>
                       </TabPane>
                       <TabPane tabId={2}>
 
-                       <AddDetails  projectAdd={projectAdd} setprojectAdd={setprojectAdd} selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup}  />
+                       <AddDetails    selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} quotation_id={quotation_id} changeTab={toggleTab}/>
                       </TabPane>
                      
                       <TabPane tabId={3}>
-                      <AddDetails projectAdd={projectAdd} setprojectAdd={setprojectAdd} selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} confirmDetails={activeTab===3}/>
+                      <AddDetails   selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} confirmDetails={activeTab===3} setquotation_id={setquotation_id} quotation_id={quotation_id}/>
                       {/* <Invoice/> */}
                       </TabPane>
                     </TabContent>
@@ -107,7 +109,7 @@ const AddQuotation = () => {
                           activeTab === 1 ? "previous disabled" : "previous"
                         }
                       >
-                        <Link
+                        {/* <Link
                           to="#"
                           className="btn btn-primary"
                           onClick={() => {
@@ -128,7 +130,7 @@ const AddQuotation = () => {
                           }}
                         >
                           Next
-                          </Link>
+                          </Link> */}
                       </li>
                     </ul>
                   </div>

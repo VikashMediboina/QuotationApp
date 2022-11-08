@@ -31,7 +31,7 @@ const AddCustomer = (props) => {
     })
   }
   
-    const addEmployees=(e,v)=>{
+    const addCustomers=(e,v)=>{
       e.preventDefault()
       if(formType=="Add"){
         var body={
@@ -45,6 +45,7 @@ const AddCustomer = (props) => {
           "city":v.city,
           "customer_alt_phone_number":v.customer_alt_phone_number,
           "state":v.state,
+          "pin_code":v.pin_code,
           "address_1":v.address_1,
           "inserted_by":login.employee_id
       }
@@ -77,6 +78,7 @@ const AddCustomer = (props) => {
           "customer_phone_number":v.customer_phone_number,
           "address_3":v.address_3,
           "state":v.state,
+          "pin_code":v.pin_code,
           "address_1":v.address_1,
           "updated_by":login.employee_id
       }
@@ -111,7 +113,7 @@ const AddCustomer = (props) => {
           <AvForm
                       className="form-horizontal"
                       onValidSubmit={(e, v) => {
-                        addEmployees(e, v)
+                       addCustomers(e, v)
                       }}
                     >
     <Row>
@@ -266,7 +268,23 @@ const AddCustomer = (props) => {
                           className="form-control"
                           placeholder="Enter Country"
                           type="text"
-                          // required
+                          required
+                        >
+                          
+                        </AvField>
+        </div>
+        
+      </Col>
+      <Col lg={4}>
+        <div className="mb-3">
+        <AvField
+                          name="pin_code"
+                          label="Pin Code"
+                          value={defalutValues?.pin_code}
+                          className="form-control"
+                          placeholder="Enter Pin Code"
+                          type="number"
+                          required
                         >
                           
                         </AvField>

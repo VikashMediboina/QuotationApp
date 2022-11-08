@@ -14,9 +14,9 @@ const create_customer_service = (body) => new Promise((resolve, reject) => {
                 }
                 new_add_id=address.add_id
                 console.log(new_cus_id,new_add_id)
-                pool.query(`Insert into customer ("customer_id", "address_id","customer_name","customer_email","customer_phone_number","customer_alt_phone_number","cust_profile","inserted_by","inserted_date")  
+                pool.query(`Insert into customer ("customer_id", "address_id","customer_name","customer_email","customer_phone_number","customer_alt_phone_number","cust_profile","pin_code","inserted_by","inserted_date")  
             VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9)`,
-                    [new_cus_id, new_add_id, body.customer_name, body.customer_email, body.customer_phone_number, body.customer_alt_phone_number,body.cust_profile, body.inserted_by, body.inserted_date],
+                    [new_cus_id, new_add_id, body.customer_name, body.customer_email, body.customer_phone_number, body.customer_alt_phone_number,body.cust_profile,body.pin_code, body.inserted_by, body.inserted_date],
                 ).then((val) => {
                     pool.query('COMMIT').then(()=>{
                         resolve("Inserted SucessFully")
@@ -57,8 +57,8 @@ const create_customer_service = (body) => new Promise((resolve, reject) => {
         update_address_service((body)).then(res=>{
 
         
-     pool.query(`UPDATE customer SET "customer_name"=$1 , "customer_email"=$2,"customer_phone_number"=$3,"customer_alt_phone_number"=$4,"updated_by"=$5,"updated_date"=$6,"cust_profile"=$7 WHERE "customer_id" = $8`,
-        [ body.customer_name, body.customer_email, body.customer_phone_number,body.customer_alt_phone_number, body.updated_by, body.updated_date,body.cust_profile,body.customer_id],)
+     pool.query(`UPDATE customer SET "customer_name"=$1 , "customer_email"=$2,"customer_phone_number"=$3,"customer_alt_phone_number"=$4,"updated_by"=$5,"updated_date"=$6,"cust_profile"=$7,"pin_code"=$8 WHERE "customer_id" = $9`,
+        [ body.customer_name, body.customer_email, body.customer_phone_number,body.customer_alt_phone_number, body.updated_by, body.updated_date,body.cust_profile,body.pin_code,body.customer_id],)
         .then((results) => {
             console.log(results)
                 resolve("Update SucessFully")

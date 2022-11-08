@@ -111,4 +111,95 @@ const qutotion_line_item_update_schema = {
 
 
 
-module.exports={qutoation_line_item_create_schema}
+
+
+
+const create_line_items=(quotation_id,body)=>(
+    body.line_item_details.map((line)=>([  
+        quotation_id,
+            line.seq_no,
+            line.line_seq_no,
+            line.line_item_id,
+            line.line_item_title,
+            line.line_item_desc,
+            line.quantity,
+            line.unit_price,
+            line.tot_price,
+            line?.disc_price,
+            line?.net_price,
+            line.cgst,
+            line.sgst,
+            line.igst,
+            line.org_unit_price,
+            body.inserted_by,
+           new Date()
+    ])
+))
+
+// {   
+//     quotation_id:quotation_id,
+//         seq_no:line.seq_no,
+//         line_seq_no:line.line_seq_no,
+//         line_item_title:line.line_item_title,
+//         line_item_desc:line.line_item_desc,
+//         unit_price:line.unit_price,
+//         quantity:line.quantity,
+//         tot_price:line.tot_price,
+//         disc_price:line?.disc_price,
+//         net_price:line?.net_price,
+//         cgst:line.cgst,
+//         sgst:line.sgst,
+//         igst:line.igst,
+//         inserted_by:body.inserted_by,
+//         inserted_date:new Date()
+// }
+const create_main_items=(quotation_id,body)=>(
+    body.main_item_details.map((main)=>([ 
+        quotation_id,
+        main.seq_no,
+        main.room_type,
+        main.main_item_id,
+        main.main_item_title,
+        main.main_item_desc,
+        main.length,
+        main.height,
+        main.depth,
+        main.tot_area,
+        main.quantity,
+        main.unit_price,
+        main.tot_price,
+        main?.disc_price?main?.disc_price:0,
+        main?.net_price?main?.net_price:0,
+        main.cgst,
+        main.sgst,
+        main.igst,
+        main.org_unit_price,
+        body.inserted_by,
+        new Date()
+    ])
+))
+
+
+
+// {   
+//     quotation_id:quotation_id,
+//     seq_no:main.seq_no,
+//     main_item_title:main.main_item_title,
+//     main_item_desc:main.main_item_desc,
+//     room_type:main.room_type,
+//     length:main.length,
+//     height:main.height,
+//     depth:main.depth,
+//     tot_area:main.tot_area,
+//     quantity:main.quantity,
+//     unit_price:main.unit_price,
+//     tot_price:main.tot_price,
+//     disc_price:main?.disc_price,
+//     net_price:main?.net_price,
+//     cgst:main.cgst,
+//     sgst:main.sgst,
+//     igst:main.igst,
+//     inserted_by:body.inserted_by,
+//     inserted_date:new Date()
+// }
+module.exports={create_line_items,create_main_items}

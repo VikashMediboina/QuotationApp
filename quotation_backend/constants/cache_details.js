@@ -6,6 +6,9 @@ const cache_details={
         {"key":"SalesGroupHead","value":"Sales Group Head","reporting":['GMSales']},
         {"key":"GMSales","value":"GM Sales","reporting":['MD']},
         {"key":"MD","value":"MD","reporting":[]},
+    ],
+    status_code:[
+       "Drafted","Active","In-active","Completed","Advance received"
     ]
 }
 

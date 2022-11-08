@@ -31,7 +31,8 @@ customer_router.post("/insert/",validate({ body: customer_create_schema }),(req,
             city:req.body.city,
             state:req.body.state,
             cust_profile:req.body.cust_profile,
-            country:req.body.country,
+        pin_code:req.body.pin_code,
+        country:req.body.country,
             inserted_date:new Date(),
         }
 
@@ -74,6 +75,7 @@ customer_router.put("/update/:id",validate({ body: customer_update_schema }),(re
         state:req.body.state,
         country:req.body.country,
         cust_profile:req.body.cust_profile,
+        pin_code:req.body.pin_code,
         updated_by:req.body.updated_by,
         updated_date:new Date()
     }
