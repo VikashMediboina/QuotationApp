@@ -6,7 +6,18 @@
 -- Dumped by pg_dump version 15.0
 
 -- Started on 2022-11-06 23:51:28 EST
+DROP DATABASE IF EXISTS "QuotationDB";
 
+CREATE DATABASE "QuotationDB"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_United States.1252'
+    LC_CTYPE = 'English_United States.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+	
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
