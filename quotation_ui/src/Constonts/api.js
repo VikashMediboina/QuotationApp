@@ -1,4 +1,4 @@
-const devURL= "http://localhost:5001/"
+const devURL= "http://localhost:5001"
 
 
 export const LOGIN_URL=devURL+"/user/login/"
