@@ -5,7 +5,7 @@
 -- Dumped from database version 15.0
 -- Dumped by pg_dump version 15.0
 
--- Started on 2022-11-08 19:49:48 EST
+-- Started on 2022-11-11 03:06:19 EST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -211,7 +211,8 @@ CREATE TABLE public.line_item (
     inserted_by character varying(50),
     inserted_date timestamp without time zone,
     updated_by character varying(50),
-    updated_date timestamp without time zone
+    updated_date timestamp without time zone,
+    tax_type character varying(20)
 );
 
 
@@ -251,7 +252,9 @@ CREATE TABLE public.main_item (
     inserted_by character varying(50),
     inserted_date timestamp without time zone,
     updated_by character varying(50),
-    updated_date timestamp without time zone
+    updated_date timestamp without time zone,
+    main_item_depth numeric(18,2),
+    tax_type character varying(20)
 );
 
 
@@ -286,7 +289,8 @@ CREATE TABLE public.quotation (
     updated_date timestamp without time zone,
     customer_id numeric,
     customer_name character varying,
-    pin_code numeric
+    pin_code numeric,
+    lead_by_name character varying
 );
 
 
@@ -320,7 +324,8 @@ CREATE TABLE public.quotation_line_item (
     inserted_by character varying(50),
     inserted_date timestamp without time zone,
     updated_by character varying(50),
-    updated_date timestamp without time zone
+    updated_date timestamp without time zone,
+    tax_type character varying(20)
 );
 
 
@@ -354,7 +359,9 @@ CREATE TABLE public.quotation_main_item (
     inserted_by character varying(50),
     inserted_date timestamp without time zone,
     updated_by character varying(50),
-    updated_date timestamp without time zone
+    updated_date timestamp without time zone,
+    main_item_depth numeric(18,2),
+    tax_type character varying(20)
 );
 
 
@@ -510,8 +517,9 @@ COPY public.employment (employment_id, employee_id, company_id, job_code, start_
 -- Data for Name: line_item; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.line_item (line_item_id, room_type, line_item_title, line_item_desc, unit_price, inserted_by, inserted_date, updated_by, updated_date) FROM stdin;
-0	Bed Room	Bed Room1	Bed Room	2001.00	SYSTEM	2022-10-31 14:31:38.813	21	2022-11-06 07:40:40.692
+COPY public.line_item (line_item_id, room_type, line_item_title, line_item_desc, unit_price, inserted_by, inserted_date, updated_by, updated_date, tax_type) FROM stdin;
+0	Bed Room	Bed Room1	Bed Room	2001.00	SYSTEM	2022-10-31 14:31:38.813	21	2022-11-10 08:13:05.947	type_1
+1	Bed Room	Line 1	Line Desc	200.00	21	2022-11-10 08:15:14.487	\N	\N	type_1
 \.
 
 
@@ -553,9 +561,10 @@ COPY public.login (login_id, email, employee_id, password, inserted_by, inserted
 -- Data for Name: main_item; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.main_item (main_item_id, room_type, main_item_title, main_item_desc, unit_price, inserted_by, inserted_date, updated_by, updated_date) FROM stdin;
-0	Bed Room1	Bed Room	Bed Room1	2002.00	SYSTEM	2022-10-31 14:22:37.479	21	2022-11-06 07:59:44.448
-1	Bed Room	aza	zaaz	111.00	21	2022-11-06 08:00:04.343	\N	\N
+COPY public.main_item (main_item_id, room_type, main_item_title, main_item_desc, unit_price, inserted_by, inserted_date, updated_by, updated_date, main_item_depth, tax_type) FROM stdin;
+0	Bed Room1	Bed Room	Bed Room1	2002.00	SYSTEM	2022-10-31 14:22:37.479	21	2022-11-10 08:01:59.562	200.00	type_1
+1	Bed Room	aza	zaaz	111.00	21	2022-11-06 08:00:04.343	21	2022-11-10 08:02:13.197	400.00	type_2
+2	Kitchen13	main Item 1	Main item desc	200.00	21	2022-11-10 08:11:12.287	\N	\N	200.00	type_1
 \.
 
 
@@ -565,34 +574,122 @@ COPY public.main_item (main_item_id, room_type, main_item_title, main_item_desc,
 -- Data for Name: quotation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.quotation (quotation_id, quotation_code, shop_detail_id, address_1, address_2, address_3, city, state, quotation_date, gene_by, shop_manager_id, lead_by, reference, mobile_1, mobile_2, mail_id, quot_status, inserted_by, inserted_date, updated_by, updated_date, customer_id, customer_name, pin_code) FROM stdin;
-0	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:47:38.455	\N	\N	0	customer_name	\N
-1	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:50:26.529	\N	\N	0	customer_name	\N
-2	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:51:21.292	\N	\N	0	customer_name	\N
-3	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:51:56.684	\N	\N	0	customer_name	\N
-4	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:54:14.439	\N	\N	0	customer_name	\N
-5	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:55:33.18	\N	\N	0	customer_name	\N
-6	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:56:26.279	\N	\N	0	customer_name	\N
-7	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:57:49.502	\N	\N	0	customer_name	\N
-8	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:58:04.697	\N	\N	0	customer_name	\N
-9	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:00:28.415	\N	\N	0	customer_name	\N
-10	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:39:05.967	\N	\N	0	customer_name	\N
-11	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:55:21.756	\N	\N	0	customer_name	\N
-12	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:56:48.668	\N	\N	0	customer_name	\N
-13	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	Drafted	0	2022-11-06 21:34:57.16	\N	\N	0	customer_name	\N
-14	\N	\N	address_1	address_2	raddress_3	city1222	state1	2022-11-07	\N	\N	\N	\N	\N	\N	rcustomer_email	Drafted	\N	2022-11-07 00:23:27.137	\N	\N	0	customer_name	\N
-15	\N	\N	address_1	address_2	raddress_3	city1222	state1	2022-11-07	\N	\N	\N	\N	\N	\N	rcustomer_email	Drafted	\N	2022-11-07 00:23:57.269	\N	\N	0	customer_name	\N
-16	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	Drafted	0	2022-11-07 00:25:44.481	\N	\N	0	customer_name	\N
-17	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	Drafted	0	2022-11-07 00:26:42.996	\N	\N	0	customer_name	\N
-18	\N	\N	KATIKI STREET			KASHINAGAR	Odisha	2022-11-07	\N	\N	\N	\N	9437658870	\N	mediboina.vikash@gmail.com	Drafted	\N	2022-11-07 09:52:37.371	\N	\N	0	customer_name	\N
-19	\N	\N	Pitapuram colony,9-40-1,surya residenciey			Visakhapatnam	Andhra Pradesh	2022-11-07	\N	\N	\N	\N	9437658870	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-07 10:24:40.061	\N	\N	0	customer_name	\N
-20	\N	\N	Pitapuram colony,9-40-1,surya residenciey			Visakhapatnam	Andhra Pradesh	2022-11-07	\N	\N	\N	\N	9437658870	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-07 10:25:04.093	\N	\N	0	customer_name	\N
-21	\N	\N	Katiki Street, Gajapathi District			KASHINAGAR	Odisha	2022-11-07	\N	\N	\N	\N	9437658870	\N	mediboina.vikash@gmail.com	Drafted	\N	2022-11-07 10:28:58.089	\N	\N	1	Vikash Mediboina	\N
-22	\N	\N	katiki street			Visakhapatnam	Andhra Pradesh	2022-11-07	\N	\N	\N	\N	111106	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-07 10:34:30.18	\N	\N	0	customer_name	\N
-23	\N	\N	katiki street			kashinagar	odisha	2022-11-07	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-07 10:36:24.55	\N	\N	1	Vikash Mediboina	\N
-24	\N	\N	katiki street			kashinagar	odisha	2022-11-07	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-07 10:36:33.095	\N	\N	1	Vikash Mediboina	\N
-25	\N	\N	katiki street			kashinagar	odisha	2022-11-07	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-07 10:36:45.268	\N	\N	1	Vikash Mediboina	\N
-26	\N	\N	Katiki Street, Gajapathi District			KASHINAGAR	Odisha	2022-11-07	\N	\N	\N	\N	9437658870	\N	mediboina.vikash@gmail.com	Drafted	\N	2022-11-07 11:28:58.742	\N	\N	1	Vikash Mediboina	\N
+COPY public.quotation (quotation_id, quotation_code, shop_detail_id, address_1, address_2, address_3, city, state, quotation_date, gene_by, shop_manager_id, lead_by, reference, mobile_1, mobile_2, mail_id, quot_status, inserted_by, inserted_date, updated_by, updated_date, customer_id, customer_name, pin_code, lead_by_name) FROM stdin;
+0	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:47:38.455	\N	\N	0	customer_name	\N	\N
+1	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:50:26.529	\N	\N	0	customer_name	\N	\N
+2	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:51:21.292	\N	\N	0	customer_name	\N	\N
+3	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:51:56.684	\N	\N	0	customer_name	\N	\N
+4	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:54:14.439	\N	\N	0	customer_name	\N	\N
+5	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:55:33.18	\N	\N	0	customer_name	\N	\N
+6	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:56:26.279	\N	\N	0	customer_name	\N	\N
+7	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:57:49.502	\N	\N	0	customer_name	\N	\N
+8	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 16:58:04.697	\N	\N	0	customer_name	\N	\N
+9	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:00:28.415	\N	\N	0	customer_name	\N	\N
+10	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:39:05.967	\N	\N	0	customer_name	\N	\N
+11	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:55:21.756	\N	\N	0	customer_name	\N	\N
+12	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	\N	0	2022-11-06 17:56:48.668	\N	\N	0	customer_name	\N	\N
+13	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	Drafted	0	2022-11-06 21:34:57.16	\N	\N	0	customer_name	\N	\N
+14	\N	\N	address_1	address_2	raddress_3	city1222	state1	2022-11-07	\N	\N	\N	\N	\N	\N	rcustomer_email	Drafted	\N	2022-11-07 00:23:27.137	\N	\N	0	customer_name	\N	\N
+15	\N	\N	address_1	address_2	raddress_3	city1222	state1	2022-11-07	\N	\N	\N	\N	\N	\N	rcustomer_email	Drafted	\N	2022-11-07 00:23:57.269	\N	\N	0	customer_name	\N	\N
+16	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	Drafted	0	2022-11-07 00:25:44.481	\N	\N	0	customer_name	\N	\N
+17	\N	\N	address_1	address_2	address_3	city	state	2022-02-07	\N	1	0	\N	111111111	122334444	mail@gmail.com	Drafted	0	2022-11-07 00:26:42.996	\N	\N	0	customer_name	\N	\N
+18	\N	\N	KATIKI STREET			KASHINAGAR	Odisha	2022-11-07	\N	\N	\N	\N	9437658870	\N	mediboina.vikash@gmail.com	Drafted	\N	2022-11-07 09:52:37.371	\N	\N	0	customer_name	\N	\N
+19	\N	\N	Pitapuram colony,9-40-1,surya residenciey			Visakhapatnam	Andhra Pradesh	2022-11-07	\N	\N	\N	\N	9437658870	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-07 10:24:40.061	\N	\N	0	customer_name	\N	\N
+20	\N	\N	Pitapuram colony,9-40-1,surya residenciey			Visakhapatnam	Andhra Pradesh	2022-11-07	\N	\N	\N	\N	9437658870	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-07 10:25:04.093	\N	\N	0	customer_name	\N	\N
+21	\N	\N	Katiki Street, Gajapathi District			KASHINAGAR	Odisha	2022-11-07	\N	\N	\N	\N	9437658870	\N	mediboina.vikash@gmail.com	Drafted	\N	2022-11-07 10:28:58.089	\N	\N	1	Vikash Mediboina	\N	\N
+22	\N	\N	katiki street			Visakhapatnam	Andhra Pradesh	2022-11-07	\N	\N	\N	\N	111106	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-07 10:34:30.18	\N	\N	0	customer_name	\N	\N
+23	\N	\N	katiki street			kashinagar	odisha	2022-11-07	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-07 10:36:24.55	\N	\N	1	Vikash Mediboina	\N	\N
+24	\N	\N	katiki street			kashinagar	odisha	2022-11-07	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-07 10:36:33.095	\N	\N	1	Vikash Mediboina	\N	\N
+25	\N	\N	katiki street			kashinagar	odisha	2022-11-07	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-07 10:36:45.268	\N	\N	1	Vikash Mediboina	\N	\N
+26	\N	\N	Katiki Street, Gajapathi District			KASHINAGAR	Odisha	2022-11-07	\N	\N	\N	\N	9437658870	\N	mediboina.vikash@gmail.com	Drafted	\N	2022-11-07 11:28:58.742	\N	\N	1	Vikash Mediboina	\N	\N
+27	\N	\N	Pitapuram colony,9-40-1,surya residenciey			Visakhapatnam	Andhra Pradesh	2022-11-10	\N	\N	\N	\N	9437658870	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-09 19:57:09.994	\N	\N	1	Vikash Mediboina	\N	\N
+28	\N	\N	Pitapuram colony,9-40-1,surya residenciey			Visakhapatnam	Andhra Pradesh	2022-11-10	\N	\N	\N	\N	9437658870	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-09 19:57:56.345	\N	\N	1	Vikash Mediboina	\N	\N
+29	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:13:37.89	\N	\N	1	Vikash Mediboina	\N	\N
+30	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 01:15:57.805	\N	\N	1	Vikash Mediboina	\N	\N
+31	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-10	\N	\N	\N	\N	9437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:16:58.928	\N	\N	1	Vikash Mediboina	\N	\N
+32	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:18:42.245	\N	\N	1	Vikash Mediboina	\N	\N
+33	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:19:41.418	\N	\N	1	Vikash Mediboina	\N	\N
+34	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:20:32.971	\N	\N	1	Vikash Mediboina	\N	\N
+35	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:22:08.653	\N	\N	1	Vikash Mediboina	\N	\N
+36	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:26:24.078	\N	\N	1	Vikash Mediboina	\N	\N
+37	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:27:25.779	\N	\N	1	Vikash Mediboina	\N	\N
+38	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:28:28.749	\N	\N	1	Vikash Mediboina	\N	\N
+39	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:29:00.641	\N	\N	1	Vikash Mediboina	\N	\N
+40	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 01:49:13.48	\N	\N	1	Vikash Mediboina	\N	\N
+41	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 01:50:04.125	\N	\N	1	Vikash Mediboina	\N	\N
+42	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 06:34:51.726	\N	\N	1	Vikash Mediboina	\N	\N
+43	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 07:02:00.554	\N	\N	0	customer_name	\N	\N
+44	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 07:06:54.081	\N	\N	1	Vikash Mediboina	\N	\N
+45	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 07:09:04.827	\N	\N	0	customer_name	\N	\N
+46	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 07:10:48.627	\N	\N	0	customer_name	\N	\N
+47	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 07:14:29.597	\N	\N	1	Vikash Mediboina	\N	\N
+48	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 07:18:00.175	\N	\N	1	Vikash Mediboina	\N	\N
+49	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 07:19:22.87	\N	\N	0	customer_name	\N	\N
+50	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 07:57:10.263	\N	\N	0	customer_name	\N	\N
+51	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 13:41:44.302	\N	\N	1	Vikash Mediboina	\N	\N
+52	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 13:42:44.333	\N	\N	0	customer_name	\N	\N
+53	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 13:48:26.444	\N	\N	0	customer_name	\N	\N
+54	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 13:54:04.212	\N	\N	1	Vikash Mediboina	\N	\N
+55	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 14:00:43.875	\N	\N	1	Vikash Mediboina	\N	\N
+56	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 14:02:27.693	\N	\N	1	Vikash Mediboina	\N	\N
+57	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 14:05:41.493	\N	\N	1	Vikash Mediboina	\N	\N
+58	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 14:08:31.957	\N	\N	0	customer_name	\N	\N
+59	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 14:29:05.485	\N	\N	1	Vikash Mediboina	\N	\N
+60	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 14:39:31.44	\N	\N	1	Vikash Mediboina	\N	\N
+61	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 14:40:05.374	\N	\N	1	Vikash Mediboina	\N	\N
+62	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 14:46:02.577	\N	\N	1	Vikash Mediboina	\N	\N
+63	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Andhra Pradesh	2022-11-10	\N	\N	\N	\N	11111111	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 15:12:29.577	\N	\N	1	Vikash Mediboina	\N	\N
+64	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 15:13:56.062	\N	\N	0	customer_name	\N	\N
+65	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 15:14:49.582	\N	\N	1	Vikash Mediboina	\N	\N
+66	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 15:15:54.635	\N	\N	1	Vikash Mediboina	\N	\N
+67	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 15:19:03.512	\N	\N	1	Vikash Mediboina	\N	\N
+68	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 15:21:20.481	\N	\N	0	customer_name	\N	\N
+69	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 15:23:56.245	\N	\N	1	Vikash Mediboina	\N	\N
+70	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Andhra Pradesh	2022-11-10	\N	\N	\N	\N	11111111	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 15:27:33.085	\N	\N	1	Vikash Mediboina	\N	\N
+71	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 15:48:19.02	\N	\N	1	Vikash Mediboina	\N	\N
+72	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 15:49:30.969	\N	\N	1	Vikash Mediboina	\N	\N
+73	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 15:51:35.763	\N	\N	1	Vikash Mediboina	\N	\N
+74	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 15:53:04.492	\N	\N	1	Vikash Mediboina	\N	\N
+75	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 15:54:43.555	\N	\N	1	Vikash Mediboina	\N	\N
+76	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 15:59:41.631	\N	\N	1	Vikash Mediboina	\N	\N
+77	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 16:03:06.416	\N	\N	1	Vikash Mediboina	\N	\N
+78	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-10 16:19:46.121	\N	\N	1	Vikash Mediboina	\N	\N
+79	\N	\N	KATIKI STREET			Kashinagar	Odisha	2022-11-10	\N	\N	\N	\N	9437658870	\N	mediboina.vikash@gmail.com	Drafted	\N	2022-11-10 16:30:20.984	\N	\N	0	customer_name	\N	\N
+80	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 16:32:32.669	\N	\N	1	Vikash Mediboina	\N	\N
+81	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 16:35:11.523	\N	\N	1	Vikash Mediboina	\N	\N
+82	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 16:37:07.76	\N	\N	1	Vikash Mediboina	\N	\N
+83	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 16:50:03.323	\N	\N	1	Vikash Mediboina	\N	\N
+84	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 16:51:44.978	\N	\N	1	Vikash Mediboina	\N	\N
+85	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 16:52:59.988	\N	\N	1	Vikash Mediboina	\N	\N
+86	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 16:54:29.04	\N	\N	1	Vikash Mediboina	\N	\N
+87	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 16:57:11.97	\N	\N	1	Vikash Mediboina	\N	\N
+88	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 17:00:48.126	\N	\N	1	Vikash Mediboina	\N	\N
+89	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 17:01:52.226	\N	\N	1	Vikash Mediboina	\N	\N
+90	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 17:03:43.074	\N	\N	1	Vikash Mediboina	\N	\N
+91	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 17:06:49.802	\N	\N	1	Vikash Mediboina	\N	\N
+92	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 17:10:13.8	\N	\N	1	Vikash Mediboina	\N	\N
+93	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 17:51:04.761	\N	\N	1	Vikash Mediboina	\N	\N
+94	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	\N	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 17:53:22.188	\N	\N	1	Vikash Mediboina	\N	\N
+95	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	10	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 17:54:38.494	\N	\N	1	Vikash Mediboina	\N	\N
+96	\N	\N	katiki street			kashinagar	odisha	2022-11-10	\N	\N	11	\N	9100556285	\N	vikash.mediboina@gmail.com	Drafted	\N	2022-11-10 17:57:31.5	\N	\N	1	Vikash Mediboina	\N	\N
+97	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-10	\N	\N	9	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-10 18:02:09.175	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+98	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-11	\N	\N	12	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:00:03.965	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+99	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	11	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:01:18.832	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+100	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:04:49.756	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+101	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:07:15.292	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+102	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	11	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:09:37.256	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+103	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:11:00.726	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+104	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:17:17.051	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+105	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:27:13.219	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+106	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:31:09.822	\N	\N	0	customer_name	\N	SYSTEM
+107	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:33:21.686	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+108	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	13	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:36:16.828	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+109	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	13	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:37:47.372	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+110	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	11	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:48:23.24	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+111	\N	\N	katiki street			kashinagar	odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	vikash.mediboina2907@gmail.com	Drafted	\N	2022-11-11 02:55:00.868	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+112	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	12	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 02:57:28.64	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+113	\N	\N	Katiki Street, Gajapathi District			Kashinagar	Odisha	2022-11-11	\N	\N	11	\N	9100556285	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 03:00:02.035	\N	\N	1	Vikash Mediboina	\N	SYSTEM
+114	\N	\N	Katiki Street, Gajapathi District			kashinagar	odisha	2022-11-11	\N	\N	12	\N	437658870	\N	kurma.mediboina@gmail.com	Drafted	\N	2022-11-11 03:03:20.857	\N	\N	1	Vikash Mediboina	\N	SYSTEM
 \.
 
 
@@ -602,9 +699,24 @@ COPY public.quotation (quotation_id, quotation_code, shop_detail_id, address_1, 
 -- Data for Name: quotation_line_item; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.quotation_line_item (quotation_id, seq_no, line_seq_no, line_item_id, line_item_title, line_item_desc, length, height, depth, tot_area, quantity, org_unit_price, unit_price, tot_price, disc_price, net_price, cgst, sgst, igst, inserted_by, inserted_date, updated_by, updated_date) FROM stdin;
-12	1	1	\N	Bed Room	Bed Room	\N	\N	\N	\N	1	\N	28.00	28.00	\N	\N	0.00	0.00	0.00	0	2022-11-06 22:56:48.683	\N	\N
-13	1	1	\N	Bed Room	Bed Room	\N	\N	\N	\N	1	\N	28.00	28.00	\N	\N	0.00	0.00	0.00	0	2022-11-07 02:34:57.187	\N	\N
+COPY public.quotation_line_item (quotation_id, seq_no, line_seq_no, line_item_id, line_item_title, line_item_desc, length, height, depth, tot_area, quantity, org_unit_price, unit_price, tot_price, disc_price, net_price, cgst, sgst, igst, inserted_by, inserted_date, updated_by, updated_date, tax_type) FROM stdin;
+12	1	1	\N	Bed Room	Bed Room	\N	\N	\N	\N	1	\N	28.00	28.00	\N	\N	0.00	0.00	0.00	0	2022-11-06 22:56:48.683	\N	\N	\N
+13	1	1	\N	Bed Room	Bed Room	\N	\N	\N	\N	1	\N	28.00	28.00	\N	\N	0.00	0.00	0.00	0	2022-11-07 02:34:57.187	\N	\N	\N
+104	\N	\N	1	Line 1	Line Desc	\N	\N	\N	\N	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-11 07:17:34.229	\N	\N	type_1
+\N	\N	0	1	Line 1	Line Desc	\N	\N	\N	\N	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-11 07:27:30.725	\N	\N	type_1
+\N	\N	0	1	Line 1	Line Desc	\N	\N	\N	\N	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-11 07:31:39.928	\N	\N	type_1
+\N	0	0	1	Line 1	Line Desc	\N	\N	\N	\N	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-11 07:33:38.499	\N	\N	type_1
+108	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 07:36:33.946	\N	\N	type_1
+109	0	0	1	Line 1	Line Desc	\N	\N	\N	\N	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-11 07:38:03.779	\N	\N	type_1
+110	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 07:48:49.055	\N	\N	type_1
+110	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 07:48:57.941	\N	\N	type_1
+110	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 07:49:52.838	\N	\N	type_1
+110	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 07:50:11.788	\N	\N	type_1
+111	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 07:55:14.575	\N	\N	type_1
+111	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 07:55:31.454	\N	\N	type_1
+113	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 08:00:21.127	\N	\N	type_1
+113	1	0	1	Line 1	Line Desc	\N	\N	\N	\N	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-11 08:00:36.839	\N	\N	type_1
+114	0	0	0	Bed Room1	Bed Room	\N	\N	\N	\N	1	0.00	2001.00	2001.00	0.00	2001.00	\N	\N	0.00	21	2022-11-11 08:03:35.412	\N	\N	type_1
 \.
 
 
@@ -614,14 +726,49 @@ COPY public.quotation_line_item (quotation_id, seq_no, line_seq_no, line_item_id
 -- Data for Name: quotation_main_item; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.quotation_main_item (quotation_id, seq_no, main_item_id, room_type, main_item_title, main_item_desc, length, height, depth, tot_area, quantity, org_unit_price, unit_price, tot_price, disc_price, net_price, cgst, sgst, igst, inserted_by, inserted_date, updated_by, updated_date) FROM stdin;
-6	1	0	0	Bed Room	Bed Room	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 21:56:26.301	\N	\N
-8	1	0	Bed Room	Bed Room	Bed Room	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 21:58:04.713	\N	\N
-9	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:00:28.432	\N	\N
-10	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:39:05.979	\N	\N
-11	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:55:21.777	\N	\N
-12	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:56:48.68	\N	\N
-13	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-07 02:34:57.186	\N	\N
+COPY public.quotation_main_item (quotation_id, seq_no, main_item_id, room_type, main_item_title, main_item_desc, length, height, depth, tot_area, quantity, org_unit_price, unit_price, tot_price, disc_price, net_price, cgst, sgst, igst, inserted_by, inserted_date, updated_by, updated_date, main_item_depth, tax_type) FROM stdin;
+6	1	0	0	Bed Room	Bed Room	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 21:56:26.301	\N	\N	\N	\N
+8	1	0	Bed Room	Bed Room	Bed Room	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 21:58:04.713	\N	\N	\N	\N
+9	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:00:28.432	\N	\N	\N	\N
+10	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:39:05.979	\N	\N	\N	\N
+11	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:55:21.777	\N	\N	\N	\N
+12	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-06 22:56:48.68	\N	\N	\N	\N
+13	1	0	Bed Room	Bed Room11	Bed Room1111	1.00	2.00	3.00	6.00	1	\N	12.00	72.00	0.00	0.00	2.00	3.00	0.00	0	2022-11-07 02:34:57.186	\N	\N	\N	\N
+77	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:05:37.521	\N	\N	400.00	type_2
+77	1	2	Kitchen13	\N	Main item desc	1.00	\N	200.00	1.00	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-10 21:09:09.367	\N	\N	200.00	type_1
+81	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:35:26.998	\N	\N	400.00	type_2
+82	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:37:23.651	\N	\N	400.00	type_2
+83	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:50:20.556	\N	\N	400.00	type_2
+84	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:51:56.653	\N	\N	400.00	type_2
+85	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:53:10.046	\N	\N	400.00	type_2
+86	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:54:42.273	\N	\N	400.00	type_2
+87	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 21:57:21.628	\N	\N	400.00	type_2
+88	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 22:00:56.38	\N	\N	400.00	type_2
+89	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 22:02:03.92	\N	\N	400.00	type_2
+90	0	1	Bed Room	\N	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 22:03:51.329	\N	\N	400.00	type_2
+91	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 22:07:01.526	\N	\N	400.00	type_2
+92	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-10 22:10:22.55	\N	\N	400.00	type_2
+92	1	2	Kitchen13	main Item 1	Main item desc	1.00	\N	200.00	1.00	1	0.00	200.00	200.00	0.00	200.00	\N	\N	0.00	21	2022-11-10 22:10:29.433	\N	\N	200.00	type_1
+98	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:00:17.508	\N	\N	400.00	type_2
+99	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:01:29.87	\N	\N	400.00	type_2
+100	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:04:59.271	\N	\N	400.00	type_2
+101	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:07:24.191	\N	\N	400.00	type_2
+102	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:09:44.835	\N	\N	400.00	type_2
+103	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:11:10.625	\N	\N	400.00	type_2
+104	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:17:25.375	\N	\N	400.00	type_2
+105	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:27:23.444	\N	\N	400.00	type_2
+106	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:31:19.315	\N	\N	400.00	type_2
+107	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:33:31.35	\N	\N	400.00	type_2
+108	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:36:26.077	\N	\N	400.00	type_2
+109	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:37:55.469	\N	\N	400.00	type_2
+110	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:48:31.686	\N	\N	400.00	type_2
+110	1	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:48:41.444	\N	\N	400.00	type_2
+111	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:55:07.382	\N	\N	400.00	type_2
+111	1	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:55:24.665	\N	\N	400.00	type_2
+112	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 07:57:40.687	\N	\N	400.00	type_2
+113	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 08:00:12.635	\N	\N	400.00	type_2
+113	1	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 08:00:27.797	\N	\N	400.00	type_2
+114	0	1	Bed Room	aza	zaaz	1.00	\N	400.00	1.00	1	0.00	111.00	111.00	0.00	111.00	\N	\N	0.00	21	2022-11-11 08:03:29.358	\N	\N	400.00	type_2
 \.
 
 
@@ -831,7 +978,7 @@ ALTER TABLE ONLY public.shop_detail
     ADD CONSTRAINT shop_empl_fk FOREIGN KEY (manager_id) REFERENCES public.employee(employee_id);
 
 
--- Completed on 2022-11-08 19:49:48 EST
+-- Completed on 2022-11-11 03:06:20 EST
 
 --
 -- PostgreSQL database dump complete
