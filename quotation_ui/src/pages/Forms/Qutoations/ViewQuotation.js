@@ -1,106 +1,126 @@
 import { MDBDataTable } from "mdbreact"
 import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
+import PropTypes from 'prop-types'
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
+import TableCard from "../../../components/InsideComponents/TableCard"
+import { GET_QUTOATION_URL } from "../../../Constonts/api"
+import axios from "axios"
+import {setAlert} from "../../../store/genric/genericAction"
+import { connect } from "react-redux"
+import AddQuotation from "./AddQuotation"
 
-const ViewQuotation = () => {
+const ViewQuotation = (props) => {
+  const [details,setDetails]=useState([])
+const [showAdd,setShowAdd]=useState(false)
+const [id,setId]=useState(false)
+  const fetchData=()=>{
+    axios.get(GET_QUTOATION_URL).then((val)=>{
+      
+        // props.setAlert({
+        //   message:val.data.msg,
+        //   type:"SUCCESS"
+        // })
+        const data = {
  
-	 const data = {
-    columns: [
-      {
-        label: "Name",
-        field: "name",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Position",
-        field: "position",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Office",
-        field: "office",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Age",
-        field: "age",
-        sort: "asc",
-        width: 100,
-      },
-      {
-        label: "Start date",
-        field: "date",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Salary",
-        field: "salary",
-        sort: "asc",
-        width: 100,
-      },
-    ],
-    rows: [
-      {
-        name: "Tiger Nixon",
-        position: "System Architect",
-        office: "Edinburgh",
-        age: "61",
-        date: "2011/04/25",
-        salary: "$320",
-      },
-      {
-        name: "Garrett Winters",
-        position: "Accountant",
-        office: "Tokyo",
-        age: "63",
-        date: "2011/07/25",
-        salary: "$170",
-      },
-      {
-        name: "Ashton Cox",
-        position: "Junior Technical Author",
-        office: "San Francisco",
-        age: "66",
-        date: "2009/01/12",
-        salary: "$86",
-      }, 
-
-    ],
+         columns: [
+          {
+            label: "Quotation Id",
+            field: "quotation_id",
+            sort: "asc",
+            width: 150,
+          },
+          {
+            label: "Customer Name",
+            field: "customer_name",
+            sort: "asc",
+            width: 270,
+          },
+          {
+            label: "City",
+            field: "city",
+            sort: "asc",
+            width: 200,
+          },
+          {
+            label: "Date",
+            field: "quotation_date",
+            sort: "asc",
+            width: 100,
+          },
+          {
+            label: "Lead By",
+            field: "lead_by_name",
+            sort: "asc",
+            width: 150,
+          },
+          {
+            label: "Status",
+            field: "quot_status",
+            sort: "asc",
+            width: 100,
+          },
+           {
+             label: "Action",
+             field: "action",
+             sort: "asc",
+             width: 250
+           }
+         ],
+          rows:val.data.values}
+        setDetails(data)
+      
+    }).catch(err=>{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+      
+    })
   }
-	
-	
+  useEffect(()=>{
+    fetchData()
+  },[])
+  const onEditButton=(row)=>{
+    setId(row.quotation_id)
+    setShowAdd(true)
+  }
   return (
     <React.Fragment>
-      <div className="page-content">
+     {!showAdd? <div className="page-content">
 
           {/* Render Breadcrumbs */}
           <Breadcrumbs title="Pages" breadcrumbItem="View Employee" />
 			
         <Row>
           <Col className="col-12">
-            <Card>
-              <CardBody>
-                <CardTitle>Quotations</CardTitle>
-                <CardSubtitle className="mb-3">
-                   
-                  </CardSubtitle>
-
-                <MDBDataTable responsive striped bordered data={data} />
-              </CardBody>
-            </Card>
+          <TableCard
+          data={details} 
+          tittle={'Quotations'} 
+          editIcon={true}
+          deleteIcon={true}
+          onEditButton={onEditButton}
+          />
+           
           </Col>
         </Row>
-      </div>
+      </div>:
+      <AddQuotation quotation_props={id}/>}
     </React.Fragment>
   )
 }
 
-export default ViewQuotation
+
+const mapStateToProps = state => {
+ 
+  return {  }
+}
+export default connect(mapStateToProps, { setAlert })(ViewQuotation)
+
+
+ViewQuotation.propTypes = {
+  setAlert: PropTypes.func,
+}

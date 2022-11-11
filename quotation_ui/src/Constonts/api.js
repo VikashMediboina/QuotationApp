@@ -1,4 +1,4 @@
-const devURL= "http://3.90.114.142:5001"
+const devURL= "http://localhost:5001"
 
 
 export const LOGIN_URL=devURL+"/user/login/"
@@ -47,3 +47,14 @@ export const DELETE_CUSTOMERS_URL=devURL+"/customer/delete/"
 
 export const ADD_CUSTOMER_QUTOATION_URL=devURL+"/quotation/insertCustomer/"
 export const GET_CUSTOMER_QUTOATION_URL=devURL+"/quotation/get/"
+export const GET_QUTOATION_URL=devURL+"/quotation/allQuotations/"
+
+
+export const ADD_MAIN_ITEMS_QUTOATION_URL=devURL+"/quotation/insertmainItems/"
+export const GET_MAIN_ITEMS_QUTOATION_URL=devURL+"/quotation/mainItems/"
+
+
+
+export const ADD_LINE_ITEMS_QUTOATION_URL=devURL+"/quotation/insertLineItems/"
+export const GET_LINE_ITEMS_QUTOATION_URL=devURL+"/quotation/lineItems/"
+

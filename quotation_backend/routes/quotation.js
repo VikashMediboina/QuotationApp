@@ -1,7 +1,7 @@
 const express=require("express")
 const { Validator } = require("express-json-validator-middleware");
 const { update_line_item_service } = require("../services/line.services");
-const {  create_qutations_service, get_all_qutations, get_all_main_items_qutations, get_all_line_items_qutations, create_qutation_service, create_qutation_main_item_service, create_qutation_line_item_service, update_customer_qutation_service, update_main_items_qutation_service } = require("../services/quotation.services");
+const {  create_qutations_service, get_all_qutations, get_all_main_items_qutations, get_all_line_items_qutations, create_qutation_service, create_qutation_main_item_service, create_qutation_line_item_service, update_customer_qutation_service, update_main_items_qutation_service, get_qutation_by_id } = require("../services/quotation.services");
 
 const quotation_router=express.Router()
 
@@ -25,6 +25,7 @@ quotation_router.post("/insertCustomer/" ,(req,res,next)=>{
             state:req.body.state,
             quotation_date:req.body.quotation_date,
             lead_by:req.body.lead_by,
+            lead_by_name:req.body.lead_by_name,
             shop_manager_id:req.body.shop_manager_id,
             mobile_1:req.body.mobile_1,
             mobile_2:req.body.mobile_2,
@@ -70,7 +71,7 @@ quotation_router.post("/insertLineItems/:quotation_id" ,(req,res,next)=>{
    
 
         const request_body={
-            line_item_details:req.body.main_item_details,
+            line_item_details:req.body.line_item_details,
             inserted_by:req.body.inserted_by,
             inserted_date:new Date()
         }

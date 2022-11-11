@@ -29,7 +29,6 @@ const Login = (props) => {
 
   const getCacheDetails=()=>{
     axios.get(CACHE_URL).then((val)=>{
-      console.log(val.data)
       if(val.data){
         props.setCacheDetails(val.data, props.history)
         
@@ -44,7 +43,6 @@ const Login = (props) => {
         })
       }
     }).catch(err=>{
-      console.log(err)
       props.setAlert({
         message:String(err),
         type:"ERROR"
@@ -58,14 +56,14 @@ const Login = (props) => {
         "employee_password":values.password
     }
     axios.post(LOGIN_URL,body).then((val)=>{
-      console.log(val.data)
       if(val.data.values){
         props.loginUser(val.data.values, props.history)
-        getCacheDetails()
+        
         props.setAlert({
           message:val.data.msg,
           type:"SUCCESS"
         })
+        getCacheDetails()
       }else{
         props.setAlert({
           message:val.data.msg,
@@ -73,8 +71,10 @@ const Login = (props) => {
         })
       }
     }).catch(err=>{
-      console.log(err)
-      
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
     })
   }
 
@@ -184,7 +184,6 @@ const Login = (props) => {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
   const { error } = state.Login
   return { error }
 }

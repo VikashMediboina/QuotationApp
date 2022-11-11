@@ -9,6 +9,9 @@ const cache_details={
     ],
     status_code:[
        "Drafted","Active","In-active","Completed","Advance received"
+    ],
+    tax_type:[
+        {value:10,key:"type_1"},{value:20,key:"type_2"}
     ]
 }
 

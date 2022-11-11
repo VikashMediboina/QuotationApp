@@ -12,7 +12,6 @@ const Authmiddleware = ({
 }) => {
   const [loginState, setLogin]=useState({})
   useEffect(()=>{
-    console.log(login)
     setLogin(login)
   },[login])
   return(
@@ -22,7 +21,6 @@ const Authmiddleware = ({
     render={props => {
 
       if (isAuthProtected && !loginState) {
-    console.log(loginState)
         return (
           <Redirect
             to={{ pathname: "/login", state: { from: props.location } }}
@@ -47,7 +45,6 @@ Authmiddleware.propTypes = {
   layout: PropTypes.any,
 }
 const mapStateToProps = state => {
-  // console.log(state.Login.login)
 const { login } = state?.Login
   return {login}
 }

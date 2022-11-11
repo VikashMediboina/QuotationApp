@@ -5,23 +5,23 @@ import {
     Col
   } from "reactstrap"
   import {setAlert} from "../../../store/genric/genericAction"
-  import {ADD_EMPLOYEE_URL,ADD_MAIN_ITEMS_QUTOATION_URL,UPDATE_EMPLOYEE_URL,VIEW_COMPANY_URL} from "../../../Constonts/api"
+  import {ADD_EMPLOYEE_URL,ADD_LINE_ITEMS_QUTOATION_URL,ADD_MAIN_ITEMS_QUTOATION_URL,UPDATE_EMPLOYEE_URL,VIEW_COMPANY_URL} from "../../../Constonts/api"
   import { connect } from "react-redux"
   import axios from "axios"
 import AvForm from 'availity-reactstrap-validation/lib/AvForm'
 import AvField from 'availity-reactstrap-validation/lib/AvField'
 
 
-const AddMainItemsQutoation = (props) => {
-  const {formType,defaultval,onAddButtonClose,login,setAlert,cacheDetails,mainItems,catogeries,quotation_id}=props
+const AddLineItems = (props) => {
+  const {formType,defaultval,onAddButtonClose,login,setAlert,cacheDetails,lineItems,catogeries,quotation_id,seq_no}=props
 const [defalutValues,setDefaultValues]=useState({})
 const [company,setCompany]=useState([])
 
-const [dropDownMainItems,setdropDownMainItems]=useState([])
+const [dropDownlineItems,setdropDownlineItems]=useState([])
 const [roomType,setRoomType]=useState("")
-const [selectedMainItems,setselectedMainItems]=useState({})
+const [selectedlineItems,setselectedlineItems]=useState({})
 const [length,setlength]=useState(defalutValues?.length?defalutValues?.length:1)
-const [main_item_depth,setmain_item_depth]=useState(defalutValues?.main_item_depth)
+const [line_item_depth,setline_item_depth]=useState(defalutValues?.line_item_depth)
 const [unit_price,setunit_price]=useState(defalutValues?.unit_price)
 const [width,setwidth]=useState(defalutValues?.width?defalutValues?.width:1)
 const [depth,setdepth]=useState(defalutValues?.depth?defalutValues?.depth:1)
@@ -29,16 +29,16 @@ const [quantity,setquantity]=useState(defalutValues?.quantity?defalutValues?.qua
 const [disc_price,setdisc_price]=useState(defalutValues?.disc_price?defalutValues?.disc_price:0)
 const fetch_tax=()=>{
   for(let i=0;i<cacheDetails.tax_type;i++){
-    if(cacheDetails.tax_type[i].key==selectedMainItems.tax_type){
+    if(cacheDetails.tax_type[i].key==selectedlineItems.tax_type){
       return cacheDetails.tax_type[i].value
     }
   }
 }
-const fetch_main_items=(id,value)=>{
+const fetch_line_items=(id,value)=>{
   
-  for(let i=0;i<mainItems.length;i++){
-    if(mainItems[i].main_item_id==id){
-      return mainItems[i][value]
+  for(let i=0;i<lineItems.length;i++){
+    if(lineItems[i].line_item_id==id){
+      return lineItems[i][value]
     }
   }
 }
@@ -60,15 +60,12 @@ const fetchCompanyData=()=>{
     e.preventDefault()
     if(formType=="Add"){
       var body={
-        main_item_details:[{
+        line_item_details:[{
+          "seq_no":Number(seq_no),
           "room_type":v.room_type,
-          "main_item_id":Number(v.main_item_id),
-          "main_item_title":fetch_main_items(v.main_item_id,"main_item_title"),
-          "main_item_desc":v.main_item_desc,
-          "length":v.length,
-          "height":v.height,
-          "depth":Number(v.depth),
-          "tot_area":v.tot_area,
+          "line_item_id":Number(v.line_item_id),
+          "line_item_title":fetch_line_items(v.line_item_id,"line_item_title"),
+          "line_item_desc":v.line_item_desc,
           "quantity":v.quantity,
           "unit_price":v.unit_price,
           "tot_price":v.tot_price,
@@ -77,8 +74,7 @@ const fetchCompanyData=()=>{
           "cgst":v.net_price*fetch_tax()*0.5,
           "sgst":v.net_price*fetch_tax()*0.5,
           "igst":0,
-          "tax_type":selectedMainItems.tax_type,
-          "main_item_depth":Number(selectedMainItems.main_item_depth),
+          "tax_type":selectedlineItems.tax_type,
           "org_unit_price":0
         }],
         // "quotation_id":v.quotation_id,
@@ -86,7 +82,7 @@ const fetchCompanyData=()=>{
         "inserted_by":login.employee_id
     }
      
-      axios.post(ADD_MAIN_ITEMS_QUTOATION_URL+quotation_id,body).then((val)=>{
+      axios.post(ADD_LINE_ITEMS_QUTOATION_URL+quotation_id,body).then((val)=>{
         
           // setAlert({
           //   message:val.data.msg,
@@ -139,37 +135,37 @@ const fetchCompanyData=()=>{
 const onchangeRoomType=(e,v)=>{
   let dropDownItems=[]
   
-  for(let i=0;i<mainItems.length;i++){
-    if(mainItems[i].room_type==v){
-      dropDownItems.push(mainItems[i])
+  for(let i=0;i<lineItems.length;i++){
+    if(lineItems[i].room_type==v){
+      dropDownItems.push(lineItems[i])
     }
   }
   setRoomType(v)
-  setdropDownMainItems(dropDownItems)
-  setselectedMainItems([])
+  setdropDownlineItems(dropDownItems)
+  setselectedlineItems([])
   setunit_price(1)
 }
-const onchangeMainItem=(e,v)=>{
-  for(let i=0;i<dropDownMainItems.length;i++){
-    if(dropDownMainItems[i].main_item_id==v){
-      setselectedMainItems(dropDownMainItems[i])
-      setunit_price(Number(dropDownMainItems[i].unit_price))
-      setmain_item_depth(Number(dropDownMainItems[i].main_item_depth))
+const onchangeLineItem=(e,v)=>{
+  for(let i=0;i<dropDownlineItems.length;i++){
+    if(dropDownlineItems[i].line_item_id==v){
+      setselectedlineItems(dropDownlineItems[i])
+      setunit_price(Number(dropDownlineItems[i].unit_price))
+      setline_item_depth(Number(dropDownlineItems[i].line_item_depth))
 
-      setdepth(dropDownMainItems[i].main_item_depth)
+      setdepth(dropDownlineItems[i].line_item_depth)
     }
   }
 }
 useEffect(()=>{
   let dropDownItems=[]
   setDefaultValues(defaultval)
-  for(let i=0;i<mainItems.length;i++){
-    if(mainItems[i].room_type==defaultval.room_type){
-      dropDownItems.push(mainItems[i])
+  for(let i=0;i<lineItems.length;i++){
+    if(lineItems[i].room_type==defaultval.room_type){
+      dropDownItems.push(lineItems[i])
     }
   }
   setRoomType(defaultval.room_type)
-  setdropDownMainItems(dropDownItems)
+  setdropDownlineItems(dropDownItems)
   fetchCompanyData()
 },[defaultval])
   return (
@@ -177,7 +173,7 @@ useEffect(()=>{
 
           {/* Render Breadcrumbs */}
           {/* <Breadcrumbs title="Pages" breadcrumbItem="Add Employee" /> */}
-
+{console.log(seq_no)}
           <AvForm
                       className="form-horizontal"
                       onValidSubmit={(e, v) => {
@@ -208,24 +204,24 @@ useEffect(()=>{
       </Col>
       </Row>
       <hr></hr>
-     {roomType!=""&&<> {dropDownMainItems.length>0?<>
+     {roomType!=""&&<> {dropDownlineItems.length>0?<>
       <Row>
       <Col lg={3}>
         <div className="mb-3">
         <AvField
-                          name="main_item_id"
-                          label="Main Items"
-                          value={defalutValues?.main_item_id}
+                          name="line_item_id"
+                          label="Line Items"
+                          value={defalutValues?.line_item_id}
                           className="form-control"
-                          placeholder="Enter Main Items"
+                          placeholder="Enter Line Items"
                           type="select"
-                          onChange={onchangeMainItem}
+                          onChange={onchangeLineItem}
                           required
                         >
-                          <option value="">Select Main Item</option>
-                          {dropDownMainItems.map((item)=>
-                          <option value={item.main_item_id}>
-                              {item.main_item_title}
+                          <option value="">Select Line Item</option>
+                          {dropDownlineItems.map((item)=>
+                          <option value={item.line_item_id}>
+                              {item.line_item_title}
                           </option>)}
                         </AvField>
           
@@ -234,11 +230,11 @@ useEffect(()=>{
       <Col lg={3}>
         <div className="mb-3">
         <AvField
-                          name="main_item_desc"
-                          label="Main Items Desc"
-                          value={defaultval?.main_item_desc?defaultval?.main_item_desc:(selectedMainItems?.main_item_desc?selectedMainItems?.main_item_desc:"")}
+                          name="line_item_desc"
+                          label="Line Items Desc"
+                          value={defaultval?.line_item_desc?defaultval?.line_item_desc:(selectedlineItems?.line_item_desc?selectedlineItems?.line_item_desc:"")}
                           className="form-control"
-                          placeholder="Enter Main Items Desc"
+                          placeholder="Enter Line Items Desc"
                           type="text"
                           disabled={true}
                           required
@@ -246,11 +242,11 @@ useEffect(()=>{
           
         </div>
       </Col>
-      <Col lg={3}>
+      <Col lg={2}>
         <div className="mb-3">
         <AvField
                           name="unit_price"
-                          label="Main Unit Price"
+                          label="Line Unit Price"
                           value={unit_price}
                           className="form-control"
                           placeholder="Enter Unit Price"
@@ -261,7 +257,7 @@ useEffect(()=>{
           
         </div>
       </Col>
-      </Row>
+      {/* </Row>
       <hr></hr>
       <Row>
       <Col lg={2}>
@@ -342,7 +338,7 @@ useEffect(()=>{
                         </div>
           
         </div>
-      </Col>
+      </Col> */}
      
       <Col lg={2}>
         <div className="mb-3">
@@ -364,7 +360,7 @@ useEffect(()=>{
         <AvField
                           name="tot_price"
                           label="Total Price"
-                          value={length*width*quantity*depth*unit_price/(main_item_depth)}
+                          value={quantity*unit_price}
                           className="form-control"
                           placeholder="Enter Total Price"
                           type="number"
@@ -414,7 +410,7 @@ useEffect(()=>{
         <AvField
                           name="net_price"
                           label="Net Price"
-                          value={(length*width*quantity*depth*unit_price/(main_item_depth))-disc_price}
+                          value={(quantity*unit_price)-disc_price}
                           className="form-control"
                           placeholder="Enter Net Price"
                           type="number"
@@ -429,14 +425,14 @@ useEffect(()=>{
 
     </Row></>:<Row>
       <Col>
-      No Main Items Found for the given Room Type
+      No Line Items Found for the given Room Type
       </Col>
       </Row>}</>} 
    
     <Row>
       <Col lg={12}>
         <div className="text-right float-end">
-          <button type="submit" className="btn btn-primary" disabled={dropDownMainItems.length<=0 || (length*width*quantity*depth*unit_price/(main_item_depth))<=0}>
+          <button type="submit" className="btn btn-primary" disabled={dropDownlineItems.length<=0 || (length*width*quantity*depth*unit_price/(line_item_depth))<=0}>
             Submit
             </button>
         </div>
@@ -456,8 +452,8 @@ const mapStateToProps = state => {
     return {login,cacheDetails}
   }
   
-  export default connect(mapStateToProps, { setAlert })(AddMainItemsQutoation)
+  export default connect(mapStateToProps, { setAlert })(AddLineItems)
   
-  AddMainItemsQutoation.propTypes = {
+  AddLineItems.propTypes = {
     setAlert: PropTypes.func,
   }

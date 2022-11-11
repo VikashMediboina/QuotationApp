@@ -88,7 +88,6 @@ const ViewCustomer = (props) => {
 
  const fetchData=()=>{
    axios.get(VIEW_CUSTOMERS_URL).then((val)=>{
-     console.log(val.data)
        // props.setAlert({
        //   message:val.data.msg,
        //   type:"SUCCESS"
@@ -184,7 +183,6 @@ const ViewCustomer = (props) => {
    fetchData()
  },[])
    const onAddButton=()=>{
-     console.log("fwefewf")
      setDefaultVal({})
      setFormType("Add")
      setmodal(!modal)
@@ -200,7 +198,6 @@ const ViewCustomer = (props) => {
  
    }
    const onEditButton=(row)=>{
-     console.log("fwefewf",row)
      setDefaultVal(row)
      setFormType("Edit")
      setmodal(!modal)
@@ -209,7 +206,6 @@ const ViewCustomer = (props) => {
  
  const onDeleteButton=(row)=>{
    axios.post(DELETE_CUSTOMERS_URL+row.company_id,{}).then((val)=>{
-     console.log(val.data)
        props.setAlert({
          message:val.data.msg,
          type:"SUCCESS"

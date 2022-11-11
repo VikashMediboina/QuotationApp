@@ -22,7 +22,7 @@ const ViewEmployee = (props) => {
 
  const fetchData=()=>{
    axios.get(VIEW_EMPLOYEE_URL).then((val)=>{
-     console.log(val.data)
+     
        // props.setAlert({
        //   message:val.data.msg,
        //   type:"SUCCESS"
@@ -94,7 +94,7 @@ const ViewEmployee = (props) => {
    fetchData()
  },[])
    const onAddButton=()=>{
-     console.log("fwefewf")
+     
      setDefaultVal({})
      setFormType("Add")
      setmodal(!modal)
@@ -110,7 +110,7 @@ const ViewEmployee = (props) => {
  
    }
    const onEditButton=(row)=>{
-     console.log("fwefewf",row)
+     
      setDefaultVal(row)
      setFormType("Edit")
      setmodal(!modal)
@@ -119,7 +119,7 @@ const ViewEmployee = (props) => {
  
  const onDeleteButton=(row)=>{
    axios.post(DELETE_EMPLOYEE_URL+row.company_id,{}).then((val)=>{
-     console.log(val.data)
+     
        props.setAlert({
          message:val.data.msg,
          type:"SUCCESS"

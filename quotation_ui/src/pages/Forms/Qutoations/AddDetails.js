@@ -5,31 +5,46 @@ import { CardBody, Row, Col, Card, Table, Button, Modal, ModalHeader, ModalBody 
 import { Link } from "react-router-dom"
 import { setAlert } from "../../../store/genric/genericAction"
 import { connect } from "react-redux"
-import { VIEW_EMPLOYEE_URL, DELETE_EMPLOYEE_URL, VIEW_MAIN_ITEMS_URL, VIEW_LINE_ITEMS_URL } from "../../../Constonts/api"
+import { VIEW_EMPLOYEE_URL, DELETE_EMPLOYEE_URL, VIEW_MAIN_ITEMS_URL, VIEW_LINE_ITEMS_URL, VIEW_CATOGERIES_URL, GET_LINE_ITEMS_QUTOATION_URL, GET_MAIN_ITEMS_QUTOATION_URL } from "../../../Constonts/api"
 import axios from "axios"
 //Import Breadcrumb
 // import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 //Import Images
 import logoLight from "../../../assets/images/logo-light.png";
-import AddMainItems from "../../Master/MainItems/AddMainItems";
 import AddMainItemsQutoation from "./AddMainItemsQutoation";
+import AddLineItemsQutoation from "./AddLineItemsQutoation";
 
 const AddDetails = (props) => {
-    const { projectAdd, setprojectAdd, setselectedcustGroup, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details } = props
+    const { projectAdd, setprojectAdd, setselectedcustGroup, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details,quotation_id } = props
     // useEffect(()=>{
     const [items, setItems] = useState([])
     const [modal, setmodal] = useState(false)
     const [formType, setFormType] = useState("Add")
+    const [seqNo, setSeqNo] = useState(null)
     const [form, setform] = useState("Main")
     const [defaultMainval, setDefaultMainVal] = useState({})
 
     const [mainItems,setMainItems]= useState([])
+    const [catogeries,setcatogeries]= useState([])
     const [lineItems,setLineItems]= useState([])
+    const [lineItemsQutation,setLineItemsQutation]= useState([])
+    const [mainItemsQutation,setMainItemsQutation]= useState([])
+    const [totalSum,setTotalSum]=useState(0)
     // },[projectAdd,selectedcustGroup])
     useEffect(()=>{
+        axios.get(VIEW_CATOGERIES_URL).then((val)=>{
+            
+            setcatogeries(val.data.values)
+            
+          }).catch(err=>{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+        })
         axios.get(VIEW_MAIN_ITEMS_URL).then((val)=>{
-            console.log(val.data)
+            
                 setMainItems(val.data.values)
             
           }).catch(err=>{
@@ -39,7 +54,7 @@ const AddDetails = (props) => {
             })
         })
         axios.get(VIEW_LINE_ITEMS_URL).then((val)=>{
-            console.log(val.data)
+            
             setLineItems(val.data.values)
             
           }).catch(err=>{
@@ -49,7 +64,41 @@ const AddDetails = (props) => {
             })
         })
 
+
+        fetchDetails()
+
     },[])
+    const fetchDetails=()=>{
+        axios.get(GET_MAIN_ITEMS_QUTOATION_URL+quotation_id).then((val)=>{
+            
+            setMainItemsQutation(val.data.values)
+            
+          }).catch(err=>{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+        })
+    
+        axios.get(GET_LINE_ITEMS_QUTOATION_URL+quotation_id).then((val)=>{
+            
+            setLineItemsQutation(val.data.values)
+            
+          }).catch(err=>{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+        })
+    }
+    useEffect(()=>{
+        fetchDetails()
+    },[quotation_id])
+
+useEffect(()=>{
+    fetchDetails()
+},[confirmDetails])
+            
     const printOrder = () => {
         const printableElements = document.getElementById('printme').innerHTML;
         const orderHtml = '<html><head><title></title></head><body><div style="padding:15px;margin:15px;border-style: solid;border-width:2px;border-color:red;">' + printableElements + '</div></body></html>'
@@ -65,17 +114,17 @@ const AddDetails = (props) => {
             main_item_name: "Main Item",
             main_item_desc: "Description",
             tot_area: 12,
-            qty: 1,
-            unitPrice: 2000,
+            quantity: 1,
+            unit_price: 2000,
             totalAmount: 12 * 2000,
             lineItems: [
                 {
                     type: "LineItem",
                     line_item_name: "Line Item",
                     line_item_desc: "Description1",
-                    qty: 2,
+                    quantity: 2,
                     tot_area: 2000,
-                    unitPrice: 2000,
+                    unit_price: 2000,
 
                 },
                 {
@@ -83,8 +132,8 @@ const AddDetails = (props) => {
                     line_item_name: "Line Item",
                     line_item_desc: "Description1",
                     tot_area: 2000,
-                    qty: 2,
-                    unitPrice: 2000,
+                    quantity: 2,
+                    unit_price: 2000,
                 }
             ]
         }
@@ -98,24 +147,52 @@ const AddDetails = (props) => {
             message: val.data.msg,
             type: "SUCCESS"
         })
-        // fetchData()
+        fetchDetails()
 
     }
-
+    useEffect(()=>{
+        let line={}
+        let sum=0
+        let itemsInside=[]
+        for(let i=0;i<lineItemsQutation.length;i++){
+        if((line[""+lineItemsQutation[i].quotation_id+lineItemsQutation[i].seq_no]==undefined)){
+        line[""+lineItemsQutation[i].quotation_id+lineItemsQutation[i].seq_no]=[lineItemsQutation[i]]
+        }
+        else{
+            line[""+lineItemsQutation[i].quotation_id+lineItemsQutation[i].seq_no].push(lineItemsQutation[i])
+        }
+        sum+=Number(lineItemsQutation[i].net_price)
+        }
+        console.log(line)
+        itemsInside=mainItemsQutation.map(item=>(
+                {
+                    ...item,
+                    lineItems:line?.[""+item.quotation_id+item.seq_no]?line?.[""+item.quotation_id+item.seq_no]:[]
+                }
+            ))
+            for(let i=0;i<mainItemsQutation.length;i++){
+                
+                sum+=Number(mainItemsQutation[i].net_price)
+                }
+            setItems(itemsInside)
+            setTotalSum(sum)
+            },[mainItemsQutation,lineItemsQutation])
     const addMainItems = () => {
-        console.log("fwefewf")
         setDefaultMainVal({})
         setFormType("Add")
         setform("Main")
         setmodal(!modal)
     }
-    const addLineItems = () => {
+    const addLineItems = (row) => {
         setmodal(true)
+        setform("Line")
+        setSeqNo(row.seq_no)
+
     }
     const onEditMainButton = (row) => {
-        console.log("fwefewf", row)
         setDefaultMainVal(row)
         setFormType("Edit")
+        setSeqNo(row.seq_no)
         setform("Main")
         setmodal(!modal)
 
@@ -214,65 +291,68 @@ const AddDetails = (props) => {
                                                 <th>Room</th>
                                                 <th>Description</th>
                                                 <th>Area</th>
-                                                <th>QTY</th>
+                                                <th>quantity</th>
                                                 <th>Unit Price</th>
+                                                <th>Discount Price</th>
                                                 <th className="text-end">Price</th>
-                                                <th className="text-end">Action</th>
+                                                {!confirmDetails&&   <th className="text-end">Action</th>}
                                             </tr>
                                         </thead>
                                         <tbody>
 
-                                            {itemas.map((item, index) => {
+                                            {items.map((item, index) => {
                                                 return (
                                                     <>
                                                         <tr>
                                                             <td rowSpan={item.lineItems.length + 1}>{index + 1}</td>
-                                                            <td rowSpan={item.lineItems.length + 1}>{item?.name}</td>
+                                                            <td rowSpan={item.lineItems.length + 1}>{item?.room_type}</td>
                                                             <td>
-                                                                <b>{item?.main_item_name}</b><br></br>
+                                                                <b>{item?.main_item_title}</b><br></br>
                                                                 {item?.main_item_desc}</td>
                                                             <td>{item?.tot_area} Sqft</td>
-                                                            <td>{item?.qty}</td>
-                                                            <td>Rs.{item.unitPrice}</td>
-                                                            <td className="text-end">Rs.{item?.tot_area * item?.qty * item?.unitPrice}</td>
-                                                            <td className="text-end">
-                                                                <button className="btn " onClick={() => onEditMainButton(item)}>
+                                                            <td>{item?.quantity}</td>
+                                                            <td>&#8377; {item.unit_price}</td>
+                                                            <td>&#8377; {item.disc_price}</td>
+                                                            <td className="text-end">&#8377; {item?.net_price}</td>
+                                                           {!confirmDetails&& <td className="text-end">
+                                                                {/* <button className="btn " onClick={() => onEditMainButton(item)}>
                                                                     <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                                                                 </button>{" "}
                                                                 <button className="btn " onClick={() => onDeleteMainButton(item)}>
                                                                     <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
-                                                                </button>{" "}
+                                                                </button>{" "} */}
 
                                                                 <Button
                                                                     type="button"
                                                                     outline
                                                                     color="primary"
-                                                                    onClick={addLineItems}
+                                                                    onClick={()=>{addLineItems(item)}}
                                                                     className="float-end btn btn-rounded waves-effect waves-light"
                                                                 >
                                                                     <i className="bx bx-plus font-size-20 align-middle me-2"></i>{" "}
                                                                     Line
                                                                 </Button>
-                                                            </td>
+                                                            </td>}
 
                                                         </tr>
                                                         {
                                                             item.lineItems.map((line, index) => {
                                                                 return (
                                                                     <tr>
-                                                                        <td>{index + 1}. {line?.line_item_name}</td>
+                                                                        <td>{index + 1}. {line?.line_item_title}</td>
                                                                         <td>{line?.tot_area} Sqft</td>
                                                                         <td>{line?.qty}</td>
-                                                                        <td>Rs.{line.unitPrice}</td>
-                                                                        <td className="text-end">Rs.{line?.tot_area * line?.qty * line?.unitPrice}</td>
-                                                                        <td className="text-end">
-                                                                            <button className="btn " onClick={() => onEditMainButton(item)}>
+                                                                        <td>&#8377; {line.unit_price}</td>
+                                                                        <td >&#8377; {line.disc_price}</td>
+                                                                        <td className="text-end">&#8377; {line.net_price}</td>
+                                                                        {!confirmDetails&& <td className="text-end">
+                                                                            {/* <button className="btn " onClick={() => onEditMainButton(item)}>
                                                                                 <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                                                                             </button>{" "}
                                                                             <button className="btn " onClick={() => onDeleteMainButton(item)}>
                                                                                 <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
-                                                                            </button>
-                                                                        </td>
+                                                                            </button> */}
+                                                                        </td>}
                                                                     </tr>)
                                                             })
                                                         }
@@ -283,21 +363,21 @@ const AddDetails = (props) => {
 
                                             </tr>
                                             <tr>
-                                                <td colSpan="6" className="text-end">Sub Total</td>
-                                                <td className="text-end">$1397.00</td>
+                                                <td colSpan="7" className="text-end">Sub Total</td>
+                                                <td className="text-end">&#8377;{totalSum}</td>
                                             </tr>
-                                            <tr>
-                                                <td colSpan="6" className="border-0 text-end">
+                                            {/* <tr>
+                                                <td colSpan="7" className="border-0 text-end">
                                                     <strong>Shipping</strong>
                                                 </td>
-                                                <td className="border-0 text-end">$13.00</td>
-                                            </tr>
+                                                <td className="border-0 text-end">&#8377; 13.00</td>
+                                            </tr> */}
                                             <tr>
-                                                <td colSpan="6" className="border-0 text-end">
+                                                <td colSpan="7" className="border-0 text-end">
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td className="border-0 text-end">
-                                                    <h4 className="m-0">$1410.00</h4>
+                                                    <h4 className="m-0">&#8377;{totalSum}</h4>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -311,22 +391,28 @@ const AddDetails = (props) => {
                                                 className="fa fa-print"></i></Link>{" "}
                                         <Link to="#" className="btn btn-primary w-md waves-effect waves-light">Send</Link>
                                     </div>
-                                </div> : ""}
+                                </div> : 
+                                
+                                <div className="d-print-none">
+                                    <div className="float-end">
+                                        <Link to="#"
+                                            onClick={()=>{changeTab(confirmDetails?2:1)}}
+                                            className="btn btn-primary w-md waves-effect waves-light">Previous</Link>{" "}
+                                        <Link to="#" className="btn btn-primary w-md waves-effect waves-light" onClick={()=>{changeTab(3)}}>Print</Link>
+                                    </div>
+                                </div>
+                                
+                                
+          }
                                 <Row>
-      <Col lg={12}>{console.log(selectedempGroup)}
-        <div className="float-end text-right">
-          <button type="button" className="btn btn-primary" onClick={()=>{changeTab(confirmDetails?2:1)}}>
-            Previous
-            </button>
-        </div>
-      </Col>
+     
     </Row>
                             </CardBody>
                         </Card>
                     </Col>
                 </Row>
                 <Modal
-                    size="lg"
+                    size="xl"
                     isOpen={modal}
                     toggle={() => {
                         setmodal(!modal)
@@ -341,7 +427,8 @@ const AddDetails = (props) => {
                         Employee
                     </ModalHeader>
                     <ModalBody>
-                        {form ? <AddMainItemsQutoation formType={formType} defaultval={defaultMainval} onAddButtonClose={onModalClose} mainItems={mainItems}/> : ""}
+                        {form=="Main" ? <AddMainItemsQutoation formType={formType} defaultval={defaultMainval} onAddButtonClose={onModalClose} quotation_id={quotation_id} mainItems={mainItems} catogeries={catogeries}/> : 
+                        <AddLineItemsQutoation formType={formType} defaultval={defaultMainval} onAddButtonClose={onModalClose} quotation_id={quotation_id} lineItems={lineItems} catogeries={catogeries} seq_no={seqNo}/>}
                     </ModalBody>
                 </Modal>
             </div>

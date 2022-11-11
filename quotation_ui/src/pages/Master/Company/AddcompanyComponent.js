@@ -29,7 +29,7 @@ const addCompany=(e,v)=>{
     }
      
       axios.post(ADD_COMPANY_URL,body).then((val)=>{
-        console.log(val.data)
+        
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
@@ -52,7 +52,7 @@ const addCompany=(e,v)=>{
         "updated_by":login.employee_id
     }
       axios.put(UPDATE_COMPANY_URL+defaultval.company_id,body).then((val)=>{
-        console.log(val.data)
+        
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
@@ -68,10 +68,10 @@ const addCompany=(e,v)=>{
       })
     }
     
-    console.log(e)
+    
 }
 useEffect(()=>{
-    console.log(defaultval)
+    
     setDefaultValues(defaultval)
 },[defaultval])
   return (

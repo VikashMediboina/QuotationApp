@@ -12,7 +12,7 @@ import Authmiddleware from "./routes/middleware/Authmiddleware"
 
 // layouts Format
 import NonAuthLayout from "./components/NonAuthLayout"
-
+import "./App.css"
 // Import scss
 import "./assets/scss/theme.scss"
 import VerticalLayout from './components/VerticalLayout'

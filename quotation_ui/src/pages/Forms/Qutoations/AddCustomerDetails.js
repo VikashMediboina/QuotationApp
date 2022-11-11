@@ -26,23 +26,21 @@ import AvField from 'availity-reactstrap-validation/lib/AvField'
 const AddCustomerDetails=(props)=> {
   const {setselectedcustGroup,selectedcustGroup,selectedempGroup,setselectedempGroup,formType,changeTab,login,cacheDetails,quotation_id,setquotation_id,setDetails,details}=props
   // const [selectedcustGroup, setselectedcustGroup] = useState(null);
-  // const [selectedempGroup, setselectedempGroup] = useState(null);
+  const [selectedempGroup1, setselectedempGroup1] = useState(null);
   const [customerGroup, setcustomerGroup] = useState(null);
   const [employeeGroup, setemployeeGroup] = useState(null);
   const [customers, setCustomers] = useState(null);
   const [employes, setemployes] = useState(null);
   const [defalutValues,setdefalutValues]=useState(null)
   const handleSelectGroup=(selectedGroup)=> {
-    console.log(selectedGroup)
     setselectedcustGroup(selectedGroup);
   }
   const handleEmpSelectGroup=(selectedGroup)=> {
-    console.log(selectedGroup)
     setselectedempGroup(selectedGroup);
+    setselectedempGroup1(selectedGroup)
   }
   useEffect(()=>{
     axios.get(VIEW_CUSTOMERS_URL).then((val)=>{
-      console.log(val.data)
         // props.setAlert({
         //   message:val.data.msg,
         //   type:"SUCCESS"
@@ -67,10 +65,9 @@ const AddCustomerDetails=(props)=> {
       
     })
     axios.get(VIEW_EMPLOYEE_URL).then((val)=>{
-      console.log(val.data)
+      
      
         let empgrup=val.data.values.map((employe,index)=>{
-          console.log(employe)
           return{
               ...employe,
               label:employe.employee_name,
@@ -90,11 +87,26 @@ const AddCustomerDetails=(props)=> {
 
 
 
+   
+   
+
+  },[])
+  useEffect(()=>{
     if(quotation_id){
 
       axios.get(GET_CUSTOMER_QUTOATION_URL+quotation_id).then((val)=>{
-        console.log(val.data)
+        
         // setDetails(val.da)
+        for(let i=0;i<employeeGroup.length;i++){
+          if(employeeGroup[i].employee_id==val.data.values.lead_by){
+            setselectedempGroup(employeeGroup[i])
+          }
+        }
+        for(let i=0;i<customers.length;i++){
+          if(customers[i].customer_id==val.data.values.customer_id){
+            setselectedempGroup(customers[i])
+          }
+        }
          
         
       }).catch(err=>{
@@ -106,9 +118,7 @@ const AddCustomerDetails=(props)=> {
       })
 
     }
-   
-
-  },[])
+  },[quotation_id])
   const addCustomers=(e,v)=>{
     e.preventDefault()
       let body={
@@ -118,9 +128,9 @@ const AddCustomerDetails=(props)=> {
         "address_2":v?.p_address_2,
         "quotation_date":new Date(),
         "customer_id":v.customer_id,
-        "lead_by":employeeGroup.employee_id,
-        "lead_by_name":employeeGroup.employee_name,
-        "shop_manager_id":employeeGroup?.reporting_to,
+        "lead_by":selectedempGroup1.employee_id,
+        "lead_by_name":selectedempGroup1.employee_name,
+        "shop_manager_id":selectedempGroup1?.reporting_to,
         "city":v.p_city,
         "country":v.p_country,
         "mobile_1":v.customer_phone_number,
@@ -135,7 +145,7 @@ const AddCustomerDetails=(props)=> {
     }
      
       axios.post(ADD_CUSTOMER_QUTOATION_URL,body).then((val)=>{
-        console.log(val.data)
+        
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
@@ -181,7 +191,7 @@ const AddCustomerDetails=(props)=> {
                     <label slot='start' className="col-lg-3 col-form-label">Assigne</label>
                     <div className="col-lg-9">
                     <Select
-                      value={selectedempGroup}
+                      value={selectedempGroup1}
                       onChange={
                         handleEmpSelectGroup
                       }
@@ -505,7 +515,7 @@ const AddCustomerDetails=(props)=> {
      
     </Row>
     <Row>
-      <Col lg={12}>{console.log(selectedempGroup)}
+      <Col lg={12}>
         <div className="float-end text-right">
           <button type="submit" className="btn btn-primary" disabled={!selectedempGroup}>
             Save Draft

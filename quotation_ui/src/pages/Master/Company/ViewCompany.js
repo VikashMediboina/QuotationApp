@@ -32,7 +32,7 @@ const ViewCompany = (props) => {
 
 const fetchData=()=>{
   axios.get(VIEW_COMPANY_URL).then((val)=>{
-    console.log(val.data)
+    
       // props.setAlert({
       //   message:val.data.msg,
       //   type:"SUCCESS"
@@ -85,7 +85,7 @@ useEffect(()=>{
   fetchData()
 },[])
 	const onAddButton=()=>{
-    console.log("fwefewf")
+    
     setDefaultVal({})
     setFormType("Add")
     setmodal(!modal)
@@ -101,7 +101,7 @@ useEffect(()=>{
 
   }
   const onEditButton=(row)=>{
-    console.log("fwefewf",row)
+    
     setDefaultVal(row)
     setFormType("Edit")
     setmodal(!modal)
@@ -110,7 +110,7 @@ useEffect(()=>{
 
 const onDeleteButton=(row)=>{
   axios.post(DELETE_COMPANY_URL+row.company_id,{}).then((val)=>{
-    console.log(val.data)
+    
       props.setAlert({
         message:val.data.msg,
         type:"SUCCESS"

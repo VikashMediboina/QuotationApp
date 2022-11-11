@@ -12,12 +12,14 @@ import AvForm from 'availity-reactstrap-validation/lib/AvForm'
 import AvField from 'availity-reactstrap-validation/lib/AvField'
 
 const AddMainItems = (props) => {
-  const {formType,defaultval,onAddButtonClose,login,setAlert}=props
+  const {formType,defaultval,onAddButtonClose,login,setAlert,cacheDetails}=props
 	const [defalutValues,setDefaultValues]=useState({})
   const [catgories,setCatgories]=useState([])
+  const [unit_price,setunit_price]=useState(defalutValues?.unit_price)
+  const [main_item_depth,setmain_item_depth]=useState(defalutValues?.main_item_depth)
   const fetchCatogeries=()=>{
     axios.get(VIEW_CATOGERIES_URL).then((val)=>{
-      console.log(val)
+      
           setCatgories(val.data.values)
     }).catch(err=>{
       props.setAlert({
@@ -33,6 +35,8 @@ const AddMainItems = (props) => {
       if(formType=="Add"){
         var body={
           "main_item_desc":v.main_item_desc,
+          "main_item_depth":Number(v.main_item_depth),
+          "tax_type":v.tax_type,
           "unit_price":Number(v.unit_price),
           "room_type":v.room_type,
           "main_item_title":v.main_item_title,
@@ -40,7 +44,7 @@ const AddMainItems = (props) => {
       }
        
         axios.post(ADD_MAIN_ITEMS_URL,body).then((val)=>{
-          console.log(val.data)
+          
             // setAlert({
             //   message:val.data.msg,
             //   type:"SUCCESS"
@@ -58,13 +62,15 @@ const AddMainItems = (props) => {
       else{
         var body={
           "main_item_desc":v.main_item_desc,
+          "main_item_depth":Number(v.main_item_depth),
+          "tax_type":v.tax_type,
           "unit_price":Number(v.unit_price),
           "room_type":v.room_type,
           "main_item_title":v.main_item_title,
           "updated_by":login.employee_id
       }
         axios.put(UPDATE_MAIN_ITEMS_URL+defaultval.main_item_id,body).then((val)=>{
-          console.log(val.data)
+          
             // setAlert({
             //   message:val.data.msg,
             //   type:"SUCCESS"
@@ -80,10 +86,10 @@ const AddMainItems = (props) => {
         })
       }
       
-      console.log(e)
+      
   }
   useEffect(()=>{
-      console.log(defaultval)
+      
       setDefaultValues(defaultval)
       fetchCatogeries()
   },[defaultval])
@@ -103,7 +109,6 @@ const AddMainItems = (props) => {
         <AvField
                           name="room_type"
                           label="Room Type"
-                          // value="admin@themesbrand.com"
                           value={defalutValues?.room_type}
                           className="form-control"
                           placeholder="Enter Catogerie Title"
@@ -123,11 +128,10 @@ const AddMainItems = (props) => {
         <div className="mb-3">
         <AvField
                           name="main_item_title"
-                          label="Line Item Title"
-                          // value="admin@themesbrand.com"
+                          label="Main Item Title"
                           value={defalutValues?.main_item_title}
                           className="form-control"
-                          placeholder="Enter Line Item Title"
+                          placeholder="Enter Main Item Title"
                           type="text"
                           required
                         />
@@ -138,11 +142,10 @@ const AddMainItems = (props) => {
         <div className="mb-3">
         <AvField
                           name="main_item_desc"
-                          label="Line Item Descriptiom"
-                          // value="admin@themesbrand.com"
+                          label="Main Item Descriptiom"
                           value={defalutValues?.main_item_desc}
                           className="form-control"
-                          placeholder="Enter Line Item Description"
+                          placeholder="Enter Main Item Description"
                           type="text"
                           required
                         />
@@ -154,13 +157,49 @@ const AddMainItems = (props) => {
         <AvField
                           name="unit_price"
                           label="Price"
-                          // value="admin@themesbrand.com"
-                          value={Number(defalutValues?.unit_price)}
+                          value={Number(unit_price)}
                           className="form-control"
                           placeholder="Enter Price"
                           type="number"
                           required
+                          onChange={(e,v)=>{setunit_price(v)}}
                         />
+          
+        </div>
+      </Col>
+      <Col lg={4}>
+        <div className="mb-3">
+        <AvField
+                          name="main_item_depth"
+                          label="General Depth"
+                          value={Number(main_item_depth)}
+                          className="form-control"
+                          placeholder="Enter General Depth"
+                          type="number"
+                          required
+                          onChange={(e,v)=>{setmain_item_depth(v)}}
+
+                        />
+          
+        </div>
+      </Col>
+      <Col lg={4}>
+        <div className="mb-3">
+        <AvField
+                          name="tax_type"
+                          label="Tax Type"
+                          value={defalutValues?.tax_type}
+                          className="form-control"
+                          placeholder="Enter Tax Type"
+                          type="select"
+                          required
+                        >
+                         <option value="">Select Tax</option>
+                          {cacheDetails?.tax_type.map((tax)=>
+                          <option value={tax.key}>
+                                                            {tax.key+" "}({tax.value}%)
+                          </option>)}
+                        </AvField>
           
         </div>
       </Col>
@@ -185,7 +224,8 @@ const AddMainItems = (props) => {
 const mapStateToProps = state => {
  
   const { login } = state?.Login
-    return {login}
+  const { cacheDetails } = state?.genricReducer
+    return {login,cacheDetails}
   }
   
   export default connect(mapStateToProps, { setAlert })(AddMainItems)

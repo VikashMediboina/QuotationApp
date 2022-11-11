@@ -17,7 +17,6 @@ const  Alerts=({alertDetails}) =>{
         }
         setalertDetailsState(alertDetails)
 
-console.log(alertDetails)
     },[alertDetails])
 const onDismiss=()=>{
     setvisible(!visible)
@@ -31,7 +30,7 @@ const onDismissSucess=()=>{
       {alertDetailsState?.type=="SUCCESS"&&<Alert 
                    isOpen={sucessvisible} toggle={onDismissSucess}
                    color="success" >
-                       {console.log(alertDetailsState?.message)}
+                       {console.log(alertDetailsState)}
                                             {alertDetailsState?.message}
                     </Alert>}
                    {alertDetailsState?.type=="ERROR"&&<Alert 
@@ -45,7 +44,6 @@ const onDismissSucess=()=>{
   )
 }
 const mapStateToProps = state => {
-    console.log(state)
   const { alertDetails } = state?.genricReducer
     return {alertDetails}
 }

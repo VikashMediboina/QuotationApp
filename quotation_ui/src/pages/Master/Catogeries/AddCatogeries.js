@@ -27,7 +27,7 @@ const addDetails=(e,v)=>{
     }
      
       axios.post(ADD_CATOGERIES_URL,body).then((val)=>{
-        console.log(val.data)
+        
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
@@ -49,7 +49,7 @@ const addDetails=(e,v)=>{
         "updated_by":login.employee_id
     }
       axios.put(UPDATE_CATOGERIES_URL+defaultval.catogerie_id,body).then((val)=>{
-        console.log(val.data)
+        
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
@@ -65,10 +65,10 @@ const addDetails=(e,v)=>{
       })
     }
     
-    console.log(e)
+    
 }
 useEffect(()=>{
-    console.log(defaultval)
+    
     setDefaultValues(defaultval)
 },[defaultval])
   return (

@@ -49,7 +49,7 @@ const fetchCompanyData=()=>{
     }
      
       axios.post(ADD_EMPLOYEE_URL,body).then((val)=>{
-        console.log(val.data)
+        
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
@@ -79,7 +79,7 @@ const fetchCompanyData=()=>{
         "updated_by":login.employee_id
     }
       axios.put(UPDATE_EMPLOYEE_URL+defaultval.employee_id,body).then((val)=>{
-        console.log(val.data)
+        
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
@@ -97,7 +97,6 @@ const fetchCompanyData=()=>{
     
 }
 useEffect(()=>{
-  console.log(employees)
   setDefaultValues(defaultval)
   fetchCompanyData()
 },[defaultval])

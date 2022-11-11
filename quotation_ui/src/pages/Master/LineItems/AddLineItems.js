@@ -12,12 +12,14 @@ import AvForm from 'availity-reactstrap-validation/lib/AvForm'
 import AvField from 'availity-reactstrap-validation/lib/AvField'
 
 const AddLineItems = (props) => {
-  const {formType,defaultval,onAddButtonClose,login,setAlert}=props
+  const {formType,defaultval,onAddButtonClose,login,setAlert,cacheDetails}=props
   const [defalutValues,setDefaultValues]=useState({})
   const [catgories,setCatgories]=useState([])
+  const [unit_price,setunit_price]=useState(defalutValues?.unit_price)
+
   const fetchCatogeries=()=>{
     axios.get(VIEW_CATOGERIES_URL).then((val)=>{
-      console.log(val)
+      
           setCatgories(val.data.values)
     }).catch(err=>{
       props.setAlert({
@@ -33,14 +35,15 @@ const AddLineItems = (props) => {
       if(formType=="Add"){
         var body={
           "line_item_desc":v.line_item_desc,
-          "unit_price":Number(v.unit_price),
+          "unit_price":Number(v.unit_price),  
+          "tax_type":(v.tax_type),
           "room_type":v.room_type,
           "line_item_title":v.line_item_title,
           "inserted_by":login.employee_id
       }
        
         axios.post(ADD_LINE_ITEMS_URL,body).then((val)=>{
-          console.log(val.data)
+          
             // setAlert({
             //   message:val.data.msg,
             //   type:"SUCCESS"
@@ -57,14 +60,15 @@ const AddLineItems = (props) => {
       }
       else{
         var body={
-          "line_item_desc":v.line_item_desc,
+          "line_item_desc":v.line_item_desc,  
+          "tax_type":(v.tax_type),
           "unit_price":Number(v.unit_price),
           "room_type":v.room_type,
           "line_item_title":v.line_item_title,
           "updated_by":login.employee_id
       }
         axios.put(UPDATE_LINE_ITEMS_URL+defaultval.line_item_id,body).then((val)=>{
-          console.log(val.data)
+          
             // setAlert({
             //   message:val.data.msg,
             //   type:"SUCCESS"
@@ -80,10 +84,10 @@ const AddLineItems = (props) => {
         })
       }
       
-      console.log(e)
+      
   }
   useEffect(()=>{
-      console.log(defaultval)
+      
       setDefaultValues(defaultval)
       fetchCatogeries()
   },[defaultval])
@@ -155,12 +159,34 @@ const AddLineItems = (props) => {
                           name="unit_price"
                           label="Price"
                           // value="admin@themesbrand.com"
-                          value={Number(defalutValues?.unit_price)}
+                          value={Number(unit_price)}
                           className="form-control"
                           placeholder="Enter Price"
+                          onChange={(e,v)=>{setunit_price(v)}}
                           type="number"
                           required
                         />
+          
+        </div>
+      </Col>
+      <Col lg={4}>
+        <div className="mb-3">
+        <AvField
+                          name="tax_type"
+                          label="Tax Type"
+                          // value="admin@themesbrand.com"
+                          value={defalutValues?.tax_type}
+                          className="form-control"
+                          placeholder="Enter Tax Type"
+                          type="select"
+                          required
+                        >
+                         <option value="">Select Tax</option>
+                          {cacheDetails?.tax_type.map((tax)=>
+                          <option value={tax.key}>
+                                {tax.key+" "}({tax.value}%)
+                          </option>)}
+                        </AvField>
           
         </div>
       </Col>
@@ -184,7 +210,8 @@ const AddLineItems = (props) => {
 const mapStateToProps = state => {
  
   const { login } = state?.Login
-    return {login}
+  const { cacheDetails } = state?.genricReducer
+    return {login,cacheDetails}
   }
   
   export default connect(mapStateToProps, { setAlert })(AddLineItems)

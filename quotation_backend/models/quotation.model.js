@@ -114,11 +114,11 @@ const qutotion_line_item_update_schema = {
 
 
 
-const create_line_items=(quotation_id,body)=>(
+const create_line_items=(quotation_id,body,new_line_seq_no)=>(
     body.line_item_details.map((line)=>([  
         quotation_id,
-            line.seq_no,
-            line.line_seq_no,
+            line?.seq_no,
+            new_line_seq_no,
             line.line_item_id,
             line.line_item_title,
             line.line_item_desc,
@@ -132,7 +132,8 @@ const create_line_items=(quotation_id,body)=>(
             line.igst,
             line.org_unit_price,
             body.inserted_by,
-           new Date()
+           new Date(),
+           line.tax_type
     ])
 ))
 
@@ -153,10 +154,10 @@ const create_line_items=(quotation_id,body)=>(
 //         inserted_by:body.inserted_by,
 //         inserted_date:new Date()
 // }
-const create_main_items=(quotation_id,body)=>(
+const create_main_items=(quotation_id,body,new_seq_no)=>(
     body.main_item_details.map((main)=>([ 
         quotation_id,
-        main.seq_no,
+        new_seq_no,
         main.room_type,
         main.main_item_id,
         main.main_item_title,
@@ -175,7 +176,9 @@ const create_main_items=(quotation_id,body)=>(
         main.igst,
         main.org_unit_price,
         body.inserted_by,
-        new Date()
+        new Date(),
+        main.tax_type,
+        main.main_item_depth
     ])
 ))
 

@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+.left-inner-addon {
+  position: relative;
+}
+.left-inner-addon input {
+  padding-left: 40px;    
+}
+.left-inner-addon span {
+  position: absolute;
+  font-size: 16px;
+  bottom: 0px;
+  padding: 7px 8px;
+  pointer-events: none;
+  background-color: rgb(220, 220, 220);
+  border-radius: 0.25rem;
+}
+
+.right-inner-addon {
+  position: relative;
+}
+.right-inner-addon input {
+  padding-right: 30px;    
+}
+.right-inner-addon span {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  font-size: 16px;
+  padding: 7px 8px;
+  border-radius: 0.25rem;
+  background-color: rgb(220, 220, 220);
+  pointer-events: none;
+}

@@ -28,14 +28,11 @@ var body={
   "employee_password":values.password
 }
     axios.post(FORGET_PASWORD_URL,body).then((val)=>{
-      console.log(val.data)
-    
         props.setAlert({
           message:val.data.msg,
           type:"SUCCESS"
         })
     }).catch(err=>{
-      console.log(err)
       
     })
     props.registerUser(values)

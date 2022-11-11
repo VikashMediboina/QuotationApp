@@ -43,6 +43,8 @@ const userRoutes = [
   { path: "/addCustomer", component: AddCustomer },
   { path: "/viewCustomer", component: ViewCustomer },
   { path: "/addQuotation", component: AddQuotation },
+  { path: "/addQuotation/?:id", component: AddQuotation },
+
   { path: "/viewQuotation", component: ViewQuotation },
   { path: "/reports", component: Reports },
 

@@ -14,20 +14,21 @@ import {
 } from "reactstrap"
 
 import classnames from "classnames"
-import { Link } from "react-router-dom"
+// import { Link, useParams } from "react-router-dom"
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 import AddCustomerDetails from "./AddCustomerDetails"
 import AddDetails from "./AddDetails"
 
-const AddQuotation = () => {
+const AddQuotation = ({quotation_props}) => {
+  // let id  = match.params;
+
   const [activeTab, setactiveTab] = useState(1)
   const [selectedcustGroup, setselectedcustGroup] = useState(null);
   const [selectedempGroup, setselectedempGroup] = useState(null);
   // const [projectAdd, setprojectAdd] = useState("");
   const [details, setDetails] = useState({});
   const [quotation_id, setquotation_id] = useState("");
-  const [items,setItems]=useState([])
 
   function toggleTab(tab) {
     if (activeTab !== tab) {
@@ -36,19 +37,22 @@ const AddQuotation = () => {
       }
     }
   }
+  useEffect(()=>{
+    if(quotation_props){
+      setquotation_id(quotation_props)
+      setactiveTab(1)
+    }
+  },[quotation_props])
   return (
     <React.Fragment>
       <div className="page-content">
 
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Pages" breadcrumbItem="Add Quotation" />
+          <Breadcrumbs title="Pages" breadcrumbItem={quotation_props?"Update/View Quotation":"Add Quotation"} />
           <Row>
           <Col lg="12">
             <Card>
               <CardBody>
-                <h4 className="card-title">Jquery Steps Wizard</h4>
-                <p className="card-title-desc">A powerful jQuery wizard plugin that supports
-                                    accessibility and HTML5</p>
                 <div className="form-wizard-wrapper wizard clearfix">
                   <div className="steps clearfix">
                     <ul>
@@ -91,13 +95,13 @@ const AddQuotation = () => {
                       </TabPane>
                       <TabPane tabId={2}>
 
-                       <AddDetails    selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} quotation_id={quotation_id} changeTab={toggleTab}/>
+                      {quotation_id&& <AddDetails    selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} quotation_id={quotation_id} changeTab={toggleTab}/>}
                       </TabPane>
                      
                       <TabPane tabId={3}>
-                      <AddDetails   selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} confirmDetails={activeTab===3} setquotation_id={setquotation_id} quotation_id={quotation_id}/>
+                      {quotation_id&& <AddDetails   selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
+                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} confirmDetails={activeTab===3} setquotation_id={setquotation_id} quotation_id={quotation_id} changeTab={toggleTab}/>}
                       {/* <Invoice/> */}
                       </TabPane>
                     </TabContent>

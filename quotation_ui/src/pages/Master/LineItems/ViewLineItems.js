@@ -24,7 +24,7 @@ const ViewLineItems = (props) => {
 
   const fetchData=()=>{
     axios.get(VIEW_LINE_ITEMS_URL).then((val)=>{
-      console.log(val.data)
+      
         // props.setAlert({
         //   message:val.data.msg,
         //   type:"SUCCESS"
@@ -82,7 +82,7 @@ const ViewLineItems = (props) => {
     fetchData()
   },[])
     const onAddButton=()=>{
-      console.log("fwefewf")
+      
       setDefaultVal({})
       setFormType("Add")
       setmodal(!modal)
@@ -98,7 +98,7 @@ const ViewLineItems = (props) => {
   
     }
     const onEditButton=(row)=>{
-      console.log("fwefewf",row)
+      
       setDefaultVal(row)
       setFormType("Edit")
       setmodal(!modal)
@@ -107,7 +107,7 @@ const ViewLineItems = (props) => {
   
   const onDeleteButton=(row)=>{
     axios.post(DELETE_LINE_ITEMS_URL+row.line_item_id,{}).then((val)=>{
-      console.log(val.data)
+      
         props.setAlert({
           message:val.data.msg,
           type:"SUCCESS"

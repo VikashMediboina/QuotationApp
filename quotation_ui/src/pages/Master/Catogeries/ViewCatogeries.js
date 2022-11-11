@@ -31,7 +31,7 @@ const ViewCatogeries = (props) => {
 
  const fetchData=()=>{
    axios.get(VIEW_CATOGERIES_URL).then((val)=>{
-     console.log(val.data)
+     
        // props.setAlert({
        //   message:val.data.msg,
        //   type:"SUCCESS"
@@ -78,7 +78,7 @@ const ViewCatogeries = (props) => {
    fetchData()
  },[])
    const onAddButton=()=>{
-     console.log("fwefewf")
+     
      setDefaultVal({})
      setFormType("Add")
      setmodal(!modal)
@@ -94,7 +94,7 @@ const ViewCatogeries = (props) => {
  
    }
    const onEditButton=(row)=>{
-     console.log("fwefewf",row)
+     
      setDefaultVal(row)
      setFormType("Edit")
      setmodal(!modal)
@@ -103,7 +103,7 @@ const ViewCatogeries = (props) => {
  
  const onDeleteButton=(row)=>{
    axios.post(DELETE_CATOGERIES_URL+row.catogerie_id,{}).then((val)=>{
-     console.log(val.data)
+     
        props.setAlert({
          message:val.data.msg,
          type:"SUCCESS"

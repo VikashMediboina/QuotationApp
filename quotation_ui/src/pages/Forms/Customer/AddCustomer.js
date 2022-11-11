@@ -51,7 +51,6 @@ const AddCustomer = (props) => {
       }
        
         axios.post(ADD_CUSTOMERS_URL,body).then((val)=>{
-          console.log(val.data)
             // setAlert({
             //   message:val.data.msg,
             //   type:"SUCCESS"
@@ -83,7 +82,6 @@ const AddCustomer = (props) => {
           "updated_by":login.employee_id
       }
         axios.put(UPDATE_CUSTOMERS_URL+defaultval.customer_id,body).then((val)=>{
-          console.log(val.data)
             // setAlert({
             //   message:val.data.msg,
             //   type:"SUCCESS"
@@ -101,7 +99,6 @@ const AddCustomer = (props) => {
       
   }
   useEffect(()=>{
-    console.log(employees)
     setDefaultValues(defaultval)
     fetchCompanyData()
   },[defaultval])
