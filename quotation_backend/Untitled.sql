@@ -24,7 +24,7 @@ DROP DATABASE "QuotationDB";
 -- Name: QuotationDB; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE "QuotationDB" WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = icu LOCALE = 'en_US.UTF-8' ICU_LOCALE = 'en-US';
+CREATE DATABASE "QuotationDB" WITH TEMPLATE = template0 ;
 
 
 ALTER DATABASE "QuotationDB" OWNER TO postgres;
