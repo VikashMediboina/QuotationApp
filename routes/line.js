@@ -21,6 +21,7 @@ line_router.post("/insert/",validate({ body: line_item_create_schema }),(req,res
         const request_body={
             line_item_title:req.body.line_item_title,
             line_item_desc:req.body.line_item_desc,
+            tax_type:req.body.tax_type,
             room_type:req.body.room_type,
             unit_price:req.body.unit_price,
             inserted_by:req.body.inserted_by,
@@ -55,6 +56,7 @@ line_router.put("/update/:id",validate({ body: line_item_update_schema }),(req,r
         line_item_id:req.params.id,
         line_item_title:req.body.line_item_title,
         line_item_desc:req.body.line_item_desc,
+        tax_type:req.body.tax_type,
         room_type:req.body.room_type,
         unit_price:req.body.unit_price,
         updated_by:req.body.updated_by,

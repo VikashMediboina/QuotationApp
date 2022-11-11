@@ -48,5 +48,13 @@ const get_all_catogeries=()=> new Promise((resolve,reject)=>{
         })
 
     })
-
+    const delete_catogerie_item_service = (body)=>new Promise((resolve,reject)=>{
+        return pool.query(`DELETE FROM catogeries WHERE "catogerie_id"=$1`,[body.catogerie_id]).then((results)=>{
+            resolve("Deleted SucessFully")
+        }).catch(err => {   
+            console.log(err)
+            reject( err)
+        })
+    
+    })
 module.exports={create_catogerie_service,update_catogerie_service,get_all_catogeries}

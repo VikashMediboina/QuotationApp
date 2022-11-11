@@ -1,13 +1,17 @@
 
 const line_item_create_schema = {
 	type: "object",
-	required: ["line_item_title", "line_item_desc","inserted_by","unit_price","room_type"],
+	required: ["line_item_title", "line_item_desc","inserted_by","unit_price","room_type","tax_type"],
 	properties: {
 		line_item_title: {
 			type: "string",
 			minLength: 1,
 		},
 		line_item_desc: {
+			type: "string",
+			minLength: 1,
+		},
+		tax_type: {
 			type: "string",
 			minLength: 1,
 		},
@@ -29,7 +33,7 @@ const line_item_create_schema = {
 
 const line_item_update_schema = {
 	type: "object",
-	required: ["line_item_title", "line_item_desc","room_type","unit_price","updated_by"],
+	required: ["line_item_title", "line_item_desc","room_type","unit_price","updated_by","tax_type"],
 	properties: {
 		line_item_title: {
 			type: "string",
@@ -40,6 +44,10 @@ const line_item_update_schema = {
 			minLength: 1,
 		},
         room_type: {
+			type: "string",
+			minLength: 1,
+		},
+		tax_type: {
 			type: "string",
 			minLength: 1,
 		},

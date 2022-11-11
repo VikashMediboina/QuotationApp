@@ -22,6 +22,8 @@ main_items_router.post("/insert/",validate({ body: main_item_create_schema }),(r
         const request_body={
             main_item_title:req.body.main_item_title,
             main_item_desc:req.body.main_item_desc,
+            main_item_depth:req.body.main_item_depth,
+            tax_type:req.body.tax_type,
             room_type:req.body.room_type,
             unit_price:req.body.unit_price,
             inserted_by:req.body.inserted_by,
@@ -55,7 +57,9 @@ main_items_router.put("/update/:id",validate({ body: main_item_update_schema }),
     const request_body={
         main_item_id:req.params.id,
         main_item_title:req.body.main_item_title,
+        main_item_depth:req.body.main_item_depth,
         main_item_desc:req.body.main_item_desc,
+        tax_type:req.body.tax_type,
         room_type:req.body.room_type,
         unit_price:req.body.unit_price,
         updated_by:req.body.updated_by,
