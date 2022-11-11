@@ -17,7 +17,7 @@ import {
   } from "reactstrap"
   import Select from "react-select";
   import {setAlert} from "../../../store/genric/genericAction"
-  import {VIEW_EMPLOYEE_URL,VIEW_CUSTOMERS_URL,UPDATE_CUSTOMERS_URL,ADD_CUSTOMER_QUTOATION_URL, GET_CUSTOMER_QUTOATION_URL} from "../../../Constonts/api"
+  import {VIEW_EMPLOYEE_URL,VIEW_CUSTOMERS_URL,UPDATE_CUSTOMER_QUTOATION_URL,ADD_CUSTOMER_QUTOATION_URL, GET_CUSTOMER_QUTOATION_URL} from "../../../Constonts/api"
   import { connect } from "react-redux"
   import axios from "axios"
 import AvForm from 'availity-reactstrap-validation/lib/AvForm'
@@ -27,12 +27,15 @@ const AddCustomerDetails=(props)=> {
   const {setselectedcustGroup,selectedcustGroup,selectedempGroup,setselectedempGroup,formType,changeTab,login,cacheDetails,quotation_id,setquotation_id,setDetails,details}=props
   // const [selectedcustGroup, setselectedcustGroup] = useState(null);
   const [selectedempGroup1, setselectedempGroup1] = useState(null);
+  const [selectedcustGroup1, setselectedcustGroup1] = useState(null);
   const [customerGroup, setcustomerGroup] = useState(null);
   const [employeeGroup, setemployeeGroup] = useState(null);
   const [customers, setCustomers] = useState(null);
   const [employes, setemployes] = useState(null);
+  const [fromCust,setFromCust]=useState(null)
   const [defalutValues,setdefalutValues]=useState(null)
   const handleSelectGroup=(selectedGroup)=> {
+    setselectedcustGroup1(selectedGroup);
     setselectedcustGroup(selectedGroup);
   }
   const handleEmpSelectGroup=(selectedGroup)=> {
@@ -45,6 +48,7 @@ const AddCustomerDetails=(props)=> {
         //   message:val.data.msg,
         //   type:"SUCCESS"
         // })
+        console.log(val.data,"ccust")
       
         let custgrup=val.data.values.map((customer,index)=>{
           return{
@@ -54,6 +58,27 @@ const AddCustomerDetails=(props)=> {
           }
 
       })
+      axios.get(VIEW_EMPLOYEE_URL).then((val)=>{
+      
+     console.log(val.data,"emp")
+        let empgrup=val.data.values.map((employe,index)=>{
+          return{
+              ...employe,
+              label:employe.employee_name,
+              value:employe.emp_id
+          }
+      })
+        setemployeeGroup(empgrup)
+        setemployes(val.data.values)
+      fetchDetails(empgrup,custgrup)
+    }).catch(err=>{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+      
+    })
+
     setcustomerGroup(custgrup)
     setCustomers(val.data.values)
 
@@ -64,26 +89,7 @@ const AddCustomerDetails=(props)=> {
       })
       
     })
-    axios.get(VIEW_EMPLOYEE_URL).then((val)=>{
-      
-     
-        let empgrup=val.data.values.map((employe,index)=>{
-          return{
-              ...employe,
-              label:employe.employee_name,
-              value:employe.emp_id
-          }
-      })
-        setemployeeGroup(empgrup)
-        setemployes(val.data.values)
-      
-    }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
-      
-    })
+   
 
 
 
@@ -91,23 +97,28 @@ const AddCustomerDetails=(props)=> {
    
 
   },[])
-  useEffect(()=>{
-    if(quotation_id){
 
+  const fetchDetails=(empgrup,custgrup)=>{
+    if(quotation_id){
+      console.log(employeeGroup,customers)
       axios.get(GET_CUSTOMER_QUTOATION_URL+quotation_id).then((val)=>{
         
         // setDetails(val.da)
-        for(let i=0;i<employeeGroup.length;i++){
-          if(employeeGroup[i].employee_id==val.data.values.lead_by){
-            setselectedempGroup(employeeGroup[i])
+        console.log(val.data,empgrup,custgrup)
+        for(let i=0;i<empgrup.length;i++){
+          if(empgrup[i].employee_id==val.data.values[0].lead_by){
+            setselectedempGroup(empgrup[i])
+            setselectedempGroup1(empgrup[i])
           }
         }
-        for(let i=0;i<customers.length;i++){
-          if(customers[i].customer_id==val.data.values.customer_id){
-            setselectedempGroup(customers[i])
+        for(let i=0;i<custgrup.length;i++){
+          if(custgrup[i].customer_id==val.data.values[0].customer_id){
+            console.log("inside",)
+            setselectedcustGroup(custgrup[i])
+            setselectedcustGroup1(custgrup[i])
           }
         }
-         
+        setFromCust(val.data.values[0])
         
       }).catch(err=>{
         props.setAlert({
@@ -118,7 +129,10 @@ const AddCustomerDetails=(props)=> {
       })
 
     }
-  },[quotation_id])
+  }
+  useEffect(()=>{
+    fetchDetails(employeeGroup,customers)
+  },[quotation_id,employeeGroup,customers])
   const addCustomers=(e,v)=>{
     e.preventDefault()
       let body={
@@ -137,22 +151,23 @@ const AddCustomerDetails=(props)=> {
         "address_3":v.p_address_3,
         "state":v.p_state,
         "address_1":v.p_address_1,
-        "pin_code":v.p_pin_code,
+        "pin_code":Number(v.p_pin_code),
         "updated_by":login.employee_id,
+        "inserted_by":login.employee_id,
         "quotation_date":new Date(),
         "quot_status":cacheDetails?.status_code[0]
 
     }
-     
-      axios.post(ADD_CUSTOMER_QUTOATION_URL,body).then((val)=>{
+     let url=quotation_id? UPDATE_CUSTOMER_QUTOATION_URL+quotation_id: ADD_CUSTOMER_QUTOATION_URL
+      axios.post(url,body).then((val)=>{
         
           // setAlert({
           //   message:val.data.msg,
           //   type:"SUCCESS"
           // })
           setDetails(body)
-          setquotation_id(val.data.quotation_id)
-          changeTab(2 )
+          setquotation_id(val.data.quotation_id?val.data.quotation_id:quotation_id)
+          changeTab(2)
         
       }).catch(err=>{
         setAlert({
@@ -175,7 +190,7 @@ const AddCustomerDetails=(props)=> {
                     <label slot='start' className="col-lg-3 col-form-label">Customer</label>
                     <div className="col-lg-9">
                     <Select
-                      value={selectedcustGroup}
+                      value={selectedcustGroup1}
                       onChange={
                         handleSelectGroup
                       }
@@ -261,7 +276,7 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="customer_email"
                           label="Email"
-                          value={selectedcustGroup?.customer_email}
+                          value={fromCust?fromCust.mail_id:selectedcustGroup?.customer_email}
                           className="form-control"
                           placeholder="Enter Email"
                           type="text"
@@ -274,7 +289,7 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="customer_phone_number"
                           label="Phone"
-                          value={selectedcustGroup?.customer_phone_number}
+                          value={fromCust?fromCust.mobile_1:selectedcustGroup?.customer_phone_number}
                           className="form-control"
                           placeholder="Enter Phone"
                           type="number"
@@ -411,7 +426,7 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="p_address_1"
                           label="Address 1"
-                          // value={selectedcustGroup?.address_1}
+                          value={fromCust?fromCust.address_1:""}
                           className="form-control"
                           placeholder="Enter Address 1"
                           type="text"
@@ -427,6 +442,8 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="p_address_2"
                           label="Address 2"
+                          value={fromCust?fromCust.address_2:""}
+
                           // value={selectedcustGroup?.address_2}
                           className="form-control"
                           placeholder="Enter Address 2"
@@ -445,6 +462,8 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="p_address_3"
                           label="Address 3"
+                          value={fromCust?fromCust.address_3:""}
+
                           // value={selectedcustGroup?.address_3}
                           className="form-control"
                           placeholder="Enter Address 3"
@@ -457,6 +476,8 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="p_city"
                           label="City"
+                          value={fromCust?fromCust.city:""}
+
                           // value={selectedcustGroup?.city}
                           className="form-control"
                           placeholder="Enter City"
@@ -470,6 +491,8 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="p_state"
                           label="state"
+                          value={fromCust?fromCust.state:""}
+
                           // value={selectedcustGroup?.state}
                           className="form-control"
                           placeholder="Enter state"
@@ -485,6 +508,8 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="p_country"
                           label="Country"
+                          value={fromCust?fromCust.country:""}
+
                           // value={selectedcustGroup?.country}
                           className="form-control"
                           placeholder="Enter Country"
@@ -501,6 +526,8 @@ const AddCustomerDetails=(props)=> {
         <AvField
                           name="p_pin_code"
                           label="Pin Code"
+                          value={fromCust?fromCust.pin_code:""}
+
                           // value={selectedcustGroup?.country}
                           className="form-control"
                           placeholder="Enter Pin Code"

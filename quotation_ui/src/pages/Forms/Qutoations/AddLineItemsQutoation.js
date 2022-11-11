@@ -5,7 +5,7 @@ import {
     Col
   } from "reactstrap"
   import {setAlert} from "../../../store/genric/genericAction"
-  import {ADD_EMPLOYEE_URL,ADD_LINE_ITEMS_QUTOATION_URL,ADD_MAIN_ITEMS_QUTOATION_URL,UPDATE_EMPLOYEE_URL,VIEW_COMPANY_URL} from "../../../Constonts/api"
+  import {ADD_EMPLOYEE_URL,ADD_LINE_ITEMS_QUTOATION_URL,ADD_MAIN_ITEMS_QUTOATION_URL,UPDATE_EMPLOYEE_URL,UPDATE_LINE_ITEMS_QUTOATION_URL,VIEW_COMPANY_URL} from "../../../Constonts/api"
   import { connect } from "react-redux"
   import axios from "axios"
 import AvForm from 'availity-reactstrap-validation/lib/AvForm'
@@ -42,19 +42,19 @@ const fetch_line_items=(id,value)=>{
     }
   }
 }
-const fetchCompanyData=()=>{
-  axios.get(VIEW_COMPANY_URL).then((val)=>{
+// const fetchCompanyData=()=>{
+//   axios.get(VIEW_COMPANY_URL).then((val)=>{
    
-    setCompany(company)
+//     setCompany(company)
     
-  }).catch(err=>{
-    props.setAlert({
-      message:String(err),
-      type:"ERROR"
-    })
+//   }).catch(err=>{
+//     props.setAlert({
+//       message:String(err),
+//       type:"ERROR"
+//     })
     
-  })
-}
+//   })
+// }
 
   const addEmployees=(e,v)=>{
     e.preventDefault()
@@ -100,19 +100,24 @@ const fetchCompanyData=()=>{
     }
     else{
       var body={
-        "employee_name":v.employee_name,
-        "employee_code":v.employee_code,
-        "employee_email":v.employee_email,
-        "reporting_to":v?.reporting_to?v?.reporting_to:"",
-        "employment_id":defaultval.employment_id,
-        "company_id":v.company_id,
-        "employee_phone_number":v.employee_phone_number,
-        "location":v.location,
-        "start_date":v.start_date,
-        "job_code":v.job_code,
-        "updated_by":login.employee_id
+        "seq_no":Number(seq_no),
+        "line_seq_no":Number(defaultval.line_seq_no),
+        "room_type":v.room_type,
+        "line_item_id":Number(v.line_item_id),
+        "line_item_title":fetch_line_items(v.line_item_id,"line_item_title"),
+        "line_item_desc":v.line_item_desc,
+        "quantity":v.quantity,
+        "unit_price":v.unit_price,
+        "tot_price":v.tot_price,
+        "disc_price":v.disc_price?v.disc_price:0,
+        "net_price":v.net_price,
+        "cgst":v.net_price*fetch_tax()*0.5,
+        "sgst":v.net_price*fetch_tax()*0.5,
+        "igst":0,
+        "tax_type":selectedlineItems.tax_type,
+        "org_unit_price":0
     }
-      axios.put(ADD_MAIN_ITEMS_QUTOATION_URL+defaultval.employee_id,body).then((val)=>{
+      axios.put(UPDATE_LINE_ITEMS_QUTOATION_URL+quotation_id,body).then((val)=>{
         
           // setAlert({
           //   message:val.data.msg,
@@ -150,30 +155,38 @@ const onchangeLineItem=(e,v)=>{
     if(dropDownlineItems[i].line_item_id==v){
       setselectedlineItems(dropDownlineItems[i])
       setunit_price(Number(dropDownlineItems[i].unit_price))
-      setline_item_depth(Number(dropDownlineItems[i].line_item_depth))
 
-      setdepth(dropDownlineItems[i].line_item_depth)
     }
   }
 }
 useEffect(()=>{
   let dropDownItems=[]
   setDefaultValues(defaultval)
+  console.log(defaultval)
   for(let i=0;i<lineItems.length;i++){
-    if(lineItems[i].room_type==defaultval.room_type){
+    if(lineItems[i].room_type==defaultval?.room_type){
       dropDownItems.push(lineItems[i])
     }
   }
-  setRoomType(defaultval.room_type)
+  console.log(dropDownItems)
+  for(let i=0;i<dropDownItems.length;i++){
+    if(dropDownItems[i].line_item_id==defaultval?.line_item_id){
+      setselectedlineItems(dropDownItems[i])
+      setunit_price(Number(dropDownItems[i].unit_price))
+    }
+  }
+  setRoomType(defaultval?.room_type)
   setdropDownlineItems(dropDownItems)
-  fetchCompanyData()
+  // fetchCompanyData()
 },[defaultval])
+
+
+
   return (
     <React.Fragment>
 
           {/* Render Breadcrumbs */}
           {/* <Breadcrumbs title="Pages" breadcrumbItem="Add Employee" /> */}
-{console.log(seq_no)}
           <AvForm
                       className="form-horizontal"
                       onValidSubmit={(e, v) => {

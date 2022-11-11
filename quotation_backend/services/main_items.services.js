@@ -49,4 +49,15 @@ const get_all_main_items=()=> new Promise((resolve,reject)=>{
 
     })
 
+
+    const delete_main_item_service = (body)=>new Promise((resolve,reject)=>{
+        return pool.query(`DELETE FROM main_item WHERE "main_item_id"=$1`,[body.main_item_id]).then((results)=>{
+            resolve("Deleted SucessFully")
+        }).catch(err => {   
+            console.log(err)
+            reject( err)
+        })
+    
+    })
+
 module.exports={create_main_item_service,update_main_item_service,get_all_main_items}

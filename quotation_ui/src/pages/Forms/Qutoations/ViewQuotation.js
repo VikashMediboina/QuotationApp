@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 import TableCard from "../../../components/InsideComponents/TableCard"
-import { GET_QUTOATION_URL } from "../../../Constonts/api"
+import { DELETE_QUTOATION_URL, GET_QUTOATION_URL } from "../../../Constonts/api"
 import axios from "axios"
 import {setAlert} from "../../../store/genric/genericAction"
 import { connect } from "react-redux"
@@ -88,6 +88,21 @@ const [id,setId]=useState(false)
     setId(row.quotation_id)
     setShowAdd(true)
   }
+  const onDeleteButton=(row)=>{
+    axios.post(DELETE_QUTOATION_URL+row.quotation_id,{}).then((val)=>{
+    
+      props.setAlert({
+        message:val.data.msg,
+        type:"SUCCESS"
+      })
+    fetchData()
+  }).catch(err=>{
+    props.setAlert({
+      message:String(err),
+      type:"ERROR"
+    })
+  })
+  }
   return (
     <React.Fragment>
      {!showAdd? <div className="page-content">
@@ -103,6 +118,7 @@ const [id,setId]=useState(false)
           editIcon={true}
           deleteIcon={true}
           onEditButton={onEditButton}
+          onDeleteButton={onDeleteButton}
           />
            
           </Col>
@@ -115,8 +131,9 @@ const [id,setId]=useState(false)
 
 
 const mapStateToProps = state => {
+  const { cacheDetails } = state?.genricReducer
  
-  return {  }
+  return {  cacheDetails}
 }
 export default connect(mapStateToProps, { setAlert })(ViewQuotation)
 

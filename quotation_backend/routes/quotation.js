@@ -1,7 +1,7 @@
 const express=require("express")
 const { Validator } = require("express-json-validator-middleware");
 const { update_line_item_service } = require("../services/line.services");
-const {  create_qutations_service, get_all_qutations, get_all_main_items_qutations, get_all_line_items_qutations, create_qutation_service, create_qutation_main_item_service, create_qutation_line_item_service, update_customer_qutation_service, update_main_items_qutation_service, get_qutation_by_id } = require("../services/quotation.services");
+const {  create_qutations_service, get_all_qutations, get_all_main_items_qutations, get_all_line_items_qutations, create_qutation_service, create_qutation_main_item_service, create_qutation_line_item_service, update_customer_qutation_service, update_main_items_qutation_service, get_qutation_by_id, delete_qutation_service, delete_main_item_qutation_service, delete_line_item_qutation_service, update_status } = require("../services/quotation.services");
 
 const quotation_router=express.Router()
 
@@ -30,6 +30,8 @@ quotation_router.post("/insertCustomer/" ,(req,res,next)=>{
             mobile_1:req.body.mobile_1,
             mobile_2:req.body.mobile_2,
             mail_id:req.body.mail_id,
+            pin_code:req.body.pin_code,
+            country:req.body.country,
             customer_id:req.body.customer_id,
             quot_status:req.body.quot_status,
             line_item_details:req.body.line_item_details,
@@ -132,16 +134,19 @@ quotation_router.get("/lineItems/:id",(req,res,next)=>{
 
 
 
-quotation_router.put("/updateCustomer/:id" ,(req,res,next)=>{
+quotation_router.post("/updateCustomer/:id" ,(req,res,next)=>{
     console.log(req.body)
         const request_body={
-            quotation_id:req.body.id,
+            quotation_id:req.params.id,
             customer_name:req.body.customer_name,
             address_1:req.body.address_1,
             address_2:req.body.address_2,
             address_3:req.body.address_3,
             city:req.body.city,
             state:req.body.state,
+            lead_by_name:req.body.lead_by_name,
+            pin_code:req.body.pin_code,
+            country:req.body.country,
             quotation_date:req.body.quotation_date,
             lead_by:req.body.lead_by,
             shop_manager_id:req.body.shop_manager_id,
@@ -229,6 +234,66 @@ quotation_router.put("/updateLineItem/:id" ,(req,res,next)=>{
         })
 })
 
-
-
+quotation_router.post("/deleteQutation/:id" ,(req,res,next)=>{
+    console.log(req.body)
+        const request_body={
+            quotation_id:req.params.id
+        }
+        delete_qutation_service(request_body)
+        .then(values=>{
+            console.log(values)
+            res.status(200).json({"msg":values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+quotation_router.post("/deleteLineItems/:id" ,(req,res,next)=>{
+    console.log(req.body)
+        const request_body={
+            quotation_id:req.params.id,
+            seq_no:req.body.seq_no,
+            line_seq_no:req.body.line_seq_no
+        }
+        delete_line_item_qutation_service(request_body)
+        .then(values=>{
+            console.log(values)
+            res.status(200).json({"msg":values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+quotation_router.post("/deleteMainItems/:id" ,(req,res,next)=>{
+    console.log(req.body)
+        const request_body={
+            quotation_id:req.params.id,
+            seq_no:req.body.seq_no
+        }
+        delete_main_item_qutation_service(request_body)
+        .then(values=>{
+            console.log(values)
+            res.status(200).json({"msg":values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+quotation_router.post("/updateActive/:id" ,(req,res,next)=>{
+    console.log(req.body)
+        const request_body={
+            quotation_id:req.params.id,
+            quot_status:req.body.quot_status,
+            updated_by:req.body.updated_by,
+            updated_date:new Date()
+        }
+        update_status(request_body)
+        .then(values=>{
+            console.log(values)
+            res.status(200).json({"msg":values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
 module.exports=quotation_router

@@ -133,7 +133,8 @@ const create_line_items=(quotation_id,body,new_line_seq_no)=>(
             line.org_unit_price,
             body.inserted_by,
            new Date(),
-           line.tax_type
+           line.tax_type,
+           line.room_type
     ])
 ))
 

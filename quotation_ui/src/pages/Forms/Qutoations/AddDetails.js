@@ -5,7 +5,7 @@ import { CardBody, Row, Col, Card, Table, Button, Modal, ModalHeader, ModalBody 
 import { Link } from "react-router-dom"
 import { setAlert } from "../../../store/genric/genericAction"
 import { connect } from "react-redux"
-import { VIEW_EMPLOYEE_URL, DELETE_EMPLOYEE_URL, VIEW_MAIN_ITEMS_URL, VIEW_LINE_ITEMS_URL, VIEW_CATOGERIES_URL, GET_LINE_ITEMS_QUTOATION_URL, GET_MAIN_ITEMS_QUTOATION_URL } from "../../../Constonts/api"
+import { VIEW_EMPLOYEE_URL, DELETE_EMPLOYEE_URL, VIEW_MAIN_ITEMS_URL, VIEW_LINE_ITEMS_URL, VIEW_CATOGERIES_URL, GET_LINE_ITEMS_QUTOATION_URL, GET_MAIN_ITEMS_QUTOATION_URL, DELETE_LINE_QUTOATION_URL, DELETE_MAIN_QUTOATION_URL, CHANGE_STATUS_ACTIVE_URL } from "../../../Constonts/api"
 import axios from "axios"
 //Import Breadcrumb
 // import Breadcrumbs from "../../components/Common/Breadcrumb"
@@ -16,7 +16,7 @@ import AddMainItemsQutoation from "./AddMainItemsQutoation";
 import AddLineItemsQutoation from "./AddLineItemsQutoation";
 
 const AddDetails = (props) => {
-    const { projectAdd, setprojectAdd, setselectedcustGroup, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details,quotation_id } = props
+    const { projectAdd, setprojectAdd, setselectedcustGroup, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details,quotation_id,login,cacheDetails } = props
     // useEffect(()=>{
     const [items, setItems] = useState([])
     const [modal, setmodal] = useState(false)
@@ -24,13 +24,15 @@ const AddDetails = (props) => {
     const [seqNo, setSeqNo] = useState(null)
     const [form, setform] = useState("Main")
     const [defaultMainval, setDefaultMainVal] = useState({})
-
+    const [defaultLineval,setDefaultLineVal]=useState(null)
     const [mainItems,setMainItems]= useState([])
     const [catogeries,setcatogeries]= useState([])
     const [lineItems,setLineItems]= useState([])
     const [lineItemsQutation,setLineItemsQutation]= useState([])
     const [mainItemsQutation,setMainItemsQutation]= useState([])
     const [totalSum,setTotalSum]=useState(0)
+    const [descountSum,setDescountSum]=useState(0)
+    const [netSum,setNetSum]=useState(0)
     // },[projectAdd,selectedcustGroup])
     useEffect(()=>{
         axios.get(VIEW_CATOGERIES_URL).then((val)=>{
@@ -153,6 +155,8 @@ useEffect(()=>{
     useEffect(()=>{
         let line={}
         let sum=0
+        let discsum=0
+        let netsums=0
         let itemsInside=[]
         for(let i=0;i<lineItemsQutation.length;i++){
         if((line[""+lineItemsQutation[i].quotation_id+lineItemsQutation[i].seq_no]==undefined)){
@@ -161,7 +165,9 @@ useEffect(()=>{
         else{
             line[""+lineItemsQutation[i].quotation_id+lineItemsQutation[i].seq_no].push(lineItemsQutation[i])
         }
-        sum+=Number(lineItemsQutation[i].net_price)
+        sum+=Number(lineItemsQutation[i]?.tot_price)
+        discsum+=Number(lineItemsQutation[i]?.disc_price)
+        netsums+=Number(lineItemsQutation[i]?.net_price)
         }
         console.log(line)
         itemsInside=mainItemsQutation.map(item=>(
@@ -172,10 +178,14 @@ useEffect(()=>{
             ))
             for(let i=0;i<mainItemsQutation.length;i++){
                 
-                sum+=Number(mainItemsQutation[i].net_price)
+                sum+=Number(lineItemsQutation[i]?.tot_price)
+        discsum+=Number(lineItemsQutation[i]?.disc_price)
+        netsums+=Number(lineItemsQutation[i]?.net_price)
                 }
             setItems(itemsInside)
             setTotalSum(sum)
+            setDescountSum(discsum)
+            setNetSum(netsums)
             },[mainItemsQutation,lineItemsQutation])
     const addMainItems = () => {
         setDefaultMainVal({})
@@ -197,8 +207,66 @@ useEffect(()=>{
         setmodal(!modal)
 
     }
-    const onDeleteMainButton = () => {
+    const onEditLineButton= (row) => {
+        setDefaultLineVal(row)
+        setFormType("Edit")
+        setSeqNo(row.seq_no)
+        setform("Line")
+        setmodal(!modal)
 
+    }
+    const onDeleteMainButton = (row) => {
+        axios.post(DELETE_MAIN_QUTOATION_URL+row.quotation_id,{
+            seq_no:row.seq_no
+        }).then((val)=>{
+    
+            props.setAlert({
+              message:val.data.msg,
+              type:"SUCCESS"
+            })
+            fetchDetails()
+        }).catch(err=>{
+          props.setAlert({
+            message:String(err),
+            type:"ERROR"
+          })
+        })
+    }
+    const confirmAndPrint=()=>{
+        axios.post(CHANGE_STATUS_ACTIVE_URL+quotation_id,{
+            quot_status:cacheDetails.status_code[1],
+            "updated_by":login.employee_id
+        }).then((val)=>{
+    
+            props.setAlert({
+              message:val.data.msg,
+              type:"SUCCESS"
+            })
+            changeTab(3)
+        }).catch(err=>{
+          props.setAlert({
+            message:String(err),
+            type:"ERROR"
+          })
+        })
+    }
+    const onDeleteLineButton = (row) => {
+        axios.post(DELETE_LINE_QUTOATION_URL+row.quotation_id,{
+            seq_no:row.seq_no,
+            line_seq_no:row.line_seq_no
+        }).then((val)=>{
+    
+            props.setAlert({
+              message:val.data.msg,
+              type:"SUCCESS"
+            })
+            fetchDetails()
+        }).catch(err=>{
+          props.setAlert({
+            message:String(err),
+            type:"ERROR"
+          })
+        })
     }
     return (
         <React.Fragment>
@@ -293,9 +361,9 @@ useEffect(()=>{
                                                 <th>Area</th>
                                                 <th>quantity</th>
                                                 <th>Unit Price</th>
-                                                <th>Discount Price</th>
+                                                {/* <th>Discount Price</th> */}
                                                 <th className="text-end">Price</th>
-                                                {!confirmDetails&&   <th className="text-end">Action</th>}
+                                                {!confirmDetails&&   <th className="text-end" hidden={confirmDetails}>Action</th>}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -312,15 +380,15 @@ useEffect(()=>{
                                                             <td>{item?.tot_area} Sqft</td>
                                                             <td>{item?.quantity}</td>
                                                             <td>&#8377; {item.unit_price}</td>
-                                                            <td>&#8377; {item.disc_price}</td>
+                                                            {/* <td>&#8377; {item.disc_price}</td> */}
                                                             <td className="text-end">&#8377; {item?.net_price}</td>
-                                                           {!confirmDetails&& <td className="text-end">
-                                                                {/* <button className="btn " onClick={() => onEditMainButton(item)}>
+                                                           {!confirmDetails&& <td className="text-end" hidden={confirmDetails}>
+                                                                <button className="btn " onClick={() => onEditMainButton(item)}>
                                                                     <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                                                                 </button>{" "}
                                                                 <button className="btn " onClick={() => onDeleteMainButton(item)}>
                                                                     <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
-                                                                </button>{" "} */}
+                                                                </button>{" "}
 
                                                                 <Button
                                                                     type="button"
@@ -343,15 +411,15 @@ useEffect(()=>{
                                                                         <td>{line?.tot_area} Sqft</td>
                                                                         <td>{line?.qty}</td>
                                                                         <td>&#8377; {line.unit_price}</td>
-                                                                        <td >&#8377; {line.disc_price}</td>
+                                                                        {/* <td >&#8377; {line.disc_price}</td> */}
                                                                         <td className="text-end">&#8377; {line.net_price}</td>
-                                                                        {!confirmDetails&& <td className="text-end">
-                                                                            {/* <button className="btn " onClick={() => onEditMainButton(item)}>
+                                                                        {!confirmDetails&& <td className="text-end" hidden={confirmDetails}>
+                                                                            <button className="btn " onClick={() => onEditLineButton(line)}>
                                                                                 <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                                                                             </button>{" "}
-                                                                            <button className="btn " onClick={() => onDeleteMainButton(item)}>
+                                                                            <button className="btn " onClick={() => onDeleteLineButton(line)}>
                                                                                 <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
-                                                                            </button> */}
+                                                                            </button>
                                                                         </td>}
                                                                     </tr>)
                                                             })
@@ -363,21 +431,21 @@ useEffect(()=>{
 
                                             </tr>
                                             <tr>
-                                                <td colSpan="7" className="text-end">Sub Total</td>
+                                                <td colSpan="6" className="text-end">Sub Total</td>
                                                 <td className="text-end">&#8377;{totalSum}</td>
                                             </tr>
-                                            {/* <tr>
-                                                <td colSpan="7" className="border-0 text-end">
-                                                    <strong>Shipping</strong>
-                                                </td>
-                                                <td className="border-0 text-end">&#8377; 13.00</td>
-                                            </tr> */}
                                             <tr>
-                                                <td colSpan="7" className="border-0 text-end">
+                                                <td colSpan="6" className="border-0 text-end">
+                                                    <strong>Discounted Price</strong>
+                                                </td>
+                                                <td className="border-0 text-end">&#8377; {descountSum}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan="6" className="border-0 text-end">
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td className="border-0 text-end">
-                                                    <h4 className="m-0">&#8377;{totalSum}</h4>
+                                                    <h4 className="m-0">&#8377;{netSum}</h4>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -398,7 +466,7 @@ useEffect(()=>{
                                         <Link to="#"
                                             onClick={()=>{changeTab(confirmDetails?2:1)}}
                                             className="btn btn-primary w-md waves-effect waves-light">Previous</Link>{" "}
-                                        <Link to="#" className="btn btn-primary w-md waves-effect waves-light" onClick={()=>{changeTab(3)}}>Print</Link>
+                                        <Link to="#" className="btn btn-primary w-md waves-effect waves-light" onClick={confirmAndPrint}>Confirm and Print</Link>
                                     </div>
                                 </div>
                                 
@@ -428,7 +496,7 @@ useEffect(()=>{
                     </ModalHeader>
                     <ModalBody>
                         {form=="Main" ? <AddMainItemsQutoation formType={formType} defaultval={defaultMainval} onAddButtonClose={onModalClose} quotation_id={quotation_id} mainItems={mainItems} catogeries={catogeries}/> : 
-                        <AddLineItemsQutoation formType={formType} defaultval={defaultMainval} onAddButtonClose={onModalClose} quotation_id={quotation_id} lineItems={lineItems} catogeries={catogeries} seq_no={seqNo}/>}
+                        <AddLineItemsQutoation formType={formType} defaultval={defaultLineval} onAddButtonClose={onModalClose} quotation_id={quotation_id} lineItems={lineItems} catogeries={catogeries} seq_no={seqNo}/>}
                     </ModalBody>
                 </Modal>
             </div>
@@ -437,8 +505,10 @@ useEffect(()=>{
     );
 }
 const mapStateToProps = state => {
-
-    return {}
+    const { cacheDetails } = state?.genricReducer
+    const { login } = state?.Login
+ 
+    return {  login,cacheDetails}
 }
 export default connect(mapStateToProps, { setAlert })(AddDetails)
 

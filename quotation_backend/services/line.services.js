@@ -49,4 +49,16 @@ const get_all_line_items=()=> new Promise((resolve,reject)=>{
 
     })
 
+
+
+const delete_line_item_service = (body)=>new Promise((resolve,reject)=>{
+    return pool.query(`DELETE FROM line_item WHERE "line_item_id"=$1`,[body.line_item_id]).then((results)=>{
+        resolve("Deleted SucessFully")
+    }).catch(err => {   
+        console.log(err)
+        reject( err)
+    })
+
+})
+
 module.exports={create_line_item_service,update_line_item_service,get_all_line_items}

@@ -5,7 +5,7 @@ import {
     Col
   } from "reactstrap"
   import {setAlert} from "../../../store/genric/genericAction"
-  import {ADD_EMPLOYEE_URL,ADD_MAIN_ITEMS_QUTOATION_URL,UPDATE_EMPLOYEE_URL,VIEW_COMPANY_URL} from "../../../Constonts/api"
+  import {ADD_EMPLOYEE_URL,ADD_MAIN_ITEMS_QUTOATION_URL,UPDATE_EMPLOYEE_URL,UPDATE_MAIN_ITEMS_QUTOATION_URL,VIEW_COMPANY_URL} from "../../../Constonts/api"
   import { connect } from "react-redux"
   import axios from "axios"
 import AvForm from 'availity-reactstrap-validation/lib/AvForm'
@@ -104,19 +104,29 @@ const fetchCompanyData=()=>{
     }
     else{
       var body={
-        "employee_name":v.employee_name,
-        "employee_code":v.employee_code,
-        "employee_email":v.employee_email,
-        "reporting_to":v?.reporting_to?v?.reporting_to:"",
-        "employment_id":defaultval.employment_id,
-        "company_id":v.company_id,
-        "employee_phone_number":v.employee_phone_number,
-        "location":v.location,
-        "start_date":v.start_date,
-        "job_code":v.job_code,
+        "seq_no":defaultval.seq_no,
+        "room_type":v.room_type,
+        "main_item_id":Number(v.main_item_id),
+        "main_item_title":fetch_main_items(v.main_item_id,"main_item_title"),
+        "main_item_desc":v.main_item_desc,
+        "length":v.length,
+        "height":v.height,
+        "depth":Number(v.depth),
+        "tot_area":v.tot_area,
+        "quantity":v.quantity,
+        "unit_price":v.unit_price,
+        "tot_price":v.tot_price,
+        "disc_price":v.disc_price?v.disc_price:0,
+        "net_price":v.net_price,
+        "cgst":v.net_price*fetch_tax()*0.5,
+        "sgst":v.net_price*fetch_tax()*0.5,
+        "igst":0,
+        "tax_type":selectedMainItems.tax_type,
+        "main_item_depth":Number(selectedMainItems.main_item_depth),
+        "org_unit_price":0,
         "updated_by":login.employee_id
     }
-      axios.put(ADD_MAIN_ITEMS_QUTOATION_URL+defaultval.employee_id,body).then((val)=>{
+      axios.put(UPDATE_MAIN_ITEMS_QUTOATION_URL+quotation_id,body).then((val)=>{
         
           // setAlert({
           //   message:val.data.msg,
@@ -168,6 +178,15 @@ useEffect(()=>{
       dropDownItems.push(mainItems[i])
     }
   }
+  for(let i=0;i<dropDownItems.length;i++){
+    if(dropDownItems[i].main_item_id==defaultval.main_item_id){
+      setselectedMainItems(dropDownItems[i])
+      setunit_price(Number(dropDownItems[i].unit_price))
+      setmain_item_depth(Number(dropDownItems[i].main_item_depth))
+
+      setdepth(dropDownItems[i].main_item_depth)
+    }
+  }
   setRoomType(defaultval.room_type)
   setdropDownMainItems(dropDownItems)
   fetchCompanyData()
@@ -195,6 +214,7 @@ useEffect(()=>{
                           placeholder="Enter Room Type"
                           type="select"
                           onChange={onchangeRoomType}
+                          disabled={formType!="Add"}
                           required
                         >
                           <option value="">Select Room Type</option>
@@ -219,6 +239,7 @@ useEffect(()=>{
                           className="form-control"
                           placeholder="Enter Main Items"
                           type="select"
+                          disabled={formType!="Add"}
                           onChange={onchangeMainItem}
                           required
                         >
