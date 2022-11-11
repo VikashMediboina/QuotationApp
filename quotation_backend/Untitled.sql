@@ -67,7 +67,7 @@ SET default_table_access_method = heap;
 -- TOC entry 215 (class 1259 OID 16391)
 -- Name: address; Type: TABLE; Schema: public; Owner: postgres
 --
-
+DROP TABLE public.address, public.catogeries,public.company_dtl,public.customer,public.employee,public.employment,public.line_item,public.main_item,public.quotation,public.quotation_line_item,public.quotation_main_item,public.shop_detail;
 CREATE TABLE public.address (
     address_id numeric NOT NULL,
     address_type character varying(2),
