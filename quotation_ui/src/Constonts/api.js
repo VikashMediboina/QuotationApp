@@ -1,4 +1,5 @@
 const devURL= "http://localhost:5001"
+// const devURL= "http://3.90.114.142"
 
 
 export const LOGIN_URL=devURL+"/user/login/"
