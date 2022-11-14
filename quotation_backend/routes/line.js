@@ -1,7 +1,8 @@
 const express=require("express")
 const { Validator } = require("express-json-validator-middleware");
+const errorHandler = require("../middleware/error_handler");
 const { line_item_create_schema, line_item_update_schema } = require("../models/line.model");
-const { create_line_item_service, get_all_line_items, update_line_item_service } = require("../services/line.services");
+const { create_line_item_service, get_all_line_items, update_line_item_service, delete_line_item_service } = require("../services/line.services");
 
 const line_router=express.Router()
 const { validate } = new Validator();
@@ -72,6 +73,21 @@ line_router.put("/update/:id",validate({ body: line_item_update_schema }),(req,r
         next(err)
         })
 })
+line_router.post("/delete/:id",(req,res,next)=>{
+    console.log(req.body,req.params.id)
+    const request_body={
+        line_item_id:req.params.id
+    }
 
+    delete_line_item_service(request_body)
+        .then(values=>{
+            // console.log(values)
+            res.status(200).json({'msg':values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+line_router.use(errorHandler)
 
 module.exports=line_router

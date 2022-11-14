@@ -32,10 +32,10 @@ const Login = (props) => {
       if(val.data){
         props.setCacheDetails(val.data, props.history)
         
-        props.setAlert({
-          message:val.data.msg,
-          type:"SUCCESS"
-        })
+        // props.setAlert({
+        //   message:val.data.msg,
+        //   type:"SUCCESS"
+        // })
       }else{
         props.setAlert({
           message:val.data.msg,
@@ -43,10 +43,19 @@ const Login = (props) => {
         })
       }
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
     })
   }
   // handleValidSubmit
@@ -71,10 +80,19 @@ const Login = (props) => {
         })
       }
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
     })
   }
 

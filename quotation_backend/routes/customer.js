@@ -1,8 +1,9 @@
 const express=require("express")
 var bodyParser = require('body-parser')
 const { Validator } = require("express-json-validator-middleware");
-const { create_customer_service, update_customer_service, get_all_customer } = require("../services/customer.service");
+const { create_customer_service, update_customer_service, get_all_customer, delete_customer_service } = require("../services/customer.service");
 const { customer_create_schema, customer_update_schema } = require("../models/customer.modal");
+const errorHandler = require("../middleware/error_handler");
 
 
 
@@ -88,6 +89,23 @@ customer_router.put("/update/:id",validate({ body: customer_update_schema }),(re
         next(err)
         })
 })
+customer_router.post("/delete/:id",(req,res,next)=>{
+    console.log(req.body,req.params.id)
+    const request_body={
+        customer_id:req.params.id,
+        updated_by:req.body?.updated_by,
+        updated_date:new Date()
+    }
 
+    delete_customer_service(request_body)
+        .then(values=>{
+            // console.log(values)
+            res.status(200).json({'msg':values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+customer_router.use(errorHandler)
 
 module.exports=customer_router

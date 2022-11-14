@@ -1,5 +1,6 @@
 const express=require("express")
 const { Validator } = require("express-json-validator-middleware");
+const errorHandler = require("../middleware/error_handler");
 const { update_line_item_service } = require("../services/line.services");
 const {  create_qutations_service, get_all_qutations, get_all_main_items_qutations, get_all_line_items_qutations, create_qutation_service, create_qutation_main_item_service, create_qutation_line_item_service, update_customer_qutation_service, update_main_items_qutation_service, get_qutation_by_id, delete_qutation_service, delete_main_item_qutation_service, delete_line_item_qutation_service, update_status } = require("../services/quotation.services");
 
@@ -296,4 +297,6 @@ quotation_router.post("/updateActive/:id" ,(req,res,next)=>{
         next(err)
         })
 })
+quotation_router.use(errorHandler)
+
 module.exports=quotation_router

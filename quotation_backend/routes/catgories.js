@@ -1,7 +1,8 @@
 const express=require("express")
 const { catgories_create_schema, catgories_update_schema } = require("../models/catgories.model")
 const { Validator } = require("express-json-validator-middleware");
-const { update_catogerie_service, create_catogerie_service, get_all_catogeries } = require("../services/catgories.services");
+const { update_catogerie_service, create_catogerie_service, get_all_catogeries, delete_catogerie_item_service } = require("../services/catgories.services");
+const errorHandler = require("../middleware/error_handler");
 
 
 const catgories_router=express.Router()
@@ -67,6 +68,22 @@ catgories_router.put("/update/:id",validate({ body: catgories_update_schema }),(
         next(err)
         })
 })
+catgories_router.post("/delete/:id",(req,res,next)=>{
+    console.log(req.body,req.params.id)
+    const request_body={
+        catogerie_id:req.params.id
+    }
+
+    delete_catogerie_item_service(request_body)
+        .then(values=>{
+            // console.log(values)
+            res.status(200).json({'msg':values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+catgories_router.use(errorHandler)
 
 
 module.exports=catgories_router

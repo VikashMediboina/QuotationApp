@@ -1,8 +1,9 @@
 const express=require("express")
 const { create_main_item } = require("../connector/crate_queries")
 const { main_item_create_schema, main_item_update_schema } = require("../models/main_items.model")
-const { update_main_item_service, get_all_main_items, create_main_item_service } = require("../services/main_items.services")
+const { update_main_item_service, get_all_main_items, create_main_item_service, delete_main_item_service } = require("../services/main_items.services")
 const { Validator } = require("express-json-validator-middleware");
+const errorHandler = require("../middleware/error_handler");
 
 const main_items_router=express.Router()
 
@@ -76,8 +77,23 @@ main_items_router.put("/update/:id",validate({ body: main_item_update_schema }),
         })
 })
 
+main_items_router.post("/delete/:id",(req,res,next)=>{
+    console.log(req.body,req.params.id)
+    const request_body={
+        main_item_id:req.params.id
+    }
 
+    delete_main_item_service(request_body)
+        .then(values=>{
+            // console.log(values)
+            res.status(200).json({'msg':values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
 
+main_items_router.use(errorHandler)
 
 
 

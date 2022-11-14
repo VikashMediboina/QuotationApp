@@ -12,7 +12,7 @@ import {VIEW_CUSTOMERS_URL,DELETE_CUSTOMERS_URL} from "../../../Constonts/api"
 import axios from "axios"
 import AddCustomer from "./AddCustomer"
 const ViewCustomer = (props) => {
- 
+  const {login}=props
 	 const data = {
     columns: [
       {
@@ -160,22 +160,25 @@ const ViewCustomer = (props) => {
             field: "country",
             sort: "asc",
             width: 100,
-          },
-          {
-            label: "Action",
-            field: "action",
-            sort: "asc",
-            width: 250
           }
         ],
          rows:val.data.values}
        setDetails(data)
      
    }).catch(err=>{
-     props.setAlert({
-       message:String(err),
-       type:"ERROR"
-     })
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
      
    })
  }
@@ -205,17 +208,26 @@ const ViewCustomer = (props) => {
  
  
  const onDeleteButton=(row)=>{
-   axios.post(DELETE_CUSTOMERS_URL+row.company_id,{}).then((val)=>{
+   axios.post(DELETE_CUSTOMERS_URL+row.customer_id,{}).then((val)=>{
        props.setAlert({
          message:val.data.msg,
          type:"SUCCESS"
        })
      fetchData()
    }).catch(err=>{
-     props.setAlert({
-       message:String(err),
-       type:"ERROR"
-     })
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
  })
  }
  
@@ -231,12 +243,13 @@ const ViewCustomer = (props) => {
 
 <TableCard
 data={details} 
-addButton={"Add Customers"} 
+addButton={login?.access?.c_add?"Add Customers":""} 
 tittle={'Customers'} 
 onAddButton={onAddButton}
-editIcon={true}
-deleteIcon={true}
+editIcon={login?.access?.c_edit?true:false}
+deleteIcon={login?.access?.c_delete?true:false}
 onEditButton={onEditButton}
+onDeleteButton={onDeleteButton}
 />
 <Modal
         size="lg"
@@ -265,7 +278,9 @@ onEditButton={onEditButton}
 
 const mapStateToProps = state => {
  
-  return {  }
+    const { login } = state?.Login
+ 
+  return { login }
 }
 export default connect(mapStateToProps, { setAlert })(ViewCustomer)
 

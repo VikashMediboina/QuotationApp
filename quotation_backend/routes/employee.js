@@ -1,7 +1,9 @@
 const express=require("express")
 const { employee_create_schema, employee_update_schema } = require("../models/employee.model")
 const { Validator } = require("express-json-validator-middleware");
-const { get_all_employees, update_employment_service, create_employment_service } = require("../services/employement.service")
+const { get_all_employees, update_employment_service, create_employment_service } = require("../services/employement.service");
+const errorHandler = require("../middleware/error_handler");
+const { delete_employee_service } = require("../services/employee.service");
 
 const employee_router=express.Router()
 
@@ -32,6 +34,7 @@ employee_router.post("/insert/",validate({ body: employee_create_schema }),(req,
             company_id: req.body?.company_id,
             job_code: req.body?.job_code,
             start_date:req.body?.start_date,
+            access:req.body.access,
             stop_date:req.body?.stop_date,
             inserted_by: req.body?.inserted_by,
             inserted_date:new Date(),
@@ -53,7 +56,7 @@ employee_router.get("/get/",(req,res,next)=>{
     get_all_employees()
         .then(values=>{
             console.log(values)
-            res.status(200).json({'values':values})
+            res.status(200).json({'values':values,'msg':"Retrived data"})
         })
         .catch(err=>{
         next(err)
@@ -80,6 +83,7 @@ employee_router.put("/update/:id",validate({ body: employee_update_schema }),(re
         start_date:req.body?.start_date,
         stop_date:req.body?.stop_date,
         updated_by:req.body?.updated_by,
+        access:req.body.access,
         updated_date:new Date()
     }
     update_employment_service(request_body)
@@ -91,7 +95,23 @@ employee_router.put("/update/:id",validate({ body: employee_update_schema }),(re
         next(err)
         })
 })
+employee_router.post("/delete/:id",(req,res,next)=>{
+    console.log(req.body,req.params.id)
+    const request_body={
+        employee_id:req.params.id,
+        updated_by:req.body?.updated_by,
+        updated_date:new Date()
+    }
 
+    delete_employee_service(request_body)
+        .then(values=>{
+            // console.log(values)
+            res.status(200).json({'msg':values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
 
-
+employee_router.use(errorHandler)
 module.exports=employee_router

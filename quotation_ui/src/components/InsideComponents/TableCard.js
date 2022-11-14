@@ -6,8 +6,19 @@ import { Row, Col, Card, CardBody, CardTitle, CardSubtitle,Button } from "reacts
 function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEditButton,onDeleteButton}) {
     const [newData,setNewData]=useState({})
     useEffect(()=>{
+      let dummy=data
         if(data.rows){
-            data.rows=data.rows.map((row) => {
+          if(deleteIcon || editIcon){
+            dummy.columns.push(
+              {
+                label: "Action",
+                field: "action",
+                sort: "asc",
+                width: 250
+              })
+          }
+          
+          dummy.rows=dummy.rows.map((row) => {
                 return {
                   ...row,
                   'action': (
@@ -23,8 +34,9 @@ function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEdit
                   ),
                 };
               })
-              setNewData(data)
+              
         }
+        setNewData(dummy)
     },[data])
   return (
     

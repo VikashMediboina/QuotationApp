@@ -19,6 +19,7 @@ import classnames from "classnames"
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 import AddCustomerDetails from "./AddCustomerDetails"
 import AddDetails from "./AddDetails"
+import ViewQuotationById from "./ViewQuotationById"
 
 const AddQuotation = ({quotation_props}) => {
   // let id  = match.params;
@@ -100,8 +101,7 @@ const AddQuotation = ({quotation_props}) => {
                       </TabPane>
                      
                       <TabPane tabId={3}>
-                      {quotation_id&& <AddDetails   selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} confirmDetails={activeTab===3} setquotation_id={setquotation_id} quotation_id={quotation_id} changeTab={toggleTab}/>}
+                      {quotation_id&& <ViewQuotationById   quotation_id={quotation_id} />}
                       {/* <Invoice/> */}
                       </TabPane>
                     </TabContent>

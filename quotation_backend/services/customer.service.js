@@ -14,9 +14,9 @@ const create_customer_service = (body) => new Promise((resolve, reject) => {
                 }
                 new_add_id=address.add_id
                 console.log(new_cus_id,new_add_id)
-                pool.query(`Insert into customer ("customer_id", "address_id","customer_name","customer_email","customer_phone_number","customer_alt_phone_number","cust_profile","pin_code","inserted_by","inserted_date")  
-            VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9)`,
-                    [new_cus_id, new_add_id, body.customer_name, body.customer_email, body.customer_phone_number, body.customer_alt_phone_number,body.cust_profile,body.pin_code, body.inserted_by, body.inserted_date],
+                pool.query(`Insert into customer ("customer_id", "address_id","customer_name","customer_email","customer_phone_number","customer_alt_phone_number","cust_profile","inserted_by","inserted_date","cust_status")  
+            VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+                    [new_cus_id, new_add_id, body.customer_name, body.customer_email, body.customer_phone_number, body.customer_alt_phone_number,body.cust_profile, body.inserted_by, body.inserted_date,'ACTIVE'],
                 ).then((val) => {
                     pool.query('COMMIT').then(()=>{
                         resolve("Inserted SucessFully")
@@ -42,7 +42,7 @@ const create_customer_service = (body) => new Promise((resolve, reject) => {
     const get_all_customer=()=> new Promise((resolve,reject)=>{
         return pool.query(`SELECT *
         FROM customer c , address a
-        WHERE c.address_id=a.address_id`).then((results)=>{
+        WHERE c.address_id=a.address_id and c.cust_status='ACTIVE'`).then((results)=>{
             console.log(results.rows[0])
             resolve(results.rows)
         }).catch(err => {
@@ -71,6 +71,19 @@ const create_customer_service = (body) => new Promise((resolve, reject) => {
         reject( err)
     })
     })
+    const delete_customer_service = (body) => new Promise((resolve, reject) => {
+     
+       
+            pool.query(`UPDATE customer SET "cust_status"='NOT ACTIVE',"updated_by"=$1,"updated_date"=$2 WHERE "customer_id" = $3`,
+            [  body.updated_by, body.updated_date,body.customer_id],
+            )
+            .then((results) => {
+                console.log(results)
+                    resolve("Deleted SucessFully")
+            }).catch(err => {
+                console.log(err)
+                reject( err)
+            })
+})
 
-
-    module.exports = { create_customer_service,update_customer_service,get_all_customer }
+    module.exports = { create_customer_service,update_customer_service,get_all_customer,delete_customer_service }

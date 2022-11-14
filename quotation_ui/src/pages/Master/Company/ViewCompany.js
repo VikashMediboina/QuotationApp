@@ -24,6 +24,7 @@ import {VIEW_COMPANY_URL,DELETE_COMPANY_URL} from "../../../Constonts/api"
 import axios from "axios"
 
 const ViewCompany = (props) => {
+  const {login}=props
   const [modal, setmodal] = useState(false)
   const [formType, setFormType] = useState("Add")
  const  [defaultval,setDefaultVal]=useState({})
@@ -62,22 +63,25 @@ const fetchData=()=>{
             field: "location",
             sort: "asc",
             width: 150,
-          },
-          {
-            label: "Action",
-            field: "action",
-            sort: "asc",
-            width: 250
           }
         ],
         rows:val.data.values}
       setDetails(data)
     
   }).catch(err=>{
-    props.setAlert({
-      message:String(err),
-      type:"ERROR"
-    })
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
     
   })
 }
@@ -117,10 +121,19 @@ const onDeleteButton=(row)=>{
       })
     fetchData()
   }).catch(err=>{
-    props.setAlert({
-      message:String(err),
-      type:"ERROR"
-    })
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
 })
 }
 
@@ -138,11 +151,11 @@ const onDeleteButton=(row)=>{
 
           <TableCard 
           data={details} 
-          addButton={"Add Company Details"} 
+          addButton={login?.access?.company_add?"Add Company Details":""} 
           tittle={'Company Details'} 
           onAddButton={onAddButton}
-          editIcon={true}
-          deleteIcon={true}
+          editIcon={login?.access?.company_edit?true:false}
+          deleteIcon={login?.access?.company_delete?true:false}
           onEditButton={onEditButton}
           onDeleteButton={onDeleteButton}
           />
@@ -171,7 +184,9 @@ const onDeleteButton=(row)=>{
 }
 const mapStateToProps = state => {
  
-  return {  }
+    const { login } = state?.Login
+ 
+  return { login }
 }
 export default connect(mapStateToProps, { setAlert })(ViewCompany)
 

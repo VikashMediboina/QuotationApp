@@ -14,6 +14,7 @@ import {VIEW_EMPLOYEE_URL,DELETE_EMPLOYEE_URL} from "../../../Constonts/api"
 import axios from "axios"
 
 const ViewEmployee = (props) => {
+  const {login}=props
   const [modal, setmodal] = useState(false)
   const [formType, setFormType] = useState("Add")
  const  [defaultval,setDefaultVal]=useState({})
@@ -62,7 +63,7 @@ const ViewEmployee = (props) => {
           },
           {
             label: "Reporting to",
-            field: "Reporting_to",
+            field: "reporting_to",
             sort: "asc",
             width: 100,
           },
@@ -71,22 +72,25 @@ const ViewEmployee = (props) => {
             field: "location",
             sort: "asc",
             width: 100,
-          },
-          {
-            label: "Action",
-            field: "action",
-            sort: "asc",
-            width: 250
           }
         ],
          rows:val.data.values}
        setDetails(data)
      
    }).catch(err=>{
-     props.setAlert({
-       message:String(err),
-       type:"ERROR"
-     })
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
      
    })
  }
@@ -118,7 +122,7 @@ const ViewEmployee = (props) => {
  
  
  const onDeleteButton=(row)=>{
-   axios.post(DELETE_EMPLOYEE_URL+row.company_id,{}).then((val)=>{
+   axios.post(DELETE_EMPLOYEE_URL+row.employee_id,{}).then((val)=>{
      
        props.setAlert({
          message:val.data.msg,
@@ -126,10 +130,19 @@ const ViewEmployee = (props) => {
        })
      fetchData()
    }).catch(err=>{
-     props.setAlert({
-       message:String(err),
-       type:"ERROR"
-     })
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
  })
  }
  
@@ -145,12 +158,13 @@ const ViewEmployee = (props) => {
 			
           <TableCard
           data={details} 
-          addButton={"Add Employees"} 
+          addButton={login?.access?.emp_add?"Add Employees":""} 
           tittle={'Employees'} 
           onAddButton={onAddButton}
-          editIcon={true}
-          deleteIcon={true}
+          editIcon={login?.access?.emp_edit?true:false}
+          deleteIcon={login?.access?.emp_delete?true:false}
           onEditButton={onEditButton}
+          onDeleteButton={onDeleteButton}
           />
         <Modal
                   size="lg"
@@ -177,8 +191,9 @@ const ViewEmployee = (props) => {
 }
 
 const mapStateToProps = state => {
+  const { login } = state?.Login
  
-  return {  }
+  return { login }
 }
 export default connect(mapStateToProps, { setAlert })(ViewEmployee)
 

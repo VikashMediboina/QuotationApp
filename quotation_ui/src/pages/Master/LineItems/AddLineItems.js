@@ -22,11 +22,19 @@ const AddLineItems = (props) => {
       
           setCatgories(val.data.values)
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
-      
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
     })
   }
   const addDetails=(e,v)=>{
@@ -51,10 +59,19 @@ const AddLineItems = (props) => {
             onAddButtonClose(val )
           
         }).catch(err=>{
-          setAlert({
-            message:String(err),
-            type:"ERROR"
-          })
+          if(err?.response){
+            console.log(err?.response?.data?.msg)
+            props.setAlert({
+              message:String(err?.response?.data?.msg),
+              type:"ERROR"
+            })
+          }
+          else{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+          }
           
         })
       }
@@ -76,10 +93,19 @@ const AddLineItems = (props) => {
             onAddButtonClose(val )
           
         }).catch(err=>{
-          setAlert({
-            message:String(err),
-            type:"ERROR"
-          })
+          if(err?.response){
+            console.log(err?.response?.data?.msg)
+            props.setAlert({
+              message:String(err?.response?.data?.msg),
+              type:"ERROR"
+            })
+          }
+          else{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+          }
           
         })
       }

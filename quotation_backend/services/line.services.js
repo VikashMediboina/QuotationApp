@@ -61,4 +61,4 @@ const delete_line_item_service = (body)=>new Promise((resolve,reject)=>{
 
 })
 
-module.exports={create_line_item_service,update_line_item_service,get_all_line_items}
+module.exports={create_line_item_service,update_line_item_service,get_all_line_items,delete_line_item_service}

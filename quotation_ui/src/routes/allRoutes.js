@@ -32,6 +32,7 @@ import ViewMainItems from "../pages/Master/MainItems/ViewMainItems"
 import AddMainItems from "../pages/Master/MainItems/AddMainItems"
 import ViewCompany from "../pages/Master/Company/ViewCompany"
 import AddCompany from "../pages/Master/Company/AddCompany"
+import ShowOutside from "../pages/Forms/Qutoations/ShowOutside"
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -60,6 +61,7 @@ const userRoutes = [
   { path: "/viewMainItems", component: ViewMainItems },
   { path: "/addMainItems", component: AddMainItems },
   { path: "/viewCompany", component: ViewCompany },
+  { path: "/qutation/:q_id", component: ShowOutside },
   { path: "/addCompany", component: AddCompany },
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
@@ -73,6 +75,7 @@ const authRoutes = [
   { path: "/register", component: Register },
   
 
+  { path: "/qutation/:q_id", component: ShowOutside },
 
 
 

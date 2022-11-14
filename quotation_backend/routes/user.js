@@ -2,6 +2,7 @@ const express=require("express")
 const { login_user_service, update_password_service } = require("../services/user.service")
 const { Validator } = require("express-json-validator-middleware");
 const {  login_update_password_model } = require("../models/user.model");
+const errorHandler = require("../middleware/error_handler");
 
 const user_router=express.Router()
 
@@ -30,5 +31,6 @@ user_router.post("/updatePassword",validate({ body: login_update_password_model 
     next(err)
     }) 
 })
+user_router.use(errorHandler)
 
 module.exports=user_router

@@ -9,9 +9,9 @@ pool.query("SELECT address_id from address ORDER BY address_id DESC LIMIT 1").th
         new_add_id = Number(results.rows[0].address_id)+1
     }
     console.log(new_add_id)
-    pool.query(`Insert into address ("address_id", "address_1","address_2","address_3","city","state","country","inserted_by","inserted_date")  
-        VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9)`,
-        [new_add_id, body.address_1, body.address_2, body.address_3, body.city, body.state, body.country, body.inserted_by, body.inserted_date],
+    pool.query(`Insert into address ("address_id", "address_1","address_2","address_3","city","state","country","pin_code","inserted_by","inserted_date")  
+        VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+        [new_add_id, body.address_1, body.address_2, body.address_3, body.city, body.state, body.country,body.pin_code, body.inserted_by, body.inserted_date],
     ).then((val) => {
        resolve({add_id:new_add_id})
     }).catch(err => {

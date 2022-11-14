@@ -14,6 +14,7 @@ import { connect } from "react-redux"
 import AddQuotation from "./AddQuotation"
 
 const ViewQuotation = (props) => {
+  const {login}=props
   const [details,setDetails]=useState([])
 const [showAdd,setShowAdd]=useState(false)
 const [id,setId]=useState(false)
@@ -62,22 +63,25 @@ const [id,setId]=useState(false)
             field: "quot_status",
             sort: "asc",
             width: 100,
-          },
-           {
-             label: "Action",
-             field: "action",
-             sort: "asc",
-             width: 250
-           }
+          }
          ],
           rows:val.data.values}
         setDetails(data)
       
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
       
     })
   }
@@ -97,10 +101,19 @@ const [id,setId]=useState(false)
       })
     fetchData()
   }).catch(err=>{
-    props.setAlert({
-      message:String(err),
-      type:"ERROR"
-    })
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
   })
   }
   return (
@@ -108,15 +121,15 @@ const [id,setId]=useState(false)
      {!showAdd? <div className="page-content">
 
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Pages" breadcrumbItem="View Employee" />
+          <Breadcrumbs title="Pages" breadcrumbItem="View Quotations" />
 			
         <Row>
           <Col className="col-12">
           <TableCard
           data={details} 
           tittle={'Quotations'} 
-          editIcon={true}
-          deleteIcon={true}
+          editIcon={login?.access?.q_edit?true:false}
+          deleteIcon={login?.access?.q_delete?true:false}
           onEditButton={onEditButton}
           onDeleteButton={onDeleteButton}
           />
@@ -132,8 +145,9 @@ const [id,setId]=useState(false)
 
 const mapStateToProps = state => {
   const { cacheDetails } = state?.genricReducer
+  const { login } = state?.Login
  
-  return {  cacheDetails}
+  return {  cacheDetails,login}
 }
 export default connect(mapStateToProps, { setAlert })(ViewQuotation)
 

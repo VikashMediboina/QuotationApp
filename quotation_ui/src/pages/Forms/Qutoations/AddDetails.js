@@ -109,38 +109,6 @@ useEffect(()=>{
         window.print();
         document.body.innerHTML = oldPage
     }
-    const itemas = [
-        {
-            name: "Kitchen Room",
-            type: "MainItem",
-            main_item_name: "Main Item",
-            main_item_desc: "Description",
-            tot_area: 12,
-            quantity: 1,
-            unit_price: 2000,
-            totalAmount: 12 * 2000,
-            lineItems: [
-                {
-                    type: "LineItem",
-                    line_item_name: "Line Item",
-                    line_item_desc: "Description1",
-                    quantity: 2,
-                    tot_area: 2000,
-                    unit_price: 2000,
-
-                },
-                {
-                    type: "LineItem",
-                    line_item_name: "Line Item",
-                    line_item_desc: "Description1",
-                    tot_area: 2000,
-                    quantity: 2,
-                    unit_price: 2000,
-                }
-            ]
-        }
-    ]
-
 
     const onModalClose = (val) => {
         setmodal(!modal)
@@ -316,15 +284,15 @@ useEffect(()=>{
                                                 details?.address_1 + ", " + (details?.address_2 ? details?.address_2 + ", " : "") + (details?.address_3 ? (details?.address_3 + ", ") : "")
                                                 + details?.city + ", " + details?.state + ", " + details?.country + ", Pin:" + details?.pin_code
                                             }<br></br>
-                                            Email: {details?.customer_email}<br></br>
-                                            Phone: {details?.customer_phone_number}
+                                            Email: {details?.mail_id}<br></br>
+                                            Phone: {details?.mobile_1}
                                         </address>
                                     </div>
                                     <div className="col-6 text-end">
                                         <address>
                                             <strong>Quotation Details:</strong><br />
-                                            QUOTE No:0001588<br />
-                                            QUOTE DATE:{String(details.quotation_date).substring(0,9)}<br />
+                                           {details.quotation_code? <>QUOTE No:{details.quotation_code}<br /></>:""}
+                                            QUOTE DATE:{String(details.quotation_date).substring(4,13)}<br />
                                             CUSTOMER ID: {details.customer_id}<br />
                                             PREPARED BY: {details?.lead_by_name}
                                         </address>
@@ -457,7 +425,7 @@ useEffect(()=>{
                                             onClick={printOrder}
                                             className="btn btn-success waves-effect waves-light"><i
                                                 className="fa fa-print"></i></Link>{" "}
-                                        <Link to="#" className="btn btn-primary w-md waves-effect waves-light">Send</Link>
+                                        {/* <Link to="#" className="btn btn-primary w-md waves-effect waves-light">Send</Link> */}
                                     </div>
                                 </div> : 
                                 
@@ -492,7 +460,7 @@ useEffect(()=>{
                         }}
                         className="h4 mt-0 mb-4"
                     >
-                        Employee
+                        Details
                     </ModalHeader>
                     <ModalBody>
                         {form=="Main" ? <AddMainItemsQutoation formType={formType} defaultval={defaultMainval} onAddButtonClose={onModalClose} quotation_id={quotation_id} mainItems={mainItems} catogeries={catogeries}/> : 

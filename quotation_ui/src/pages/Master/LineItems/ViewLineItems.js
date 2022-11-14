@@ -16,6 +16,7 @@ import {VIEW_LINE_ITEMS_URL,DELETE_LINE_ITEMS_URL} from "../../../Constonts/api"
 import axios from "axios"
 
 const ViewLineItems = (props) => {
+  const {login}=props
   const [modal, setmodal] = useState(false)
   const [formType, setFormType] = useState("Add")
  const  [defaultval,setDefaultVal]=useState({})
@@ -59,22 +60,25 @@ const ViewLineItems = (props) => {
               field: "unit_price",
               sort: "asc",
               width: 250
-            },
-            {
-              label: "Action",
-              field: "action",
-              sort: "asc",
-              width: 250
             }
           ],
           rows:val.data.values}
         setDetails(data)
       
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
       
     })
   }
@@ -114,10 +118,19 @@ const ViewLineItems = (props) => {
         })
       fetchData()
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
   })
   }
 	
@@ -130,12 +143,13 @@ const ViewLineItems = (props) => {
  
           <TableCard 
           data={details} 
-          addButton={"Add Line Items"} 
+          addButton={login?.access?.line_add?"Add Line Items":""} 
           tittle={'Line Items'} 
           onAddButton={onAddButton}
-          editIcon={true}
-          deleteIcon={true}
+          editIcon={login?.access?.line_edit?true:false}
+          deleteIcon={login?.access?.line_delete?true:false}
           onEditButton={onEditButton}
+          onDeleteButton={onDeleteButton}
           />
 			
 
@@ -166,7 +180,9 @@ const ViewLineItems = (props) => {
 
 const mapStateToProps = state => {
  
-  return {  }
+    const { login } = state?.Login
+ 
+  return { login }
 }
 export default connect(mapStateToProps, { setAlert })(ViewLineItems)
 

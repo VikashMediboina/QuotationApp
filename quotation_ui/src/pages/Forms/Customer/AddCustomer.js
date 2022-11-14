@@ -23,10 +23,19 @@ const AddCustomer = (props) => {
       setCompany(company)
       
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
       
     })
   }
@@ -58,10 +67,19 @@ const AddCustomer = (props) => {
             onAddButtonClose(val )
           
         }).catch(err=>{
-          setAlert({
-            message:String(err),
-            type:"ERROR"
-          })
+          if(err?.response){
+            console.log(err?.response?.data?.msg)
+            props.setAlert({
+              message:String(err?.response?.data?.msg),
+              type:"ERROR"
+            })
+          }
+          else{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+          }
           
         })
       }
@@ -89,11 +107,19 @@ const AddCustomer = (props) => {
             onAddButtonClose(val )
           
         }).catch(err=>{
-          setAlert({
-            message:String(err),
-            type:"ERROR"
-          })
-          
+          if(err?.response){
+            console.log(err?.response?.data?.msg)
+            props.setAlert({
+              message:String(err?.response?.data?.msg),
+              type:"ERROR"
+            })
+          }
+          else{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+          }
         })
       }
       

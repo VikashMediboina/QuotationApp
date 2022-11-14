@@ -22,6 +22,7 @@ import {VIEW_MAIN_ITEMS_URL,DELETE_MAIN_ITEMS_URL} from "../../../Constonts/api"
 import axios from "axios"
 
 const ViewMainItems = (props) => {
+  const {login}=props
   const [modal, setmodal] = useState(false)
   const [formType, setFormType] = useState("Add");
  const  [defaultval,setDefaultVal]=useState({});
@@ -65,22 +66,25 @@ const ViewMainItems = (props) => {
               field: "unit_price",
               sort: "asc",
               width: 250
-            },
-            {
-              label: "Action",
-              field: "action",
-              sort: "asc",
-              width: 250
             }
           ],
           rows:val.data.values}
         setDetails(data)
       
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
       
     })
   }
@@ -120,10 +124,19 @@ const ViewMainItems = (props) => {
         })
       fetchData()
     }).catch(err=>{
-      props.setAlert({
-        message:String(err),
-        type:"ERROR"
-      })
+      if(err?.response){
+        console.log(err?.response?.data?.msg)
+        props.setAlert({
+          message:String(err?.response?.data?.msg),
+          type:"ERROR"
+        })
+      }
+      else{
+        props.setAlert({
+          message:String(err),
+          type:"ERROR"
+        })
+      }
   })
   }
 	
@@ -136,12 +149,13 @@ const ViewMainItems = (props) => {
  
           <TableCard 
           data={details} 
-          addButton={"Add Main Items"} 
+          addButton={login?.access?.main_add?"Add Main Items":""} 
           tittle={'Main Items'} 
           onAddButton={onAddButton}
-          editIcon={true}
-          deleteIcon={true}
+          editIcon={login?.access?.main_edit?true:false}
+          deleteIcon={login?.access?.main_delete?true:false}
           onEditButton={onEditButton}
+          onDeleteButton={onDeleteButton}
           />
 			
 
@@ -172,8 +186,9 @@ const ViewMainItems = (props) => {
 
 
 const mapStateToProps = state => {
+  const { login } = state?.Login
  
-  return {  }
+  return { login }
 }
 export default connect(mapStateToProps, { setAlert })(ViewMainItems)
 

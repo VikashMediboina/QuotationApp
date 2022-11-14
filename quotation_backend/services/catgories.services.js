@@ -50,11 +50,18 @@ const get_all_catogeries=()=> new Promise((resolve,reject)=>{
     })
     const delete_catogerie_item_service = (body)=>new Promise((resolve,reject)=>{
         return pool.query(`DELETE FROM catogeries WHERE "catogerie_id"=$1`,[body.catogerie_id]).then((results)=>{
-            resolve("Deleted SucessFully")
+            console.log(results)
+            if(results.rowCount!=0){
+                resolve("Deleted SucessFully")
+            }
+            else{
+                throw new Error("Unable to delete because of data is been associated with other.")
+
+            }
         }).catch(err => {   
             console.log(err)
             reject( err)
         })
     
     })
-module.exports={create_catogerie_service,update_catogerie_service,get_all_catogeries}
+module.exports={create_catogerie_service,update_catogerie_service,get_all_catogeries,delete_catogerie_item_service}
