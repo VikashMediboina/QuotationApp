@@ -49,7 +49,7 @@ const [state,setState]=useState({
 const fetchCompanyData=()=>{
   axios.get(VIEW_COMPANY_URL).then((val)=>{
    
-    setCompany(company)
+    setCompany(val.data.values)
     
   }).catch(err=>{
     if(err?.response){
@@ -215,7 +215,7 @@ const fetchCompanyData=()=>{
 useEffect(()=>{
   setDefaultValues(defaultval)
   setState({
-    
+
   })
   fetchCompanyData()
 },[defaultval])
@@ -382,11 +382,11 @@ useEffect(()=>{
                           className="form-control"
                           placeholder="Enter Reporting to"
                           type="select"
-                          // required
+                          required
                         >
                           <option value="">
                           </option>
-{employees.map((codes)=>
+{company.map((codes)=>
                             <option value={codes.company_id}>
                       {codes.company_name} ({codes.company_code})
                           </option>

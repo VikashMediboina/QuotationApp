@@ -25,8 +25,8 @@ pool.query("SELECT employee_id from employee ORDER BY employee_id DESC LIMIT 1")
 
     const update_employee_service = (body) => new Promise((resolve, reject) => {
      
-            pool.query(`UPDATE employee SET "employee_code"=$1 , "employee_name"=$2,"birth_date"=$3,"gender"=$4 , "past_exp"=$5,"emp_status"=$6,"emp_type"=$7,"reporting_to"=$8,"updated_by"=$9,"updated_date"=$10 WHERE "employee_id" = $11`,
-            [ body.employee_code, body.employee_name, body.birth_date, body.gender, body.past_exp, body.emp_status,body.emp_type,Number(body.reporting_to), body.updated_by, body.updated_date,body.employee_id],
+            pool.query(`UPDATE employee SET "employee_code"=$1 , "employee_name"=$2,"birth_date"=$3,"gender"=$4 , "past_exp"=$5,"emp_type"=$6,"reporting_to"=$7,"updated_by"=$8,"updated_date"=$9 WHERE "employee_id" = $10`,
+            [ body.employee_code, body.employee_name, body.birth_date, body.gender, body.past_exp,body.emp_type,Number(body.reporting_to), body.updated_by, body.updated_date,body.employee_id],
             )
             .then((results) => {
                 console.log(results)
