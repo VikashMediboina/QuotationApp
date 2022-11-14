@@ -60,4 +60,4 @@ const get_all_main_items=()=> new Promise((resolve,reject)=>{
     
     })
 
-module.exports={create_main_item_service,update_main_item_service,get_all_main_items}
+module.exports={create_main_item_service,update_main_item_service,get_all_main_items,delete_main_item_service}

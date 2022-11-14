@@ -193,14 +193,15 @@ const update_line_items_qutation_service = (body) => new Promise((resolve, rejec
    })
 
 const delete_qutation_service = (body)=>new Promise((resolve,reject)=>{
-    pool.query(`DELETE FROM quotation WHERE "quotation_id" = $1 and "quot_status"='Drafted' `,[body.quotation_id]).then((results)=>{
         pool.query(`DELETE FROM quotation_main_item WHERE "quotation_id" = $1`,[body.quotation_id]).then((results)=>{
        pool.query(`DELETE FROM quotation_line_item WHERE "quotation_id" = $1`,[body.quotation_id]).then((results)=>{
+    pool.query(`DELETE FROM quotation WHERE "quotation_id" = $1 and "quot_status"='Drafted' `,[body.quotation_id]).then((results)=>{
+
            resolve("Deleted SucessFully")
        }).catch(err => {   
            console.log(err)
            reject( err)
-       })}).catch(err => {   
+       })}).catch(err => {      
         console.log(err)
         reject( err)
     })

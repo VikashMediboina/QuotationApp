@@ -3,6 +3,7 @@ const { create_company_service, get_all_company, update_company_service, delete_
 var bodyParser = require('body-parser')
 const {  company_create_schema, company_update_schema } = require("../models/company.model")
 const { Validator } = require("express-json-validator-middleware");
+const errorHandler = require("../middleware/error_handler");
 
 
 
@@ -56,6 +57,7 @@ company_router.put("/update/:id",validate({ body: company_update_schema }),(req,
         company_code:req.body.company_code,
         company_name:req.body.company_name,
         location:req.body.location,
+        access:req.body.access,
         updated_by:req.body.updated_by,
         updated_date:new Date()
     }
@@ -86,5 +88,6 @@ company_router.post("/delete/:id",(req,res,next)=>{
         })
 })
 
+company_router.use(errorHandler)
 
 module.exports=company_router

@@ -1,6 +1,6 @@
 const pool = require('../connector/sql_connector');
 const { update_employee_service } = require('./employee.service');
-const { create_user_service } = require('./user.service');
+const { create_user_service, update_access_service } = require('./user.service');
 
 
 
@@ -42,9 +42,10 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
 })
     const get_all_employees=()=> new Promise((resolve,reject)=>{
         return pool.query(`SELECT *
-        FROM employment c , employee a, company_dtl cd
-        WHERE c.employee_id=a.employee_id and cd.company_id=c.company_id`).then((results)=>{
+        FROM employment c , employee a, company_dtl cd,login l
+        WHERE c.employee_id=a.employee_id and cd.company_id=c.company_id and l.employee_id=a.employee_id and a.emp_status='ACTIVE'` ).then((results)=>{
             console.log(results.rows[0])
+
             resolve(results.rows)
         }).catch(err => {
             console.log(err)
@@ -55,6 +56,7 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
 
 
     const update_employment_service = (body) => new Promise((resolve, reject) => {
+        update_access_service(body).then(login=>{
         update_employee_service((body)).then(res=>{
 
         
@@ -71,6 +73,10 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
         console.log(err)
         reject( err)
     })
+}).catch(err => {
+    console.log(err)
+    reject( err)
+})
     })
 
 
