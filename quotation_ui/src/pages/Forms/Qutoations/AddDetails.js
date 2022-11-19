@@ -5,7 +5,7 @@ import { CardBody, Row, Col, Card, Table, Button, Modal, ModalHeader, ModalBody 
 import { Link } from "react-router-dom"
 import { setAlert } from "../../../store/genric/genericAction"
 import { connect } from "react-redux"
-import { VIEW_EMPLOYEE_URL, DELETE_EMPLOYEE_URL, VIEW_MAIN_ITEMS_URL, VIEW_LINE_ITEMS_URL, VIEW_CATOGERIES_URL, GET_LINE_ITEMS_QUTOATION_URL, GET_MAIN_ITEMS_QUTOATION_URL, DELETE_LINE_QUTOATION_URL, DELETE_MAIN_QUTOATION_URL, CHANGE_STATUS_ACTIVE_URL } from "../../../Constonts/api"
+import { VIEW_EMPLOYEE_URL, DELETE_EMPLOYEE_URL, VIEW_MAIN_ITEMS_URL, VIEW_LINE_ITEMS_URL, VIEW_CATOGERIES_URL, GET_LINE_ITEMS_QUTOATION_URL, GET_MAIN_ITEMS_QUTOATION_URL, DELETE_LINE_QUTOATION_URL, DELETE_MAIN_QUTOATION_URL, CHANGE_STATUS_ACTIVE_URL, ADD_MAIN_ITEMS_QUTOATION_URL, ADD_LINE_ITEMS_QUTOATION_URL } from "../../../Constonts/api"
 import axios from "axios"
 //Import Breadcrumb
 // import Breadcrumbs from "../../components/Common/Breadcrumb"
@@ -16,7 +16,7 @@ import AddMainItemsQutoation from "./AddMainItemsQutoation";
 import AddLineItemsQutoation from "./AddLineItemsQutoation";
 
 const AddDetails = (props) => {
-    const { projectAdd, setprojectAdd, setselectedcustGroup, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details,quotation_id,login,cacheDetails } = props
+    const { projectAdd, setprojectAdd, setselectedcustGroup,clone_id, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details,quotation_id,login,cacheDetails } = props
     // useEffect(()=>{
     const [items, setItems] = useState([])
     const [modal, setmodal] = useState(false)
@@ -70,6 +70,107 @@ const AddDetails = (props) => {
         fetchDetails()
 
     },[])
+
+    const add_main_items=(item)=>{
+        var body={
+            main_item_details:[{
+              "room_type":item.room_type,
+              "main_item_id":Number(item.main_item_id),
+              "main_item_title":item.main_item_title,
+              "main_item_desc":item.main_item_desc,
+              "length":item.length,
+              "height":item.height,
+              "depth":Number(item.depth),
+              "tot_area":item.tot_area,
+              "quantity":item.quantity,
+              "unit_price":item.unit_price,
+              "tot_price":item.tot_price,
+              "disc_price":item.disc_price?item.disc_price:0,
+              "net_price":item.net_price,
+              "cgst":item.cgst,
+              "sgst":item.sgst,
+              "igst":0,
+              "tax_type":item.tax_type,
+              "main_item_depth":Number(item.main_item_depth),
+              "org_unit_price":0
+            }],
+            // "quotation_id":v.quotation_id,
+            
+            "inserted_by":login.employee_id
+        }
+         
+          axios.post(ADD_MAIN_ITEMS_QUTOATION_URL+quotation_id,body).then((val)=>{
+            
+              // setAlert({
+              //   message:val.data.msg,
+              //   type:"SUCCESS"
+              // })
+            
+          }).catch(err=>{
+            if(err?.response){
+              console.log(err?.response?.data?.msg)
+              props.setAlert({
+                message:String(err?.response?.data?.msg),
+                type:"ERROR"
+              })
+            }
+            else{
+              props.setAlert({
+                message:String(err),
+                type:"ERROR"
+              })
+            }
+            
+          })
+    }
+    const add_line_items=(items)=>{
+        var body={
+            line_item_details:[{
+              "seq_no":Number(items.seq_no),
+              "room_type":items.room_type,
+              "line_item_id":Number(items.line_item_id),
+              "line_item_title":items.line_item_title,
+              "line_item_desc":items.line_item_desc,
+              "quantity":items.quantity,
+              "unit_price":items.unit_price,
+              "tot_price":items.tot_price,
+              "disc_price":items.disc_price?items.disc_price:0,
+              "net_price":items.net_price,
+              "cgst":items.cgst,
+              "sgst":items.sgst,
+              "igst":0,
+              "tax_type":items.tax_type,
+              "org_unit_price":0
+            }],
+            // "quotation_id":v.quotation_id,
+            
+            "inserted_by":login.employee_id
+        }
+         
+          axios.post(ADD_LINE_ITEMS_QUTOATION_URL+quotation_id,body).then((val)=>{
+            
+              // setAlert({
+              //   message:val.data.msg,
+              //   type:"SUCCESS"
+              // })
+            
+          }).catch(err=>{
+            if(err?.response){
+              console.log(err?.response?.data?.msg)
+              props.setAlert({
+                message:String(err?.response?.data?.msg),
+                type:"ERROR"
+              })
+            }
+            else{
+              props.setAlert({
+                message:String(err),
+                type:"ERROR"
+              })
+            }
+            
+          })
+    }
     const fetchDetails=()=>{
         axios.get(GET_MAIN_ITEMS_QUTOATION_URL+quotation_id).then((val)=>{
             
@@ -96,7 +197,37 @@ const AddDetails = (props) => {
     useEffect(()=>{
         fetchDetails()
     },[quotation_id])
-
+    useEffect(()=>{
+        if(clone_id){
+        axios.get(GET_MAIN_ITEMS_QUTOATION_URL+clone_id).then((val)=>{
+            for(let i=0;i<val.data.values.length;i++){
+                add_main_items(val.data.values[i])
+            }
+            setMainItemsQutation(val.data.values)
+            
+          }).catch(err=>{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+        })
+    
+        axios.get(GET_LINE_ITEMS_QUTOATION_URL+clone_id).then((val)=>{
+            for(let i=0;i<val.data.values.length;i++){
+                add_line_items(val.data.values[i])
+            }
+            console.log(val.data.values)
+            setLineItemsQutation(val.data.values)
+            
+          }).catch(err=>{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+        })
+    }
+    fetchDetails()
+    },[])
 useEffect(()=>{
     fetchDetails()
 },[confirmDetails])
@@ -146,9 +277,9 @@ useEffect(()=>{
             ))
             for(let i=0;i<mainItemsQutation.length;i++){
                 
-                sum+=Number(lineItemsQutation[i]?.tot_price)
-        discsum+=Number(lineItemsQutation[i]?.disc_price)
-        netsums+=Number(lineItemsQutation[i]?.net_price)
+                sum+=Number(mainItemsQutation[i]?.tot_price)
+        discsum+=Number(mainItemsQutation[i]?.disc_price)
+        netsums+=Number(mainItemsQutation[i]?.net_price)
                 }
             setItems(itemsInside)
             setTotalSum(sum)
@@ -266,9 +397,9 @@ useEffect(()=>{
                                                     Info@rochanaIndustries.com,<br></br>
                                                     venu@rochanaIndustries.com<br></br>
                                                     +(91) 8567887777, +(91) 8688887777<br></br>
-                                                    <h2>
-                                                        Q.No:0001588
-                                                    </h2>
+                                                    {details?.quotation_code!=null?  <h2>
+                                                        Q.No:{details.quotation_code}
+                                                    </h2>:""}
                                                 </b>
                                             </div>
                                         </div>
@@ -292,7 +423,7 @@ useEffect(()=>{
                                         <address>
                                             <strong>Quotation Details:</strong><br />
                                            {details.quotation_code? <>QUOTE No:{details.quotation_code}<br /></>:""}
-                                            QUOTE DATE:{String(details.quotation_date).substring(4,13)}<br />
+                                            QUOTE DATE:{String(details.quotation_date).substring(4,15)}<br />
                                             CUSTOMER ID: {details.customer_id}<br />
                                             PREPARED BY: {details?.lead_by_name}
                                         </address>
@@ -305,7 +436,7 @@ useEffect(()=>{
                                             <h3 className="font-size-15 fw-bold">Order summary</h3>
                                         </div>
                                     </div>
-                                    {!confirmDetails && <div className="col-6 text-end">
+                                    {!confirmDetails &&details.quot_status=="Drafted"&& <div className="col-6 text-end">
 
                                         <Button
                                             type="button"
@@ -331,7 +462,7 @@ useEffect(()=>{
                                                 <th>Unit Price</th>
                                                 {/* <th>Discount Price</th> */}
                                                 <th className="text-end">Price</th>
-                                                {!confirmDetails&&   <th className="text-end" hidden={confirmDetails}>Action</th>}
+                                                {!confirmDetails && details.quot_status=="Drafted" &&   <th className="text-end" hidden={confirmDetails}>Action</th>}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -349,8 +480,8 @@ useEffect(()=>{
                                                             <td>{item?.quantity}</td>
                                                             <td>&#8377; {item.unit_price}</td>
                                                             {/* <td>&#8377; {item.disc_price}</td> */}
-                                                            <td className="text-end">&#8377; {item?.net_price}</td>
-                                                           {!confirmDetails&& <td className="text-end" hidden={confirmDetails}>
+                                                            <td className="text-end">&#8377; {item?.net_price}</td>{console.log(details)}
+                                                           {!confirmDetails&&details.quot_status=="Drafted" && <td className="text-end" hidden={confirmDetails}>
                                                                 <button className="btn " onClick={() => onEditMainButton(item)}>
                                                                     <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                                                                 </button>{" "}
@@ -381,7 +512,7 @@ useEffect(()=>{
                                                                         <td>&#8377; {line.unit_price}</td>
                                                                         {/* <td >&#8377; {line.disc_price}</td> */}
                                                                         <td className="text-end">&#8377; {line.net_price}</td>
-                                                                        {!confirmDetails&& <td className="text-end" hidden={confirmDetails}>
+                                                                        {!confirmDetails&&details.quot_status=="Drafted" && <td className="text-end" hidden={confirmDetails}>
                                                                             <button className="btn " onClick={() => onEditLineButton(line)}>
                                                                                 <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                                                                             </button>{" "}
@@ -434,7 +565,9 @@ useEffect(()=>{
                                         <Link to="#"
                                             onClick={()=>{changeTab(confirmDetails?2:1)}}
                                             className="btn btn-primary w-md waves-effect waves-light">Previous</Link>{" "}
-                                        <Link to="#" className="btn btn-primary w-md waves-effect waves-light" onClick={confirmAndPrint}>Confirm and Print</Link>
+                                             <button type="submit" className="btn btn-primary" disabled={items?.length<=0} onClick={confirmAndPrint}>
+                                             {details.quot_status=="Drafted"&&<>Freeze and</>} Print
+                                              </button>
                                     </div>
                                 </div>
                                 

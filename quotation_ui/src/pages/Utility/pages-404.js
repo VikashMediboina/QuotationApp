@@ -31,10 +31,6 @@ const Pages404 = () => {
 
                     <h1 className="error-page mt-5"><span>404!</span></h1>
                     <h4 className="mb-4 mt-5">Sorry, page not found</h4>
-                    <p className="mb-4 w-75 mx-auto">It will be as simple as Occidental in fact, it will
-                                    Occidental to an English person</p>
-                    <a className="btn btn-primary mb-4 waves-effect waves-light" href="/">
-                    <i className="mdi mdi-home"></i> Back to Dashboard</a>
                   </div>
 
                 </CardBody>

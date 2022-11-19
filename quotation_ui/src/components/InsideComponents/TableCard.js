@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import { MDBDataTable } from "mdbreact"
 import { Row, Col, Card, CardBody, CardTitle, CardSubtitle,Button } from "reactstrap"
+import { connect } from 'react-redux'
 
-function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEditButton,onDeleteButton}) {
+function TableCard(props) {
+  const {data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEditButton,onDeleteButton,onViewButton,onCloneButton,cacheDetails}=props
     const [newData,setNewData]=useState({})
     useEffect(()=>{
       let dummy=data
@@ -19,11 +21,36 @@ function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEdit
           }
           
           dummy.rows=dummy.rows.map((row) => {
+            console.log(row,cacheDetails?.status_code[0])
+            if(tittle=="Quotations"){
+              return {
+                ...row,
+                'action': (
+                  <>
+              {<button className="btn " onClick={()=>onEditButton(row)}>
+              {/* <> */}
+              <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
+              </button>}{" "}
+              {( row?.quot_status==cacheDetails?.status_code[0])&&<button  className="btn " onClick={()=>onDeleteButton(row)}>
+              <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
+              </button>}
+              {( row?.quot_status!=cacheDetails?.status_code[0])&&<button  className="btn " onClick={()=>onViewButton(row)}>
+              <i className="bx bx-window-open font-size-20 align-middle me-2 text-primary"></i>{" "}
+              </button>}
+              {<button  className="btn " onClick={()=>onCloneButton(row)}>
+              <i className="bx bx-copy-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
+              </button>}
+                  </>
+                ),
+              };
+            
+            
+            }
                 return {
                   ...row,
                   'action': (
                     <>
-                {editIcon&&<button className="btn " onClick={()=>onEditButton(row)}>
+                {(editIcon && !row?.quot_status!=cacheDetails?.status_code[0])&&<button className="btn " onClick={()=>onEditButton(row)}>
                 {/* <> */}
                 <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
                 </button>}{" "}
@@ -74,5 +101,10 @@ function TableCard({data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEdit
   </Row>
   )
 }
-
-export default TableCard
+const mapStateToProps = state => {
+  const { cacheDetails } = state?.genricReducer
+  const { login } = state?.Login
+ 
+  return {  cacheDetails,login}
+}
+export default connect(mapStateToProps,  {})(TableCard)

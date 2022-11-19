@@ -17,7 +17,9 @@ const ViewQuotation = (props) => {
   const {login}=props
   const [details,setDetails]=useState([])
 const [showAdd,setShowAdd]=useState(false)
+const [formType,setFormType]=useState("")
 const [id,setId]=useState(false)
+const [clone,setclone]=useState(null)
   const fetchData=()=>{
     axios.get(GET_QUTOATION_URL).then((val)=>{
       
@@ -91,6 +93,16 @@ const [id,setId]=useState(false)
   const onEditButton=(row)=>{
     setId(row.quotation_id)
     setShowAdd(true)
+    setFormType("Edit")
+  }
+  const onCloneButton=(row)=>{
+    setclone(row.quotation_id)
+    setShowAdd(true)
+    setFormType("Clone")
+  }
+  const onViewButton=(row)=>{
+    console.log(window.location)
+    window.open(window.location.origin+"/qutation/"+row.quotation_id)
   }
   const onDeleteButton=(row)=>{
     axios.post(DELETE_QUTOATION_URL+row.quotation_id,{}).then((val)=>{
@@ -132,12 +144,14 @@ const [id,setId]=useState(false)
           deleteIcon={login?.access?.q_delete?true:false}
           onEditButton={onEditButton}
           onDeleteButton={onDeleteButton}
+          onViewButton={onViewButton}
+          onCloneButton={onCloneButton}
           />
            
           </Col>
         </Row>
       </div>:
-      <AddQuotation quotation_props={id}/>}
+      <AddQuotation quotation_props={id} formType={formType} clone_props={clone}/>}
     </React.Fragment>
   )
 }

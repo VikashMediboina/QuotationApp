@@ -194,10 +194,19 @@ const update_line_items_qutation_service = (body) => new Promise((resolve, rejec
 
 const delete_qutation_service = (body)=>new Promise((resolve,reject)=>{
         pool.query(`DELETE FROM quotation_main_item WHERE "quotation_id" = $1`,[body.quotation_id]).then((results)=>{
-       pool.query(`DELETE FROM quotation_line_item WHERE "quotation_id" = $1`,[body.quotation_id]).then((results)=>{
-    pool.query(`DELETE FROM quotation WHERE "quotation_id" = $1 and "quot_status"='Drafted' `,[body.quotation_id]).then((results)=>{
+            console.log(results)
 
+       pool.query(`DELETE FROM quotation_line_item WHERE "quotation_id" = $1`,[body.quotation_id]).then((results)=>{
+        // console.log(results)
+
+    pool.query(`DELETE FROM quotation WHERE "quotation_id" = $1 and "quot_status"='Drafted' `,[body.quotation_id]).then((results)=>{
+        if(results.rowCount>0){
+            console.log(results)
            resolve("Deleted SucessFully")
+        }
+        else{
+            reject("Id is wrong")
+        }
        }).catch(err => {   
            console.log(err)
            reject( err)
@@ -237,8 +246,9 @@ const delete_line_item_qutation_service = (body)=>new Promise((resolve,reject)=>
    })
 
 const update_status=(body)=>new Promise((resolve, reject) => {
-    pool.query("SELECT  quotation_code from quotation where quotation_code!=Null ORDER BY quotation_code DESC LIMIT 1").then((results) => {
+    pool.query("SELECT  quotation_code from quotation where quotation_code IS NOT NULL ORDER BY quotation_code DESC LIMIT 1").then((results) => {
         var new_quotation_code = 0
+        console.log(results.rows[0])
         if (results.rows[0]) {
             console.log(results.rows)
             new_quotation_code = Number(results.rows[0].quotation_code)+1

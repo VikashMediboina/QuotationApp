@@ -1,5 +1,4 @@
 const pool = require('../connector/sql_connector');
-const { update_access_service } = require('./user.service');
 
 
 const create_employee_service = (body) => new Promise((resolve, reject) => {

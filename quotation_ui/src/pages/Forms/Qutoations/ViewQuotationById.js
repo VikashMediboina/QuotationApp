@@ -12,8 +12,7 @@ import axios from "axios"
 
 //Import Images
 import logoLight from "../../../assets/images/logo-light.png";
-import AddMainItemsQutoation from "./AddMainItemsQutoation";
-import AddLineItemsQutoation from "./AddLineItemsQutoation";
+import Pages404 from "../../Utility/pages-404";
 
 const ViewQuotationById = (props) => {
     const {   quotation_id, } = props
@@ -100,9 +99,9 @@ useEffect(()=>{
             ))
             for(let i=0;i<mainItemsQutation.length;i++){
                 
-                sum+=Number(lineItemsQutation[i]?.tot_price)
-        discsum+=Number(lineItemsQutation[i]?.disc_price)
-        netsums+=Number(lineItemsQutation[i]?.net_price)
+                sum+=Number(mainItemsQutation[i]?.tot_price)
+        discsum+=Number(mainItemsQutation[i]?.disc_price)
+        netsums+=Number(mainItemsQutation[i]?.net_price)
                 }
             setItems(itemsInside)
             setTotalSum(sum)
@@ -115,12 +114,14 @@ useEffect(()=>{
     return (
         <React.Fragment>
             {/* <div className="page-content"> */}
-            <div style={{ border: 1, padding: "30px" }}>
+           {details? <div style={{ border: 1, padding: "30px" }}>
                 <Row id="printme2" >
                     <Col lg={12} >
                         <Card>
                             <CardBody>
                                 <div className="invoice-title">
+               <div className="water-mark">{details?.quot_status}</div>
+
                                     {/* <h4 className="float-end font-size-16">Order # 12345</h4> */}
                                     <Row>
 
@@ -142,9 +143,9 @@ useEffect(()=>{
                                                     Info@rochanaIndustries.com,<br></br>
                                                     venu@rochanaIndustries.com<br></br>
                                                     +(91) 8567887777, +(91) 8688887777<br></br>
-                                                    <h2>
-                                                        Q.No:0001588
-                                                    </h2>
+                                                    {details?.quotation_code!=null?  <h2>
+                                                        Q.No:{details.quotation_code}
+                                                    </h2>:""}
                                                 </b>
                                             </div>
                                         </div>
@@ -167,8 +168,8 @@ useEffect(()=>{
                                         <address>
                                             <strong>Quotation Details:</strong><br />
                                            {details?.quotation_code!=null? <>QUOTE No:{details.quotation_code}<br /></>:""}
-                                            QUOTE DATE:{String(details.quotation_date).substring(0,10)}<br />
-                                            CUSTOMER ID: {details.customer_id}<br />
+                                            QUOTE DATE:{String(details?.quotation_date).substring(0,10)}<br />
+                                            CUSTOMER ID: {details?.customer_id}<br />
                                             PREPARED BY: {details?.lead_by_name}
                                         </address>
                                     </div>
@@ -274,8 +275,7 @@ useEffect(()=>{
                     </Col>
                 </Row>
              
-            </div>
-            {/* </div> */}
+            </div>:<Pages404/>}
         </React.Fragment>
     );
 }

@@ -21,7 +21,7 @@ import AddCustomerDetails from "./AddCustomerDetails"
 import AddDetails from "./AddDetails"
 import ViewQuotationById from "./ViewQuotationById"
 
-const AddQuotation = ({quotation_props}) => {
+const AddQuotation = ({quotation_props,formType,clone_props}) => {
   // let id  = match.params;
 
   const [activeTab, setactiveTab] = useState(1)
@@ -30,6 +30,8 @@ const AddQuotation = ({quotation_props}) => {
   // const [projectAdd, setprojectAdd] = useState("");
   const [details, setDetails] = useState({});
   const [quotation_id, setquotation_id] = useState("");
+  const [clone_id, setclone_id] = useState("");
+  const [type, settype] = useState("Add");
 
   function toggleTab(tab) {
     if (activeTab !== tab) {
@@ -43,7 +45,18 @@ const AddQuotation = ({quotation_props}) => {
       setquotation_id(quotation_props)
       setactiveTab(1)
     }
-  },[quotation_props])
+  },[quotation_props,clone_props])
+  useEffect(()=>{
+    if(clone_props){
+      setclone_id(clone_props)
+      setactiveTab(1)
+    }
+  },[clone_props])
+  useEffect(()=>{
+    if(formType){
+      settype(formType)
+    }
+  },[formType])
   return (
     <React.Fragment>
       <div className="page-content">
@@ -92,17 +105,16 @@ const AddQuotation = ({quotation_props}) => {
                     >
                       <TabPane tabId={1}>
                       <AddCustomerDetails   selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup} changeTab={toggleTab} formType={"Add"} setquotation_id={setquotation_id} quotation_id={quotation_id}/>
+                      setselectedempGroup={setselectedempGroup} clone_id={clone_id}selectedempGroup={selectedempGroup} changeTab={toggleTab} formType={type} setquotation_id={setquotation_id} quotation_id={quotation_id}/>
                       </TabPane>
                       <TabPane tabId={2}>
 
                       {quotation_id&& <AddDetails    selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
-                      setselectedempGroup={setselectedempGroup} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} quotation_id={quotation_id} changeTab={toggleTab}/>}
+                      setselectedempGroup={setselectedempGroup} clone_id={clone_id} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} formType={type} quotation_id={quotation_id} changeTab={toggleTab}/>}
                       </TabPane>
                      
                       <TabPane tabId={3}>
                       {quotation_id&& <ViewQuotationById   quotation_id={quotation_id} />}
-                      {/* <Invoice/> */}
                       </TabPane>
                     </TabContent>
                   </div>

@@ -236,10 +236,11 @@ quotation_router.put("/updateLineItem/:id" ,(req,res,next)=>{
 })
 
 quotation_router.post("/deleteQutation/:id" ,(req,res,next)=>{
-    console.log(req.body)
+    console.log(req)
         const request_body={
             quotation_id:req.params.id
         }
+        
         delete_qutation_service(request_body)
         .then(values=>{
             console.log(values)

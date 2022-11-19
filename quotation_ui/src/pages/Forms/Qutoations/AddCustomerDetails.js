@@ -24,7 +24,7 @@ import AvForm from 'availity-reactstrap-validation/lib/AvForm'
 import AvField from 'availity-reactstrap-validation/lib/AvField'
 
 const AddCustomerDetails=(props)=> {
-  const {setselectedcustGroup,selectedcustGroup,selectedempGroup,setselectedempGroup,formType,changeTab,login,cacheDetails,quotation_id,setquotation_id,setDetails,details}=props
+  const {setselectedcustGroup,selectedcustGroup,selectedempGroup,setselectedempGroup,formType,changeTab,login,cacheDetails,clone_id,quotation_id,setquotation_id,setDetails,details}=props
   // const [selectedcustGroup, setselectedcustGroup] = useState(null);
   const [selectedempGroup1, setselectedempGroup1] = useState(null);
   const [selectedcustGroup1, setselectedcustGroup1] = useState(null);
@@ -48,7 +48,6 @@ const AddCustomerDetails=(props)=> {
         //   message:val.data.msg,
         //   type:"SUCCESS"
         // })
-        console.log(val.data,"ccust")
       
         let custgrup=val.data.values.map((customer,index)=>{
           return{
@@ -60,7 +59,6 @@ const AddCustomerDetails=(props)=> {
       })
       axios.get(VIEW_EMPLOYEE_URL).then((val)=>{
       
-     console.log(val.data,"emp")
         let empgrup=val.data.values.map((employe,index)=>{
           return{
               ...employe,
@@ -68,6 +66,7 @@ const AddCustomerDetails=(props)=> {
               value:employe.emp_id
           }
       })
+      empgrup=empgrup.filter((row)=>row.job_code=="SalesOfficer")
         setemployeeGroup(empgrup)
         setemployes(val.data.values)
       fetchDetails(empgrup,custgrup)
@@ -99,9 +98,10 @@ const AddCustomerDetails=(props)=> {
   },[])
 
   const fetchDetails=(empgrup,custgrup)=>{
-    if(quotation_id){
-      console.log(employeeGroup,customers)
-      axios.get(GET_CUSTOMER_QUTOATION_URL+quotation_id).then((val)=>{
+    if(quotation_id || clone_id){
+      console.log(clone_id)
+      var id=quotation_id?quotation_id:clone_id
+      axios.get(GET_CUSTOMER_QUTOATION_URL+id).then((val)=>{
         
         // setDetails(val.da)
         console.log(val.data,empgrup,custgrup)
@@ -132,7 +132,7 @@ const AddCustomerDetails=(props)=> {
   }
   useEffect(()=>{
     fetchDetails(employeeGroup,customers)
-  },[quotation_id,employeeGroup,customers])
+  },[quotation_id,employeeGroup,customers,clone_id])
   const addCustomers=(e,v)=>{
     e.preventDefault()
       let body={
@@ -155,7 +155,7 @@ const AddCustomerDetails=(props)=> {
         "updated_by":login.employee_id,
         "inserted_by":login.employee_id,
         "quotation_date":new Date(),
-        "quot_status":cacheDetails?.status_code[0]
+        "quot_status":fromCust?.quot_status?fromCust?.quot_status:cacheDetails?.status_code[0]
 
     }
      let url=quotation_id? UPDATE_CUSTOMER_QUTOATION_URL+quotation_id: ADD_CUSTOMER_QUTOATION_URL
@@ -167,7 +167,13 @@ const AddCustomerDetails=(props)=> {
           // })
           setDetails(body)
           setquotation_id(val.data.quotation_id?val.data.quotation_id:quotation_id)
-          changeTab(2)
+          console.log(details)
+          if(details.quot_status!=cacheDetails?.status_code[0] && details.quot_status){
+            changeTab(3)
+          }
+          else{
+            changeTab(2)
+          }
         
       }).catch(err=>{
         setAlert({
@@ -186,7 +192,7 @@ const AddCustomerDetails=(props)=> {
    <Row>
       <Col md={6} >
 
-      <Row  className="mb-3">
+      {formType!="Edit"&&<Row  className="mb-3">
                     <label slot='start' className="col-lg-3 col-form-label">Customer</label>
                     <div className="col-lg-9">
                     <Select
@@ -194,11 +200,12 @@ const AddCustomerDetails=(props)=> {
                       onChange={
                         handleSelectGroup
                       }
+                      
                       options={customerGroup}
                       classNamePrefix="select2-selection"
                     />
                     </div>
-                  </Row>
+                  </Row>}
         </Col>
         <Col md={6} >
 
@@ -544,7 +551,7 @@ const AddCustomerDetails=(props)=> {
     <Row>
       <Col lg={12}>
         <div className="float-end text-right">
-          <button type="submit" className="btn btn-primary" disabled={!selectedempGroup}>
+          <button type="submit" className="btn btn-primary" disabled={!selectedempGroup1}>
             Save Draft
             </button>
         </div>
