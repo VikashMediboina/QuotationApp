@@ -111,8 +111,10 @@ const Login = (props) => {
                 <div className="bg-login text-center">
                   <div className="bg-login-overlay"></div>
                   <div className="position-relative">
-                    <h5 className="text-white font-size-20">Welcome Back !</h5>
-                    <p className="text-white-50 mb-0">Sign in to continue to Rochana LTD.</p>
+                  <h5 className="text-white font-size-20">Welcome</h5>
+                  <p className="text-white-50 mb-0">Sign in to</p>
+                    <h5 className="text-white font-size-10">Quotation Application</h5>
+                    <h5 className="text-white font-size-10">Rochana Industries Pvt Ltd.</h5>
                     <Link to="/" className="logo logo-admin mt-4">
                       <img src={logo} alt="" height="30" />
                     </Link>
