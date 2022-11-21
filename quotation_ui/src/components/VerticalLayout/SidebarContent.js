@@ -118,7 +118,7 @@ const SidebarContent = props => {
               <ul className="sub-menu">
               {login?.access?.main_view&&<li><Link to="/viewMainItems">{props.t("Main Items")}</Link></li>}
                 {login?.access?.line_view&&<li><Link to="/viewLineItems">{props.t("Line Items")}</Link></li>}
-                {login?.access?.cat_view&&<li><Link to="/viewCatogeries">{props.t("Catogeries")}</Link></li>}
+                {login?.access?.cat_view&&<li><Link to="/viewCatogeries">{props.t("Rooms/Catogeries")}</Link></li>}
                 {login?.access?.emp_view&&<li><Link to="/viewEmployee">{props.t("Employees")}</Link></li>}
                 {login?.access?.company_view&&<li><Link to="/viewCompany">{props.t("Company")}</Link></li>}
               </ul>

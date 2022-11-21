@@ -101,7 +101,7 @@ useEffect(()=>{
         <div className="mb-3">
         <AvField
                           name="catogerie_title"
-                          label="Catogerie Title"
+                          label="Room / Catogerie Title"
                           // value="admin@themesbrand.com"
                           value={defalutValues?.catogerie_title}
                           className="form-control"
@@ -116,7 +116,7 @@ useEffect(()=>{
         <div className="mb-3">
         <AvField
                           name="catogerie_desc"
-                          label="Catogerie Description"
+                          label="Room / Catogerie Description"
                           // value="admin@themesbrand.com"
                           value={defalutValues?.catogerie_desc}
                           className="form-control"
