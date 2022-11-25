@@ -46,13 +46,13 @@ const ViewCatogeries = (props) => {
              width: 150,
            },
            {
-             label: "Company Title",
+             label: "Rooms/Category",
              field: "catogerie_title",
              sort: "asc",
              width: 270,
            },
            {
-             label: "Company Description",
+             label: "Rooms/Category Description",
              field: "catogerie_desc",
              sort: "asc",
              width: 200,
@@ -137,12 +137,12 @@ const ViewCatogeries = (props) => {
       <div className="page-content">
 
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Pages" breadcrumbItem="View Categories" />
+          <Breadcrumbs title="Pages" breadcrumbItem="View Rooms/Categories" />
 
 
           <TableCard 
           data={details} 
-          addButton={login?.access?.cat_add?"Add Category Details":""} 
+          addButton={login?.access?.cat_add?"Add Room / Category":""} 
           tittle={'category Details'} 
           onAddButton={onAddButton}
           editIcon={login?.access?.cat_edit?true:false}
