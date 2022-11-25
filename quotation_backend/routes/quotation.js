@@ -75,6 +75,7 @@ quotation_router.post("/insertLineItems/:quotation_id" ,(req,res,next)=>{
 
         const request_body={
             line_item_details:req.body.line_item_details,
+            seq_no:req.body.seq_no,
             inserted_by:req.body.inserted_by,
             inserted_date:new Date()
         }

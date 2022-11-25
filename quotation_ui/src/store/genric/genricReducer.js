@@ -1,4 +1,4 @@
-import { LOAD_DATA, STOP_LOAD_DATA, CLEAR_ALERT, SET_ALERT, CLEAR_MODAL_ALERT, SET_MODAL_ALERT, LOAD_MODAL_DATA, STOP_LOAD_MODAL_DATA, SET_CACHEL_DETAILS } from '../type'
+import { LOAD_DATA, STOP_LOAD_DATA, CLEAR_ALERT, SET_ALERT, CLEAR_MODAL_ALERT, SET_MODAL_ALERT, LOAD_MODAL_DATA, STOP_LOAD_MODAL_DATA, SET_CACHEL_DETAILS, SET_QUOTATION_DETAILS } from '../type'
 
 
 
@@ -30,6 +30,9 @@ export const genricReducer = (state = { lodding: false,alertDetails:{},cacheDeta
         }
         case SET_CACHEL_DETAILS: {
             return { ...state, cacheDetails: action.cacheDetails }
+        }
+        case SET_QUOTATION_DETAILS: {
+            return { ...state, store_qutation_id: action.store_qutation_id }
         }
         
         default: return state

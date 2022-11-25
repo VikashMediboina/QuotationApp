@@ -114,7 +114,7 @@ const AddQuotation = ({quotation_props,formType,clone_props}) => {
                       </TabPane>
                      
                       <TabPane tabId={3}>
-                      {quotation_id&& <ViewQuotationById   quotation_id={quotation_id} />}
+                      {quotation_id && activeTab==3 && <ViewQuotationById   quotation_id={quotation_id} />}
                       </TabPane>
                     </TabContent>
                   </div>

@@ -47,13 +47,13 @@ const create_qutation_service = (body) => new Promise((resolve, reject) => {
     })
 
     const create_qutation_line_item_service=(body,qu)=>new Promise((resolve,reject)=>{
-        pool.query("SELECT  line_seq_no from quotation_line_item where quotation_id=$1 and seq_no=$2 ORDER BY seq_no DESC LIMIT 1",[qu.quotation_id,body.seq_no]).then((results) => {
+        pool.query("SELECT  line_seq_no from quotation_line_item where quotation_id=$1 and seq_no=$2 ORDER BY seq_no DESC LIMIT 1",[Number(qu.quotation_id),body.seq_no]).then((results) => {
             var new_line_seq_no = 0
             if (results.rows[0]) {
                 console.log(results.rows)
                 new_line_seq_no = Number(results.rows[0].line_seq_no)+1
             }
-            console.log(new_line_seq_no,qu)
+            console.log(new_line_seq_no,qu,results,"ggyggtgt")
         pool.query(format(`INSERT into quotation_line_item ("quotation_id","seq_no","line_seq_no","line_item_id","line_item_title","line_item_desc","quantity","unit_price","tot_price","disc_price","net_price","cgst","sgst","igst","org_unit_price","inserted_by","inserted_date","tax_type","room_type") 
                     VALUES %L`,create_line_items(qu.quotation_id,body,new_line_seq_no))).then((res)=>{
                         resolve({msg:"Line Items Insereted sucessfuly"})

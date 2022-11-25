@@ -66,7 +66,7 @@ const AddCustomerDetails=(props)=> {
               value:employe.emp_id
           }
       })
-      empgrup=empgrup.filter((row)=>row.job_code=="SalesOfficer")
+      // empgrup=empgrup.filter((row)=>row.job_code=="SalesOfficer")
         setemployeeGroup(empgrup)
         setemployes(val.data.values)
       fetchDetails(empgrup,custgrup)

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react"
+import React, { createRef, useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { CardBody, Row, Col, Card, Table, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { Link } from "react-router-dom"
@@ -7,6 +7,7 @@ import { setAlert } from "../../../store/genric/genericAction"
 import { connect } from "react-redux"
 import {  GET_LINE_ITEMS_QUTOATION_URL, GET_MAIN_ITEMS_QUTOATION_URL, GET_CUSTOMER_QUTOATION_URL } from "../../../Constonts/api"
 import axios from "axios"
+
 //Import Breadcrumb
 // import Breadcrumbs from "../../components/Common/Breadcrumb"
 
@@ -14,8 +15,13 @@ import axios from "axios"
 import logoLight from "../../../assets/images/logo-light.png";
 import Pages404 from "../../Utility/pages-404";
 
-const ViewQuotationById = (props) => {
+const ViewPrintQuotationById = (props) => {
     const {   quotation_id, } = props
+    const options = {
+        orientation: 'landscape',
+        unit: 'in',
+        format: [4,2]
+    };
   const [details, setDetails] = useState({});
     const [items, setItems] = useState([])
     const [lineItemsQutation,setLineItemsQutation]= useState([])
@@ -23,7 +29,7 @@ const ViewQuotationById = (props) => {
     const [totalSum,setTotalSum]=useState(0)
     const [descountSum,setDescountSum]=useState(0)
     const [netSum,setNetSum]=useState(0)
-   
+    const ref = createRef();
     const fetchDetails=()=>{
         axios.get(GET_CUSTOMER_QUTOATION_URL+quotation_id).then((val)=>{
             setDetails(val.data.values[0])
@@ -65,6 +71,14 @@ useEffect(()=>{
 },[])
             
     const printOrder = () => {
+    //     const printableElements = document.getElementById('printme2');
+        
+    //     html2canvas(printableElements).then(function(canvas) {
+    //         const divImage = canvas.toDataURL("image/png");
+    //         const pdf = new jsPDF();
+    //        pdf.addImage(divImage, 'PNG', 0, 0);
+    //        pdf.save("download.pdf");
+    //    })
         const printableElements = document.getElementById('printme2').innerHTML;
         const orderHtml = '<html><head><title></title></head><body><div style="padding:15px;margin:15px;border-style: solid;border-width:2px;border-color:red;">' + printableElements + '</div></body></html>'
         const oldPage = document.body.innerHTML;
@@ -114,14 +128,17 @@ useEffect(()=>{
     return (
         <React.Fragment>
             {/* <div className="page-content"> */}
+            
            {details? <div style={{ border: 1, padding: "30px" }}>
-                <Row id="printme2" >
-                    <Col lg={12} >
-                        <Card>
+                <Row id="printme2" ref={ref} >
+                    <Col sm={12} >
+<div style={{width:"900px"}}>
+<Card>
+
+
                             <CardBody>
                                 <div className="invoice-title">
                <div className="water-mark">{details?.quot_status}</div>
-
                                     {/* <h4 className="float-end font-size-16">Order # 12345</h4> */}
                                     <Row>
 
@@ -262,6 +279,7 @@ useEffect(()=>{
                                             onClick={printOrder}
                                             className="btn btn-success waves-effect waves-light"><i
                                                 className="fa fa-print"></i></Link>{" "}
+                                               
                                         {/* <Link to="#" className="btn btn-primary w-md waves-effect waves-light">Send</Link> */}
                                     </div>
                                 </div> 
@@ -272,10 +290,15 @@ useEffect(()=>{
     </Row>
                             </CardBody>
                         </Card>
+
+    </div>
+
                     </Col>
                 </Row>
-             
-            </div>:<Pages404/>}
+            
+            </div>
+            
+            :<Pages404/>}
         </React.Fragment>
     );
 }
@@ -285,9 +308,9 @@ const mapStateToProps = state => {
  
     return {  login,cacheDetails}
 }
-export default connect(mapStateToProps, { setAlert })(ViewQuotationById)
+export default connect(mapStateToProps, { setAlert })(ViewPrintQuotationById)
 
 
-ViewQuotationById.propTypes = {
+ViewPrintQuotationById.propTypes = {
     setAlert: PropTypes.func,
 }

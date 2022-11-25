@@ -140,6 +140,7 @@ const AddLineItems = (props) => {
                           type="select"
                           required
                         >
+                          <option value="">Select Room Type</option>
                           {catgories.map((cat)=>
                             <option value={cat.catogerie_title}>
                       {cat.catogerie_title}

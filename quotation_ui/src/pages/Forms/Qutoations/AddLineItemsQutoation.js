@@ -78,7 +78,7 @@ const fetch_line_items=(id,value)=>{
           "org_unit_price":0
         }],
         // "quotation_id":v.quotation_id,
-        
+        "seq_no":Number(seq_no),
         "inserted_by":login.employee_id
     }
      

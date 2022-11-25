@@ -1,4 +1,4 @@
-import { CLEAR_MODAL_ALERT, LOAD_MODAL_DATA, SET_ALERT, SET_CACHEL_DETAILS, SET_MODAL_ALERT, STOP_LOAD_MODAL_DATA } from "../type"
+import { CLEAR_MODAL_ALERT, LOAD_MODAL_DATA, SET_ALERT, SET_CACHEL_DETAILS, SET_MODAL_ALERT, SET_QUOTATION_DETAILS, STOP_LOAD_MODAL_DATA } from "../type"
 import {LOAD_DATA,STOP_LOAD_DATA,CLEAR_ALERT} from "../type"
 
 
@@ -22,3 +22,4 @@ export const clearModalAlert =()=>( {type:CLEAR_MODAL_ALERT,modalAlertDetails:{}
 
 
 export const setCacheDetails =(details)=>( {type:SET_CACHEL_DETAILS,cacheDetails:details})
+export const setQutationId =(details)=>( {type:SET_QUOTATION_DETAILS,store_qutation_id:details})

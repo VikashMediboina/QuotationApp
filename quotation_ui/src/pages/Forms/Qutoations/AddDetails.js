@@ -16,7 +16,7 @@ import AddMainItemsQutoation from "./AddMainItemsQutoation";
 import AddLineItemsQutoation from "./AddLineItemsQutoation";
 
 const AddDetails = (props) => {
-    const { projectAdd, setprojectAdd, setselectedcustGroup,clone_id, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details,quotation_id,login,cacheDetails } = props
+    const { projectAdd, setprojectAdd, setquotation_id,clone_id, changeTab, selectedempGroup, setselectedempGroup, confirmDetails,details,quotation_id,login,cacheDetails } = props
     // useEffect(()=>{
     const [items, setItems] = useState([])
     const [modal, setmodal] = useState(false)
@@ -341,6 +341,7 @@ useEffect(()=>{
               message:val.data.msg,
               type:"SUCCESS"
             })
+            setquotation_id(quotation_id)
             changeTab(3)
         }).catch(err=>{
           props.setAlert({
