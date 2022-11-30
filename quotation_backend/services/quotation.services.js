@@ -1,6 +1,7 @@
 const pool = require('../connector/sql_connector');
 var format = require('pg-format');
 const { create_main_items, create_line_items } = require('../models/quotation.model');
+const { get_employees_under_service } = require('./employee.service');
 
 const create_qutation_service = (body) => new Promise((resolve, reject) => {
     pool.query("SELECT  quotation_id from quotation ORDER BY quotation_id DESC LIMIT 1").then((results) => {
@@ -10,16 +11,15 @@ const create_qutation_service = (body) => new Promise((resolve, reject) => {
             new_quotation_id = Number(results.rows[0].quotation_id)+1
         }
         console.log(new_quotation_id)
-        pool.query(`Insert into quotation ("quotation_id", "customer_name","address_1","address_2","address_3","city","state","quotation_date","lead_by","shop_manager_id","mobile_1","mobile_2","mail_id","customer_id","quot_status","pin_code","inserted_by","inserted_date","lead_by_name","country")  
-            VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)`,
-            [new_quotation_id, body.customer_name, body.address_1,body.address_2,body.address_3, body.city, body.state,body.quotation_date, body.lead_by,body.shop_manager_id,body.mobile_1, body.mobile_2, body.mail_id,body.customer_id,body.quot_status,body.pin_code,body.inserted_by,body.inserted_date,body.lead_by_name,body.country],
+        pool.query(`Insert into quotation ("quotation_id", "customer_name","address_1","address_2","address_3","city","state","quotation_date","lead_by","shop_manager_id","mobile_1","mobile_2","mail_id","customer_id","quot_status","pin_code","inserted_by","inserted_date","lead_by_name","country","company_detail_id")  
+            VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)`,
+            [new_quotation_id, body.customer_name, body.address_1,body.address_2,body.address_3, body.city, body.state,body.quotation_date, body.lead_by,body.shop_manager_id,body.mobile_1, body.mobile_2, body.mail_id,body.customer_id,body.quot_status,body.pin_code,body.inserted_by,body.inserted_date,body.lead_by_name,body.country,body.company_detail_id],
         ).then((val) => {
-           resolve({"msg":"Inserted Sucessfully",quotation_id:new_quotation_id})
+           resolve({"msg":"Quotation saved as Draft",quotation_id:new_quotation_id})
         }).catch(err => {
             console.log("",err)
             reject(err)
         })
-    
     })
     })
 
@@ -34,7 +34,7 @@ const create_qutation_service = (body) => new Promise((resolve, reject) => {
              pool.query(format(`INSERT into quotation_main_item ("quotation_id","seq_no","room_type","main_item_id","main_item_title","main_item_desc","length","height","depth","tot_area","quantity","unit_price","tot_price","disc_price","net_price","cgst","sgst","igst","org_unit_price","inserted_by","inserted_date","tax_type","main_item_depth") 
             VALUES %L`,create_main_items(qu.quotation_id,body,new_seq_no))).then((res)=>{
 
-           resolve({quotation_id:qu.quotation_id,msg:"Main Items Insereted sucessfuly"})
+           resolve({quotation_id:qu.quotation_id,msg:"Main Items Insereted Successfully"})
             }).catch(err => {
             console.log("Main items",err)
             reject(err)
@@ -47,7 +47,7 @@ const create_qutation_service = (body) => new Promise((resolve, reject) => {
     })
 
     const create_qutation_line_item_service=(body,qu)=>new Promise((resolve,reject)=>{
-        pool.query("SELECT  line_seq_no from quotation_line_item where quotation_id=$1 and seq_no=$2 ORDER BY seq_no DESC LIMIT 1",[Number(qu.quotation_id),body.seq_no]).then((results) => {
+        pool.query("SELECT  line_seq_no from quotation_line_item where quotation_id=$1 and seq_no=$2 ORDER BY line_seq_no DESC LIMIT 1",[Number(qu.quotation_id),body.seq_no]).then((results) => {
             var new_line_seq_no = 0
             if (results.rows[0]) {
                 console.log(results.rows)
@@ -56,7 +56,7 @@ const create_qutation_service = (body) => new Promise((resolve, reject) => {
             console.log(new_line_seq_no,qu,results,"ggyggtgt")
         pool.query(format(`INSERT into quotation_line_item ("quotation_id","seq_no","line_seq_no","line_item_id","line_item_title","line_item_desc","quantity","unit_price","tot_price","disc_price","net_price","cgst","sgst","igst","org_unit_price","inserted_by","inserted_date","tax_type","room_type") 
                     VALUES %L`,create_line_items(qu.quotation_id,body,new_line_seq_no))).then((res)=>{
-                        resolve({msg:"Line Items Insereted sucessfuly"})
+                        resolve({msg:"Line Items Insereted Successfully"})
                     })
                     .catch(err => {
                     console.log(err)
@@ -101,8 +101,8 @@ const create_qutations_service=(body)=>new Promise((resolve,reject)=>{
 
 
 
-const get_all_qutations=()=> new Promise((resolve,reject)=>{
-    return pool.query("SELECT * from quotation ORDER BY quotation_id DESC").then((results)=>{
+const get_all_qutations=(body)=> new Promise((resolve,reject)=>{
+    return pool.query("SELECT * from quotation where company_detail_id=$1 ORDER BY quotation_id DESC",[body.company_detail_id]).then((results)=>{
         console.log(results.rows[0])
         resolve(results.rows)
     }).catch(err => {
@@ -246,7 +246,7 @@ const delete_line_item_qutation_service = (body)=>new Promise((resolve,reject)=>
    })
 
 const update_status=(body)=>new Promise((resolve, reject) => {
-    pool.query("SELECT  quotation_code from quotation where quotation_code IS NOT NULL ORDER BY quotation_code DESC LIMIT 1").then((results) => {
+    pool.query("SELECT  quotation_code from quotation where quotation_code IS NOT NULL AND company_detail_id=$1 ORDER BY quotation_code DESC LIMIT 1",[body.company_detail_id]).then((results) => {
         var new_quotation_code = 0
         console.log(results.rows[0])
         if (results.rows[0]) {
@@ -276,5 +276,35 @@ const update_status=(body)=>new Promise((resolve, reject) => {
 
 })
 
+const get_reports_by_id=(body)=>new Promise((resolve, reject) =>{
+    get_employees_under_service(body.user_id,body.company_id).then(results=>{
+        let users=[]
+        console.log(results)
+        for(let i=0;i<results.length;i++){
+            users.push(results[i].employee_id)
+            }
+        pool.query("SELECT  COUNT(quotation_id),quot_status from quotation where lead_by=ANY($1::int[]) and company_detail_id=$2 group by quot_status",[users,body.company_id]).then((results) => {
+            console.log(results.rows)
+            resolve(results.rows)
+        }).catch(err => {
+            console.log("",err)
+            reject(err)
+        })
+    }).catch(err => {
+        console.log("",err)
+        reject(err)
+    })
+})
+const get_reports=(body)=>new Promise((resolve, reject) =>{
+    
+    pool.query("SELECT  COUNT(quotation_id),quot_status from quotation where company_detail_id=$1 group by quot_status",[body.company_id]).then((results) => {
+        console.log(results)
+        resolve(results.rows)
+    }).catch(err => {
+        console.log("",err)
+        reject(err)
+    })
 
-module.exports={update_status,delete_qutation_service,delete_main_item_qutation_service,delete_line_item_qutation_service,get_qutation_by_id,update_customer_qutation_service,update_line_items_qutation_service,update_main_items_qutation_service,create_qutations_service,create_qutation_service,create_qutation_main_item_service,create_qutation_line_item_service,get_all_qutations,get_all_main_items_qutations,get_all_line_items_qutations}
+})
+
+module.exports={get_reports,get_reports_by_id,update_status,delete_qutation_service,delete_main_item_qutation_service,delete_line_item_qutation_service,get_qutation_by_id,update_customer_qutation_service,update_line_items_qutation_service,update_main_items_qutation_service,create_qutations_service,create_qutation_service,create_qutation_main_item_service,create_qutation_line_item_service,get_all_qutations,get_all_main_items_qutations,get_all_line_items_qutations}

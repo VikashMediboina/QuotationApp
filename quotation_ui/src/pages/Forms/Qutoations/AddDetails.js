@@ -334,6 +334,7 @@ useEffect(()=>{
     const confirmAndPrint=()=>{
         axios.post(CHANGE_STATUS_ACTIVE_URL+quotation_id,{
             quot_status:cacheDetails.status_code[1],
+            company_detail_id:login.company_id,
             "updated_by":login.employee_id
         }).then((val)=>{
     
@@ -423,7 +424,7 @@ useEffect(()=>{
                                     <div className="col-6 text-end">
                                         <address>
                                             <strong>Quotation Details:</strong><br />
-                                           {details.quotation_code? <>QUOTE No:{details.quotation_code}<br /></>:""}
+                                           {details.quotation_code? <>QUOTE No:{details.quotation_code}<br /></>:<>QUOTE No:{quotation_id}<br /></>}
                                             QUOTE DATE:{String(details.quotation_date).substring(4,15)}<br />
                                             CUSTOMER ID: {details.customer_id}<br />
                                             PREPARED BY: {details?.lead_by_name}

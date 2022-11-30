@@ -20,6 +20,9 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
                     [new_employment_id, new_emp_id, body.company_id, body.job_code, body.start_date, body.stop_date, body.inserted_by, body.inserted_date],
                 ).then((val) => {
                     pool.query('COMMIT').then(()=>{
+                        if(emp?.old){
+                            resolve("User Already exists new company added with old credentials")
+                        }
                         resolve("Inserted SucessFully")
                     }).catch(err => {
                         reject(err)
@@ -40,10 +43,10 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
     
      
 })
-    const get_all_employees=()=> new Promise((resolve,reject)=>{
+    const get_all_employees=(body)=> new Promise((resolve,reject)=>{
         return pool.query(`SELECT *
         FROM employment c , employee a, company_dtl cd,login l
-        WHERE c.employee_id=a.employee_id and cd.company_id=c.company_id and l.employee_id=a.employee_id and a.emp_status='ACTIVE'` ).then((results)=>{
+        WHERE c.employee_id=a.employee_id and cd.company_id=c.company_id and c.company_id=$1 and l.employee_id=a.employee_id and a.emp_status='ACTIVE'`,[body.company_id]).then((results)=>{
             console.log(results.rows[0])
 
             resolve(results.rows)
@@ -56,12 +59,12 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
 
 
     const update_employment_service = (body) => new Promise((resolve, reject) => {
-        update_access_service(body).then(login=>{
+        // update_access_service(body).then(login=>{
         update_employee_service((body)).then(res=>{
 
         
-     pool.query(`UPDATE employment SET "company_id"=$1 , "job_code"=$2,"start_date"=$3,"stop_date"=$4,"updated_by"=$5,"updated_date"=$6 WHERE "employment_id" = $7`,
-        [ body.company_id, body.job_code, body.start_date,body.stop_date, body.updated_by, body.updated_date,body.employment_id],)
+     pool.query(`UPDATE employment SET "company_id"=$1 , "job_code"=$2,"start_date"=$3,"stop_date"=$4,"updated_by"=$5,"updated_date"=$6,access=$7 WHERE "employment_id" = $8`,
+        [ body.company_id, body.job_code, body.start_date,body.stop_date, body.updated_by, body.updated_date,body.access,body.employment_id],)
         .then((results) => {
             console.log(results)
             resolve("Update SucessFully")
@@ -69,10 +72,10 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
             console.log(err)
             reject( err)
         })
-    }).catch(err => {
-        console.log(err)
-        reject( err)
-    })
+    // }).catch(err => {
+    //     console.log(err)
+    //     reject( err)
+    // })
 }).catch(err => {
     console.log(err)
     reject( err)

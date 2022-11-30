@@ -17,6 +17,11 @@ const AddMainItems = (props) => {
   const [catgories,setCatgories]=useState([])
   const [unit_price,setunit_price]=useState(defalutValues?.unit_price)
   const [main_item_depth,setmain_item_depth]=useState(defalutValues?.main_item_depth)
+  useEffect(()=>{
+    setunit_price(defalutValues?.unit_price)
+    setmain_item_depth(defalutValues?.main_item_depth)
+
+  },[defalutValues])
   const fetchCatogeries=()=>{
     axios.get(VIEW_CATOGERIES_URL).then((val)=>{
       

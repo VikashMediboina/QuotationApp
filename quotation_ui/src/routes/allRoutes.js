@@ -37,6 +37,7 @@ import ShowOutside from "../pages/Forms/Qutoations/ShowOutside"
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
+  { path: "/forgot-password", component: ForgetPwd },
 
 
   //Form
@@ -71,7 +72,6 @@ const authRoutes = [
 
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
-  { path: "/forgot-password", component: ForgetPwd },
   { path: "/register", component: Register },
   
 

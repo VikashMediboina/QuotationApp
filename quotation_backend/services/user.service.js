@@ -6,6 +6,9 @@ const { create_employee_service, update_employee_service } = require('./employee
 
 const create_user_service = (body) => new Promise((resolve, reject) => {
         create_employee_service(body).then((emp)=>{
+            if(emp?.old){
+                resolve(emp)
+            }
               pool.query("SELECT login_id from login ORDER BY login_id DESC LIMIT 1").then((results) => {
             var new_login_id = 0
             var new_emp_id;
@@ -48,7 +51,7 @@ const create_user_service = (body) => new Promise((resolve, reject) => {
         
 
         
-     pool.query(`SELECT * from login Where email=$1 and password = crypt($2, password)`,
+     pool.query(`SELECT * from  employment c , company_dtl cd,login l Where c.employee_id=l.employee_id and cd.company_id=c.company_id and l.email=$1 and l.emp_status='ACTIVE' and l.password = crypt($2, password)`,
         [ body.employee_email,body.employee_password],)
         .then((results) => {
             if(results.rowCount==0){
@@ -56,11 +59,23 @@ const create_user_service = (body) => new Promise((resolve, reject) => {
 
             }
             else{
-                resolve({"msg":"Login sucessful","values":{
-                    "employee_id":results.rows[0].employee_id,
-                    "email:":results.rows[0].email,
-                    "access":results.rows[0].access
-                }})
+                console.log(results,"n hbhb")
+                let val=[]
+                for(let i=0;i<results.rowCount;i++){
+                    val.push(
+                        {
+                            "employee_id":results.rows[i].employee_id,
+                            "email":results.rows[i].email,
+                            "access":results.rows[i].access,
+                            "last_user":results.rows[i].updated_by,
+                            "company_code": results.rows[i].company_code,
+                            "company_name": results.rows[i].company_name,
+                            "job_code":results.rows[i].job_code,
+                            "company_id":results.rows[i].company_id
+                        }
+                    )
+                }
+                resolve({"msg":"Login sucessful","values":val})
             }
         }).catch(err => {
             console.log(err)
@@ -74,8 +89,8 @@ const create_user_service = (body) => new Promise((resolve, reject) => {
         
 
         
-        pool.query(`UPDATE login SET password = crypt($1, gen_salt('bf')) Where email=$2`,
-           [ body.employee_password,body.employee_email],)
+        pool.query(`UPDATE login SET password = crypt($1, gen_salt('bf')), updated_by=$2, updated_date=$3 Where email=$4`,
+           [ body.employee_password,body.updated_by,body.updated_date,body.employee_email],)
            .then((results) => {
                
                    resolve({"msg":"Password updated"})

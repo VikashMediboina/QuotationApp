@@ -21,7 +21,8 @@ const [formType,setFormType]=useState("")
 const [id,setId]=useState(false)
 const [clone,setclone]=useState(null)
   const fetchData=()=>{
-    axios.get(GET_QUTOATION_URL).then((val)=>{
+    const body={"company_id":Number(login?.company_id)}
+    axios.get(GET_QUTOATION_URL,{params:body}).then((val)=>{
       
         // props.setAlert({
         //   message:val.data.msg,

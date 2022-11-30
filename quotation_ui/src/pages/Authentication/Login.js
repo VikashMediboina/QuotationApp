@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
-import { Row, Col, Alert, Container } from "reactstrap"
+import { Row, Col, Alert, Container, Button, CardBody } from "reactstrap"
 
 // Redux
 import { connect } from "react-redux"
@@ -16,7 +16,7 @@ import {setAlert,setCacheDetails} from "../../store/genric/genericAction.js"
 // import images
 import logo from "../../assets/images/logo-sm-dark.png"
 import axios from "axios"
-import {LOGIN_URL,CACHE_URL} from "../../Constonts/api"
+import {LOGIN_URL,CACHE_URL, REPORTED_EMPLOYEES} from "../../Constonts/api"
 
 const Login = (props) => {
   useEffect(() => {
@@ -26,6 +26,7 @@ const Login = (props) => {
       document.body.className = "";
     };
   });
+  const [login,setLoginDetails]=useState([])
 
   const getCacheDetails=()=>{
     axios.get(CACHE_URL).then((val)=>{
@@ -66,13 +67,13 @@ const Login = (props) => {
     }
     axios.post(LOGIN_URL,body).then((val)=>{
       if(val.data.values){
-        props.loginUser(val.data.values, props.history)
-        
+
+        setLoginDetails(val.data.values)
         props.setAlert({
           message:val.data.msg,
           type:"SUCCESS"
         })
-        getCacheDetails()
+
       }else{
         props.setAlert({
           message:val.data.msg,
@@ -96,6 +97,37 @@ const Login = (props) => {
     })
   }
 
+  const onCompanySelect=(row)=>{
+     axios.get(REPORTED_EMPLOYEES+row.company_id+"/"+row?.employee_id).then((rep)=>{
+          if(row){
+            const data={...row,reported_employees:rep.data.values}
+            props.loginUser(data, props.history)
+        
+            
+            getCacheDetails()
+    
+          }else{
+            props.setAlert({
+              message:rep.data.msg,
+              type:"ERROR"
+            })
+          }
+        }).catch(err=>{
+          if(err?.response){
+            console.log(err?.response?.data?.msg)
+            props.setAlert({
+              message:String(err?.response?.data?.msg),
+              type:"ERROR"
+            })
+          }
+          else{
+            props.setAlert({
+              message:String(err),
+              type:"ERROR"
+            })
+          }
+        })
+  }
   return (
     <React.Fragment>
       <div className="home-btn d-none d-sm-block">
@@ -105,6 +137,7 @@ const Login = (props) => {
       </div>
       <div className="account-pages my-5 pt-sm-5">
         <Container>
+         {login.length==0?
           <Row className="justify-content-center">
             <Col md={8} lg={6} xl={5}>
               <div className="card overflow-hidden">
@@ -178,10 +211,7 @@ const Login = (props) => {
                         </button>
                       </div>
 
-                      <div className="mt-4 text-center">
-                        <Link to="/forgot-password" className="text-muted"><i
-                          className="mdi mdi-lock me-1"></i> Forgot your password?</Link>
-                      </div>
+                      
                     </AvForm>
 
                   </div>
@@ -195,7 +225,21 @@ const Login = (props) => {
                         </p>
               </div> */}
             </Col>
+          </Row>:
+          <>
+          <h1>Select company</h1>
+          <Row>
+            {login.map((val,index)=><Col key={index} onClick={()=>onCompanySelect(val)}>
+            <div className="card overflow-hidden">
+                <div className="text-center">
+          {val.company_name}
+        </div>
+        </div>
+            </Col>)}
+           
           </Row>
+          
+          </>}
 
         </Container>
       </div>

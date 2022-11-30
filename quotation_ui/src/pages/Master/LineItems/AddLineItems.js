@@ -16,7 +16,10 @@ const AddLineItems = (props) => {
   const [defalutValues,setDefaultValues]=useState({})
   const [catgories,setCatgories]=useState([])
   const [unit_price,setunit_price]=useState(defalutValues?.unit_price)
+  useEffect(()=>{
+    setunit_price(defalutValues?.unit_price)
 
+  },[defalutValues])
   const fetchCatogeries=()=>{
     axios.get(VIEW_CATOGERIES_URL).then((val)=>{
       

@@ -1,8 +1,12 @@
 const errorHandler = (error, request, response, next)=> {
-    console.log( `error ${error.message}`) // log the error
+    console.log( `error ${error.message}`,error) // log the error
   const status = error.status || 400
-  // send back an easily understandable error message to the caller
-  response.status(status).json({'msg':error.message})
+  if(error.code==23503){
+  response.status(status).json({'msg':"Element can't be deleted as it is used some other place."})
+  }
+  else{
+    response.status(status).json({'msg':error.message})
+  }
   }
 
 

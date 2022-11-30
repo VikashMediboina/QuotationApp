@@ -57,7 +57,8 @@ const AddCustomerDetails=(props)=> {
           }
 
       })
-      axios.get(VIEW_EMPLOYEE_URL).then((val)=>{
+      const body={"company_id":Number(login?.company_id)}
+      axios.get(VIEW_EMPLOYEE_URL,{params:body}).then((val)=>{
       
         let empgrup=val.data.values.map((employe,index)=>{
           return{
@@ -155,6 +156,7 @@ const AddCustomerDetails=(props)=> {
         "updated_by":login.employee_id,
         "inserted_by":login.employee_id,
         "quotation_date":new Date(),
+        "company_detail_id":login.company_id,
         "quot_status":fromCust?.quot_status?fromCust?.quot_status:cacheDetails?.status_code[0]
 
     }
@@ -210,7 +212,7 @@ const AddCustomerDetails=(props)=> {
         <Col md={6} >
 
       <Row  className="mb-3">
-                    <label slot='start' className="col-lg-3 col-form-label">Assigne</label>
+                    <label slot='start' className="col-lg-3 col-form-label">Assignee</label>
                     <div className="col-lg-9">
                     <Select
                       value={selectedempGroup1}

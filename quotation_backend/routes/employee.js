@@ -3,7 +3,7 @@ const { employee_create_schema, employee_update_schema } = require("../models/em
 const { Validator } = require("express-json-validator-middleware");
 const { get_all_employees, update_employment_service, create_employment_service } = require("../services/employement.service");
 const errorHandler = require("../middleware/error_handler");
-const { delete_employee_service } = require("../services/employee.service");
+const { delete_employee_service, get_employees_under_service } = require("../services/employee.service");
 
 const employee_router=express.Router()
 
@@ -51,9 +51,11 @@ employee_router.post("/insert/",validate({ body: employee_create_schema }),(req,
 })
 
 employee_router.get("/get/",(req,res,next)=>{
-    console.log(req.body)
-
-    get_all_employees()
+    console.log(req.query,req.body)
+    const request_body={
+        company_id:Number(req.query.company_id)
+    }
+    get_all_employees(request_body)
         .then(values=>{
             console.log(values)
             res.status(200).json({'values':values,'msg':"Retrived data"})
@@ -107,6 +109,19 @@ employee_router.post("/delete/:id",(req,res,next)=>{
         .then(values=>{
             // console.log(values)
             res.status(200).json({'msg':values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+
+employee_router.get("/reportedEmployees/:companyId/:id",(req,res,next)=>{
+   
+
+    get_employees_under_service(req.params.id,req.params.companyId)
+        .then(values=>{
+            // console.log(values)
+            res.status(200).json({'values':values})
         })
         .catch(err=>{
         next(err)

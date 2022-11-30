@@ -25,13 +25,16 @@ const ForgetPassword = props => {
   const handleValidSubmit = (event, values) => {
 var body={
   "employee_email":values.email,
-  "employee_password":values.password
+  "employee_password":values.password,
+  "updated_by":values.email
 }
     axios.post(FORGET_PASWORD_URL,body).then((val)=>{
+
         props.setAlert({
           message:val.data.msg,
           type:"SUCCESS"
         })
+        props.history.push("/dashboard")
     }).catch(err=>{
       
     })
@@ -95,9 +98,11 @@ var body={
                           id="email"
                           name="email"
                           label="Email"
+                          value={props.login?.email}
                           className="form-control"
                           placeholder="Enter email"
                           type="email"
+                          disabled
                           required
                         />
                       </div>
@@ -159,7 +164,9 @@ ForgetPassword.propTypes = {
 
 const mapStatetoProps = state => {
   const { user, registrationError, loading } = state.Account
-  return { user, registrationError, loading }
+  const { login } = state?.Login
+
+  return { user, registrationError, loading ,login}
 }
 
 export default connect(mapStatetoProps, {

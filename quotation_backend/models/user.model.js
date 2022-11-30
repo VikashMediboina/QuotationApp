@@ -9,6 +9,10 @@ const login_update_password_model={
         employee_password: {
 			type: "string",
 			minLength: 1,
+		},
+		updated_by:{
+			type: "string",
+			minLength: 1,
 		}
     }
 }

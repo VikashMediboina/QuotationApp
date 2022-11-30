@@ -12,7 +12,14 @@ function* loginUser({ payload: { user, history } }) {
     
       // localStorage.setItem("authUser", JSON.stringify(user))
       yield put(loginSuccess(user))
-    history.push("/dashboard")
+      console.log(user)
+      if(user.email==user.last_user){
+        console.log(user.email,user.last_user)
+        history.push("/dashboard")
+      }
+      else{
+        history.push("/forgot-password")
+      }
   } catch (error) {
     yield put(apiError(error))
   }

@@ -22,7 +22,8 @@ const ViewEmployee = (props) => {
 	    
 
  const fetchData=()=>{
-   axios.get(VIEW_EMPLOYEE_URL).then((val)=>{
+    const body={"company_id":Number(login?.company_id)}
+   axios.get(VIEW_EMPLOYEE_URL,{params:body}).then((val)=>{
      
        // props.setAlert({
        //   message:val.data.msg,

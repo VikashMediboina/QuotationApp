@@ -23,7 +23,13 @@ user_router.post("/login",validate({ body: login_update_password_model }),(req,r
     }) 
 })
 user_router.post("/updatePassword",validate({ body: login_update_password_model }),(req,res,next)=>{
-    update_password_service(req.body).then(values=>{
+    const request_body={
+        employee_email:req.body.employee_email,
+        employee_password:req.body.employee_password,
+        updated_by:req.body.updated_by,
+        updated_date:new Date()
+    }
+    update_password_service(request_body).then(values=>{
         // console.log(values)
         res.status(200).json(values)
     })

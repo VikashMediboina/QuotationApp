@@ -1,9 +1,11 @@
-// const devURL= "http://localhost:5001"
-const devURL= "http://3.90.114.142"
+const devURL= "http://localhost:5001"
+// const devURL= "http://3.90.114.142"
 
 
 export const LOGIN_URL=devURL+"/user/login/"
 export const FORGET_PASWORD_URL=devURL+"/user/updatePassword/"
+
+export const REPORTED_EMPLOYEES=devURL+"/employees/reportedEmployees/"
 
 
 export const CACHE_URL=devURL+"/cache/"
@@ -17,7 +19,7 @@ export const DELETE_COMPANY_URL=devURL+"/company/delete/"
 
 
 export const ADD_EMPLOYEE_URL=devURL+"/employees/insert/"
-export const VIEW_EMPLOYEE_URL=devURL+"/employees/get/"
+export const VIEW_EMPLOYEE_URL=devURL+"/employees/get"
 export const UPDATE_EMPLOYEE_URL=devURL+"/employees/update/"
 export const DELETE_EMPLOYEE_URL=devURL+"/employees/delete/"
 
@@ -67,3 +69,4 @@ export const GET_LINE_ITEMS_QUTOATION_URL=devURL+"/quotation/lineItems/"
 export const DELETE_LINE_QUTOATION_URL=devURL+"/quotation/deleteLineItems/"
 
 
+export const GET_REPORTS=devURL+"/quotation/getReports/"

@@ -83,34 +83,34 @@ const fetchCompanyData=()=>{
         "company_id":v.company_id,
         "password":v.password,
         "access":{
-          "q_add":v.q_add,
-          "q_edit":v.q_edit,
-          "q_view":v.q_view,
-          "q_delete":v.q_delete,
-          "c_add":v.c_add,
-          "c_edit":v.c_edit,
-          "c_view":v.c_view,
-          "c_delete":v.c_delete,
-          "company_add":v.company_add,
-          "company_edit":v.company_edit,
-          "company_view":v.company_view,
-          "company_delete":v.company_delete,
-          "emp_add":v.emp_add,
-          "emp_edit":v.emp_edit,
-          "emp_view":v.emp_view,
-          "emp_delete":v.emp_delete,
-          "cat_add":v.cat_add,
-          "cat_edit":v.cat_edit,
-          "cat_view":v.cat_view,
-          "cat_delete":v.cat_delete,
-          "main_add":v.main_add,
-          "main_edit":v.main_edit,
-          "main_view":v.main_view,
-          "main_delete":v.main_delete,
-          "line_add":v.line_add,
-          "line_edit":v.line_edit,
-          "line_view":v.line_view,
-          "line_delete":v.line_delete
+          "q_add":state.q_add,
+          "q_edit":state.q_edit,
+          "q_view":state.q_view,
+          "q_delete":state.q_delete,
+          "c_add":state.c_add,
+          "c_edit":state.c_edit,
+          "c_view":state.c_view,
+          "c_delete":state.c_delete,
+          "company_add":state.company_add,
+          "company_edit":state.company_edit,
+          "company_view":state.company_view,
+          "company_delete":state.company_delete,
+          "emp_add":state.emp_add,
+          "emp_edit":state.emp_edit,
+          "emp_view":state.emp_view,
+          "emp_delete":state.emp_delete,
+          "cat_add":state.cat_add,
+          "cat_edit":state.cat_edit,
+          "cat_view":state.cat_view,
+          "cat_delete":state.cat_delete,
+          "main_add":state.main_add,
+          "main_edit":state.main_edit,
+          "main_view":state.main_view,
+          "main_delete":state.main_delete,
+          "line_add":state.line_add,
+          "line_edit":state.line_edit,
+          "line_view":state.line_view,
+          "line_delete":state.line_delete
         },
         "start_date":v.start_date,
         "job_code":v.job_code,
@@ -153,34 +153,34 @@ const fetchCompanyData=()=>{
         "location":v.location,
         "start_date":v.start_date,
         "access":{
-          "q_add":v.q_add,
-          "q_edit":v.q_edit,
-          "q_view":v.q_view,
-          "q_delete":v.q_delete,
-          "c_add":v.c_add,
-          "c_edit":v.c_edit,
-          "c_view":v.c_view,
-          "c_delete":v.c_delete,
-          "company_add":v.company_add,
-          "company_edit":v.company_edit,
-          "company_view":v.company_view,
-          "company_delete":v.company_delete,
-          "emp_add":v.emp_add,
-          "emp_edit":v.emp_edit,
-          "emp_view":v.emp_view,
-          "emp_delete":v.emp_delete,
-          "cat_add":v.cat_add,
-          "cat_edit":v.cat_edit,
-          "cat_view":v.cat_view,
-          "cat_delete":v.cat_delete,
-          "main_add":v.main_add,
-          "main_edit":v.main_edit,
-          "main_view":v.main_view,
-          "main_delete":v.main_delete,
-          "line_add":v.line_add,
-          "line_edit":v.line_edit,
-          "line_view":v.line_view,
-          "line_delete":v.line_delete
+          "q_add":state.q_add,
+          "q_edit":state.q_edit,
+          "q_view":state.q_view,
+          "q_delete":state.q_delete,
+          "c_add":state.c_add,
+          "c_edit":state.c_edit,
+          "c_view":state.c_view,
+          "c_delete":state.c_delete,
+          "company_add":state.company_add,
+          "company_edit":state.company_edit,
+          "company_view":state.company_view,
+          "company_delete":state.company_delete,
+          "emp_add":state.emp_add,
+          "emp_edit":state.emp_edit,
+          "emp_view":state.emp_view,
+          "emp_delete":state.emp_delete,
+          "cat_add":state.cat_add,
+          "cat_edit":state.cat_edit,
+          "cat_view":state.cat_view,
+          "cat_delete":state.cat_delete,
+          "main_add":state.main_add,
+          "main_edit":state.main_edit,
+          "main_view":state.main_view,
+          "main_delete":state.main_delete,
+          "line_add":state.line_add,
+          "line_edit":state.line_edit,
+          "line_view":state.line_view,
+          "line_delete":state.line_delete
         },
         "job_code":v.job_code,
         "updated_by":login.employee_id
@@ -214,11 +214,23 @@ const fetchCompanyData=()=>{
 }
 useEffect(()=>{
   setDefaultValues(defaultval)
-  setState({
+  // setState({
 
-  })
+  // })
   fetchCompanyData()
 },[defaultval])
+const job_code_change=(e,val)=>{
+  for(let i=0;i<cacheDetails.job_code.length;i++){
+    if(cacheDetails.job_code[i].key===val){
+      setState(cacheDetails.job_code[i].access)
+      break
+    }
+  }
+}
+const changeCheckbox=(val,index)=>{
+  state[index]=val;
+  setState({...state})
+}
   return (
     <React.Fragment>
 
@@ -310,8 +322,11 @@ useEffect(()=>{
                           className="form-control"
                           placeholder="Enter Role"
                           type="select"
+                          onChange={(e,val)=>{job_code_change(e,val)}}
                           required
                         >
+                          <option value="">
+                          </option>
                           {cacheDetails.job_code.map((codes)=>
                             <option value={codes.key}>
                       {codes.value}
@@ -409,57 +424,80 @@ useEffect(()=>{
 <Row>
 <Col lg={3}>
         <div className="form-check mb-3">{console.log(state.q_view)}
-        <AvField  
-        className="form-check-label"
-                          name="q_view"
-                          label="&nbsp;&nbsp;View"
-                          value={state.q_view?true:false}
-                          className="form-control"
-                          placeholder="Enter View"
-                          type="checkbox"
-                        />
+
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="q_view"
+                    name="q_view"
+                    checked={state.q_view}
+                    onChange={() => {
+                      changeCheckbox(!state.q_view,'q_view')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="q_view">
+                  View
+                  </label>
+
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="q_edit"
-                          label="&nbsp;&nbsp;Edit"
-                          value={state.q_edit}
-                          className="form-control"
-                          placeholder="Enter Edit"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="q_edit"
+                    name="q_edit"
+                    checked={state.q_edit}
+                    onChange={() => {
+                      changeCheckbox(!state.q_edit,'q_edit')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="q_edit">
+                  Edit
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="q_add"
-                          label="&nbsp;&nbsp;Add"
-                          value={state.q_add}
-                          className="form-control"
-                          placeholder="Enter Add"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="q_add"
+                    name="q_add"
+                    checked={state.q_add}
+                    onChange={() => {
+                      changeCheckbox(!state.q_add,'q_add')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="q_add">
+                  Add
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="q_delete"
-                          label="&nbsp;&nbsp;Delete"
-                          value={state.q_delete}
-                          className="form-control"
-                          placeholder="Enter Delete"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="q_delete"
+                    name="q_delete"
+                    checked={state.q_delete}
+                    onChange={() => {
+                      changeCheckbox(!state.q_delete,'q_delete')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="q_delete">
+                  Delete
+                  </label>
+        
         </div>
         
       </Col>
@@ -472,65 +510,88 @@ useEffect(()=>{
     </h6>
     <hr></hr>
 </Row>
-
 <Row>
 <Col lg={3}>
-        <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="c_view"
-                          label="&nbsp;&nbsp;View"
-                          value={state.c_view}
-                          className="form-control"
-                          placeholder="Enter View"
-                          type="checkbox"
-                        />
+        <div className="form-check mb-3">{console.log(state.q_view)}
+
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="c_view"
+                    name="c_view"
+                    checked={state.c_view}
+                    onChange={() => {
+                      changeCheckbox(!state.c_view,'c_view')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="c_view">
+                  View
+                  </label>
+
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="c_edit"
-                          label="&nbsp;&nbsp;Edit"
-                          value={state.c_edit}
-                          className="form-control"
-                          placeholder="Enter Edit"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="c_edit"
+                    name="c_edit"
+                    checked={state.c_edit}
+                    onChange={() => {
+                      changeCheckbox(!state.c_edit,'c_edit')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="c_edit">
+                  Edit
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="c_add"
-                          label="&nbsp;&nbsp;Add"
-                          value={state.c_add}
-                          className="form-control"
-                          placeholder="Enter Add"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="c_add"
+                    name="c_add"
+                    checked={state.c_add}
+                    onChange={() => {
+                      changeCheckbox(!state.c_add,'c_add')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="c_add">
+                  Add
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="c_delete"
-                          label="&nbsp;&nbsp;Delete"
-                          value={state.c_delete}
-                          className="form-control"
-                          placeholder="Enter Delete"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="c_delete"
+                    name="c_delete"
+                    checked={state.c_delete}
+                    onChange={() => {
+                      changeCheckbox(!state.c_delete,'c_delete')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="c_delete">
+                  Delete
+                  </label>
+        
         </div>
         
       </Col>
       </Row>
+     
      
       <Row>
     <h6>
@@ -538,198 +599,265 @@ useEffect(()=>{
     </h6>
     <hr></hr>
 </Row>
-
 <Row>
 <Col lg={3}>
-        <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="company_view"
-                          label="&nbsp;&nbsp;View"
-                          value={state.company_view}
-                          className="form-control"
-                          placeholder="Enter View"
-                          type="checkbox"
-                        />
+        <div className="form-check mb-3">{console.log(state.q_view)}
+
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="company_view"
+                    name="company_view"
+                    checked={state.company_view}
+                    onChange={() => {
+                      changeCheckbox(!state.company_view,'company_view')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="company_view">
+                  View
+                  </label>
+
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="company_edit"
-                          label="&nbsp;&nbsp;Edit"
-                          value={state.company_edit}
-                          className="form-control"
-                          placeholder="Enter Edit"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="company_edit"
+                    name="company_edit"
+                    checked={state.company_edit}
+                    onChange={() => {
+                      changeCheckbox(!state.company_edit,'company_edit')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="company_edit">
+                  Edit
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="company_add"
-                          label="&nbsp;&nbsp;Add"
-                          value={state.company_add}
-                          className="form-control"
-                          placeholder="Enter Add"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="company_add"
+                    name="company_add"
+                    checked={state.company_add}
+                    onChange={() => {
+                      changeCheckbox(!state.company_add,'company_add')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="company_add">
+                  Add
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="company_delete"
-                          label="&nbsp;&nbsp;Delete"
-                          value={state.company_delete}
-                          className="form-control"
-                          placeholder="Enter Delete"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="company_delete"
+                    name="company_delete"
+                    checked={state.company_delete}
+                    onChange={() => {
+                      changeCheckbox(!state.company_delete,'company_delete')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="company_delete">
+                  Delete
+                  </label>
+        
         </div>
         
       </Col>
       </Row>
      
+
       <Row>
     <h6>
       Employee
     </h6>
     <hr></hr>
 </Row>
-
 <Row>
 <Col lg={3}>
-        <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="emp_view"
-                          label="&nbsp;&nbsp;View"
-                          value={state.emp_view}
-                          className="form-control"
-                          placeholder="Enter View"
-                          type="checkbox"
-                        />
+        <div className="form-check mb-3">{console.log(state.q_view)}
+
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="emp_view"
+                    name="emp_view"
+                    checked={state.emp_view}
+                    onChange={() => {
+                      changeCheckbox(!state.emp_view,'emp_view')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="emp_view">
+                  View
+                  </label>
+
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="emp_edit"
-                          label="&nbsp;&nbsp;Edit"
-                          value={state.emp_edit}
-                          className="form-control"
-                          placeholder="Enter Edit"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="emp_edit"
+                    name="emp_edit"
+                    checked={state.emp_edit}
+                    onChange={() => {
+                      changeCheckbox(!state.emp_edit,'emp_edit')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="emp_edit">
+                  Edit
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="emp_add"
-                          label="&nbsp;&nbsp;Add"
-                          value={state.emp_add}
-                          className="form-control"
-                          placeholder="Enter Add"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="emp_add"
+                    name="emp_add"
+                    checked={state.emp_add}
+                    onChange={() => {
+                      changeCheckbox(!state.emp_add,'emp_add')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="emp_add">
+                  Add
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="emp_delete"
-                          label="&nbsp;&nbsp;Delete"
-                          value={state.emp_delete}
-                          className="form-control"
-                          placeholder="Enter Delete"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="emp_delete"
+                    name="emp_delete"
+                    checked={state.emp_delete}
+                    onChange={() => {
+                      changeCheckbox(!state.emp_delete,'emp_delete')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="emp_delete">
+                  Delete
+                  </label>
+        
         </div>
         
       </Col>
       </Row>
-     
+
       <Row>
     <h6>
       Catogreies
     </h6>
     <hr></hr>
 </Row>
-
 <Row>
 <Col lg={3}>
-        <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="cat_view"
-                          label="&nbsp;&nbsp;View"
-                          value={state.cat_view}
-                          className="form-control"
-                          placeholder="Enter View"
-                          type="checkbox"
-                        />
+        <div className="form-check mb-3">{console.log(state.q_view)}
+
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="cat_view"
+                    name="cat_view"
+                    checked={state.cat_view}
+                    onChange={() => {
+                      changeCheckbox(!state.cat_view,'cat_view')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="cat_view">
+                  View
+                  </label>
+
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="cat_edit"
-                          label="&nbsp;&nbsp;Edit"
-                          value={state.cat_edit}
-                          className="form-control"
-                          placeholder="Enter Edit"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="cat_edit"
+                    name="cat_edit"
+                    checked={state.cat_edit}
+                    onChange={() => {
+                      changeCheckbox(!state.cat_edit,'cat_edit')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="cat_edit">
+                  Edit
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="cat_add"
-                          label="&nbsp;&nbsp;Add"
-                          value={state.cat_add}
-                          className="form-control"
-                          placeholder="Enter Add"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="cat_add"
+                    name="cat_add"
+                    checked={state.cat_add}
+                    onChange={() => {
+                      changeCheckbox(!state.cat_add,'cat_add')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="cat_add">
+                  Add
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="cat_delete"
-                          label="&nbsp;&nbsp;Delete"
-                          value={state.cat_delete}
-                          className="form-control"
-                          placeholder="Enter Delete"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="cat_delete"
+                    name="cat_delete"
+                    checked={state.cat_delete}
+                    onChange={() => {
+                      changeCheckbox(!state.cat_delete,'cat_delete')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="cat_delete">
+                  Delete
+                  </label>
+        
         </div>
         
       </Col>
       </Row>
-     
+
       <Row>
     <h6>
       Main Items
@@ -739,63 +867,87 @@ useEffect(()=>{
 
 <Row>
 <Col lg={3}>
-        <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="main_view"
-                          label="&nbsp;&nbsp;View"
-                          value={state.main_view}
-                          className="form-control"
-                          placeholder="Enter View"
-                          type="checkbox"
-                        />
+        <div className="form-check mb-3">{console.log(state.q_view)}
+
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="main_view"
+                    name="main_view"
+                    checked={state.main_view}
+                    onChange={() => {
+                      changeCheckbox(!state.main_view,'main_view')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="main_view">
+                  View
+                  </label>
+
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="main_edit"
-                          label="&nbsp;&nbsp;Edit"
-                          value={state.main_edit}
-                          className="form-control"
-                          placeholder="Enter Edit"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="main_edit"
+                    name="main_edit"
+                    checked={state.main_edit}
+                    onChange={() => {
+                      changeCheckbox(!state.main_edit,'main_edit')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="main_edit">
+                  Edit
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="main_add"
-                          label="&nbsp;&nbsp;Add"
-                          value={state.main_add}
-                          className="form-control"
-                          placeholder="Enter Add"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="main_add"
+                    name="main_add"
+                    checked={state.main_add}
+                    onChange={() => {
+                      changeCheckbox(!state.main_add,'main_add')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="main_add">
+                  Add
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="main_delete"
-                          label="&nbsp;&nbsp;Delete"
-                          value={state.main_delete}
-                          className="form-control"
-                          placeholder="Enter Delete"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="main_delete"
+                    name="main_delete"
+                    checked={state.main_delete}
+                    onChange={() => {
+                      changeCheckbox(!state.main_delete,'main_delete')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="main_delete">
+                  Delete
+                  </label>
+        
         </div>
         
       </Col>
       </Row>
      
+
 
       <Row>
     <h6>
@@ -804,64 +956,90 @@ useEffect(()=>{
     <hr></hr>
 </Row>
 
+
 <Row>
 <Col lg={3}>
-        <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="line_view"
-                          label="&nbsp;&nbsp;View"
-                          value={state.line_view}
-                          className="form-control"
-                          placeholder="Enter View"
-                          type="checkbox"
-                        />
+        <div className="form-check mb-3">{console.log(state.q_view)}
+
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="line_view"
+                    name="line_view"
+                    checked={state.line_view}
+                    onChange={() => {
+                      changeCheckbox(!state.line_view,'line_view')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="line_view">
+                  View
+                  </label>
+
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="line_edit"
-                          label="&nbsp;&nbsp;Edit"
-                          value={state.line_edit}
-                          className="form-control"
-                          placeholder="Enter Edit"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="line_edit"
+                    name="line_edit"
+                    checked={state.line_edit}
+                    onChange={() => {
+                      changeCheckbox(!state.line_edit,'line_edit')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="line_edit">
+                  Edit
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="line_add"
-                          label="&nbsp;&nbsp;Add"
-                          value={state.line_add}
-                          className="form-control"
-                          placeholder="Enter Add"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="line_add"
+                    name="line_add"
+                    checked={state.line_add}
+                    onChange={() => {
+                      changeCheckbox(!state.line_add,'line_add')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="line_add">
+                  Add
+                  </label>
         </div>
         
       </Col>
       <Col lg={3}>
         <div className="form-check mb-3">
-        <AvField  
-        className="form-check-label"
-                          name="line_delete"
-                          label="&nbsp;&nbsp;Delete"
-                          value={state.line_delete}
-                          className="form-control"
-                          placeholder="Enter Delete"
-                          type="checkbox"
-                        />
+        <input
+                    type="checkbox"
+                    className="form-check-input checkbox"
+                    id="line_delete"
+                    name="line_delete"
+                    checked={state.line_delete}
+                    onChange={() => {
+                      changeCheckbox(!state.line_delete,'line_delete')
+                    }}
+                  />
+
+                  <label className="form-check-label" htmlFor="line_delete">
+                  Delete
+                  </label>
+        
         </div>
         
       </Col>
       </Row>
+     
+
 
     <Row>
       <Col lg={12}>

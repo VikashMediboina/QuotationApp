@@ -45,6 +45,13 @@ const App = props => {
           ))}
           
           {userRoutes.map((route, idx) => (
+          route.path=="/forgot-password"?<Authmiddleware
+          path={route.path}
+          layout={NonAuthLayout}
+          component={route.component}
+          key={idx}
+          isAuthProtected={true}
+        />:
             <Authmiddleware
               path={route.path}
               layout={Layout}

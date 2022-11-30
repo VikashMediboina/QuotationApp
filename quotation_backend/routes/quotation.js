@@ -2,7 +2,7 @@ const express=require("express")
 const { Validator } = require("express-json-validator-middleware");
 const errorHandler = require("../middleware/error_handler");
 const { update_line_item_service } = require("../services/line.services");
-const {  create_qutations_service, get_all_qutations, get_all_main_items_qutations, get_all_line_items_qutations, create_qutation_service, create_qutation_main_item_service, create_qutation_line_item_service, update_customer_qutation_service, update_main_items_qutation_service, get_qutation_by_id, delete_qutation_service, delete_main_item_qutation_service, delete_line_item_qutation_service, update_status } = require("../services/quotation.services");
+const {  create_qutations_service, get_all_qutations, get_all_main_items_qutations, get_all_line_items_qutations, create_qutation_service, create_qutation_main_item_service, create_qutation_line_item_service, update_customer_qutation_service, update_main_items_qutation_service, get_qutation_by_id, delete_qutation_service, delete_main_item_qutation_service, delete_line_item_qutation_service, update_status, get_reports, get_reports_by_id } = require("../services/quotation.services");
 
 const quotation_router=express.Router()
 
@@ -38,6 +38,7 @@ quotation_router.post("/insertCustomer/" ,(req,res,next)=>{
             line_item_details:req.body.line_item_details,
             main_item_details:req.body.main_item_details,
             inserted_by:req.body.inserted_by,
+            company_detail_id:req.body.company_detail_id,
             inserted_date:new Date()
         }
         create_qutation_service(request_body)
@@ -91,7 +92,10 @@ quotation_router.post("/insertLineItems/:quotation_id" ,(req,res,next)=>{
 
 
 quotation_router.get("/allQuotations/",(req,res,next)=>{
-    get_all_qutations()
+    const request_body={
+        company_detail_id:req.query.company_id
+    }
+    get_all_qutations(request_body)
         .then(values=>{
             console.log(values)
             res.status(200).json({'values':values})
@@ -288,6 +292,7 @@ quotation_router.post("/updateActive/:id" ,(req,res,next)=>{
             quotation_id:req.params.id,
             quot_status:req.body.quot_status,
             updated_by:req.body.updated_by,
+            company_detail_id:req.body.company_detail_id,
             updated_date:new Date()
         }
         update_status(request_body)
@@ -299,6 +304,37 @@ quotation_router.post("/updateActive/:id" ,(req,res,next)=>{
         next(err)
         })
 })
+
+quotation_router.get("/getReports/:company/:id/" ,(req,res,next)=>{
+    console.log(req.params)
+        const request_body={
+            user_id:req.params.id,
+            company_id:req.params.company
+            // time:(req.params.time)
+        }
+        get_reports_by_id(request_body)
+        .then(values=>{
+            console.log(values)
+            res.status(200).json({"values":values})
+        })
+        .catch(err=>{
+        next(err)
+        })
+})
+quotation_router.get("/getReports/:company/" ,(req,res,next)=>{
+    const request_body={
+        company_id:Number(req.params.company)
+    }
+    get_reports(request_body)
+    .then(values=>{
+        console.log(values)
+        res.status(200).json({"values":values})
+    })
+    .catch(err=>{
+    next(err)
+    })
+})
+
 quotation_router.use(errorHandler)
 
 module.exports=quotation_router
