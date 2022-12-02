@@ -136,6 +136,7 @@ const [clone,setclone]=useState(null)
         comment:v.comment
     }).then((val)=>{
       setmodal(false)
+      fetchData()
 
         props.setAlert({
           message:val.data.msg,

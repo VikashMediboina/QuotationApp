@@ -2,13 +2,21 @@
 import { MDBDataTable } from "mdbreact"
 import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap"
 
-import React from "react"
-
+import React, { useEffect, useState } from "react"
+import { GET_REPORTS } from "../../../Constonts/api"
+import axios from "axios"
+import { connect } from "react-redux"
+import {setAlert} from "../../../store/genric/genericAction"
+import PropTypes from 'prop-types'
+import Select from "react-select";
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 
-const Reports = () => {
- 
+const Reports = (props) => {
+  const {login}=props
+  const [details,setDetails]=useState([])
+  const [reportingEmp,setReportingEmp]=useState([])
+  const [selectedcustGroup1, setselectedcustGroup1] = useState(null);
 	 const data = {
     columns: [
       {
@@ -77,7 +85,69 @@ const Reports = () => {
     ],
   }
 	
-	
+	const fetchData=(emp)=>{
+   axios.get(GET_REPORTS+login?.company_id+"/"+emp.employee_id).then((val)=>{
+     
+       // props.setAlert({
+       //   message:val.data.msg,
+       //   type:"SUCCESS"
+       // })
+       const data = {
+
+        columns: [
+          {
+            label: "Status",
+            field: "quot_status",
+            sort: "asc",
+            width: 150,
+          },
+          {
+            label: "Count",
+            field: "count",
+            sort: "asc",
+            width: 270,
+          }
+        ],
+         rows:val.data.values}
+         console.log(val.data)
+       setDetails(data)
+     
+   }).catch(err=>{
+    if(err?.response){
+      console.log(err?.response?.data?.msg)
+      props.setAlert({
+        message:String(err?.response?.data?.msg),
+        type:"ERROR"
+      })
+    }
+    else{
+      props.setAlert({
+        message:String(err),
+        type:"ERROR"
+      })
+    }
+     
+   })
+ }
+ const handleSelectGroup=(selectedGroup)=> {
+  fetchData(selectedGroup)
+  setselectedcustGroup1(selectedGroup);
+}
+ useEffect(()=>{
+  let emp=login?.reported_employees.map((employe,index)=>{
+    return{
+        ...employe,
+        label:employe.employee_name,
+        value:employe.employee_id
+    }
+})
+setReportingEmp(emp)
+if(emp?.length>0){
+    fetchData(emp?.[0])
+setselectedcustGroup1(emp?.[0]);
+}
+ },[])
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -89,12 +159,27 @@ const Reports = () => {
           <Col className="col-12">
             <Card>
               <CardBody>
+              <Row>
+                               <Col size={6}>
+                               <Select 
+                             value={selectedcustGroup1}
+                             onChange={
+                               handleSelectGroup
+                             }
+                             
+                             options={reportingEmp}
+                             classNamePrefix="select2-selection"
+                            placeholder="Select Employee"
+                            />
+                               </Col>
+                           </Row>
+                              
                 <CardTitle>Reports</CardTitle>
                 <CardSubtitle className="mb-3">
                    
                   </CardSubtitle>
 
-                <MDBDataTable responsive striped bordered data={data} />
+                <MDBDataTable responsive striped bordered data={details} />
               </CardBody>
             </Card>
           </Col>
@@ -103,5 +188,14 @@ const Reports = () => {
     </React.Fragment>
   )
 }
+const mapStateToProps = state => {
+  const { cacheDetails } = state?.genricReducer
+  const { login } = state?.Login
+ 
+  return {  cacheDetails,login}
+}
+export default connect(mapStateToProps, { setAlert })(Reports);
 
-export default Reports
+Reports.propTypes = {
+  setAlert: PropTypes.func,
+}

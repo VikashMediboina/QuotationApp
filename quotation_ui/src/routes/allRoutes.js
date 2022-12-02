@@ -65,7 +65,7 @@ const userRoutes = [
   { path: "/qutation/:q_id", component: ShowOutside },
   { path: "/addCompany", component: AddCompany },
   // this route should be at the end of all other routes
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
 ]
 
 const authRoutes = [

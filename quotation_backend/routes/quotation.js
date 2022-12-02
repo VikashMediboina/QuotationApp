@@ -399,7 +399,7 @@ quotation_router.post("/updateActive/:id" ,(req,res,next)=>{
         update_customer_qutation_service(request_body)
         .then(values=>{
             console.log(values)
-            res.status(200).json({"msg":values})
+            res.status(200).json(values)
         })
         .catch(err=>{
         next(err)

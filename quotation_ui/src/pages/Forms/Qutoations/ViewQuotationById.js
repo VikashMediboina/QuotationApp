@@ -29,7 +29,7 @@ const ViewPrintQuotationById = (props) => {
     const [totalSum,setTotalSum]=useState(0)
     const [descountSum,setDescountSum]=useState(0)
     const [netSum,setNetSum]=useState(0)
-    const ref = createRef();
+    // const ref = createRef();
     const fetchDetails=()=>{
         axios.get(GET_CUSTOMER_QUTOATION_URL+quotation_id).then((val)=>{
             setDetails(val.data.values[0])
@@ -130,7 +130,7 @@ useEffect(()=>{
             {/* <div className="page-content"> */}
             
            {details? <div style={{ border: 1, padding: "30px" }}>
-                <Row id="printme2" ref={ref} >
+                <Row id="printme2"  >
                     <Col sm={12} >
 <div style={{width:"900px"}}>
 <Card>

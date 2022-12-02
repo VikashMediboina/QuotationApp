@@ -7,7 +7,7 @@ const Footer = () => {
       <footer className="footer">
         <Container fluid={true}>
           <Row>
-            <Col sm={6}>V 1.2(Bug Fixes) - {new Date().getFullYear()} © Rochana Industries Pvt. Ltd.</Col>
+            <Col sm={6}>V 1.3(Bug Fixes and New Requirments) - {new Date().getFullYear()} © Rochana Industries Pvt. Ltd.</Col>
             <Col sm={6}>
               <div className="text-sm-end d-none d-sm-block">
               <i className="mdi mdi-heart text-danger"></i>  
