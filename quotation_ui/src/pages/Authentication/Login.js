@@ -128,6 +128,12 @@ const Login = (props) => {
           }
         })
   }
+  const arrayBufferToBase64=(buffer) =>{
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+  }
   return (
     <React.Fragment>
       <div className="home-btn d-none d-sm-block">
@@ -229,9 +235,13 @@ const Login = (props) => {
           <>
           <h1>Select company</h1>
           <Row>
-            {login.map((val,index)=><Col key={index} onClick={()=>onCompanySelect(val)}>
+            {login.map((val,index)=><Col lg={3}key={index} onClick={()=>onCompanySelect(val)}>
             <div className="card overflow-hidden">
                 <div className="text-center">
+                  {console.log('data:image/jpeg;base64,'+(val?.company_logo))}
+                  <img src={ 
+                    'data:image/png;base64,' +
+                    val?.company_logo} className="img-fluid mx-auto d-block"></img>
           {val.company_name}
         </div>
         </div>

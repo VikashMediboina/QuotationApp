@@ -20,13 +20,13 @@ const [company,setCompany]=useState([])
 const [dropDownMainItems,setdropDownMainItems]=useState([])
 const [roomType,setRoomType]=useState("")
 const [selectedMainItems,setselectedMainItems]=useState({})
-const [length,setlength]=useState(defalutValues?.length?defalutValues?.length:1)
-const [main_item_depth,setmain_item_depth]=useState(defalutValues?.main_item_depth)
-const [unit_price,setunit_price]=useState(defalutValues?.unit_price)
-const [width,setwidth]=useState(defalutValues?.width?defalutValues?.width:1)
-const [depth,setdepth]=useState(defalutValues?.depth?defalutValues?.depth:1)
-const [quantity,setquantity]=useState(defalutValues?.quantity?defalutValues?.quantity:1)
-const [disc_price,setdisc_price]=useState(defalutValues?.disc_price?defalutValues?.disc_price:0)
+const [length,setlength]=useState(defaultval?.length?defaultval?.length:1)
+const [main_item_depth,setmain_item_depth]=useState(defaultval?.main_item_depth)
+const [unit_price,setunit_price]=useState(defaultval?.unit_price)
+const [height,setheight]=useState(defaultval?.height?defaultval?.height:1)
+const [depth,setdepth]=useState(defaultval?.depth?defaultval?.depth:1)
+const [quantity,setquantity]=useState(defaultval?.quantity?defaultval?.quantity:1)
+const [disc_price,setdisc_price]=useState(defaultval?.disc_price?defaultval?.disc_price:0)
 const fetch_tax=()=>{
   for(let i=0;i<cacheDetails.tax_type;i++){
     if(cacheDetails.tax_type[i].key==selectedMainItems.tax_type){
@@ -200,6 +200,11 @@ const onchangeMainItem=(e,v)=>{
 useEffect(()=>{
   let dropDownItems=[]
   setDefaultValues(defaultval)
+  setquantity(defaultval.quantity?defaultval.quantity:1)
+  setheight(defaultval.height?defaultval.height:1)
+  setlength(defaultval.length?defaultval.length:1)
+  setdisc_price(defaultval.disc_price?defaultval.disc_price:0)
+
   for(let i=0;i<mainItems.length;i++){
     if(mainItems[i].room_type==defaultval.room_type){
       dropDownItems.push(mainItems[i])
@@ -335,14 +340,14 @@ useEffect(()=>{
         <div className="mb-3">
         <div class="right-inner-addon">
         <AvField
-                          name="width"
-                          label="Width in ft"
-                          value={width}
+                          name="height"
+                          label="Height in ft"
+                          value={height}
                           className="form-control"
-                          placeholder="Enter Width"
+                          placeholder="Enter Height"
                           type="number"
                           required
-                          onChange={(e,v)=>{setwidth(v)
+                          onChange={(e,v)=>{setheight(v)
                           }
                         }
                         />
@@ -378,7 +383,7 @@ useEffect(()=>{
         <AvField
                           name="tot_area"
                           label="Total Area"
-                          value={length*width}
+                          value={length*height}
                           className="form-control"
                           placeholder="Enter Total Area"
                           type="number"
@@ -412,7 +417,7 @@ useEffect(()=>{
         <AvField
                           name="tot_price"
                           label="Total Price"
-                          value={length*width*quantity*depth*unit_price/(main_item_depth)}
+                          value={length*height*quantity*depth*unit_price/(main_item_depth)}
                           className="form-control"
                           placeholder="Enter Total Price"
                           type="number"
@@ -462,7 +467,7 @@ useEffect(()=>{
         <AvField
                           name="net_price"
                           label="Net Price"
-                          value={(length*width*quantity*depth*unit_price/(main_item_depth))-disc_price}
+                          value={(length*height*quantity*depth*unit_price/(main_item_depth))-disc_price}
                           className="form-control"
                           placeholder="Enter Net Price"
                           type="number"
@@ -484,7 +489,7 @@ useEffect(()=>{
     <Row>
       <Col lg={12}>
         <div className="text-right float-end">
-          <button type="submit" className="btn btn-primary" disabled={dropDownMainItems.length<=0 || (length*width*quantity*depth*unit_price/(main_item_depth))<=0}>
+          <button type="submit" className="btn btn-primary" disabled={dropDownMainItems.length<=0 || (length*height*quantity*depth*unit_price/(main_item_depth))<=0}>
             Submit
             </button>
         </div>

@@ -25,6 +25,7 @@ company_router.post("/insert/",validate({ body: company_create_schema }),(req,re
             company_name:req.body.company_name,
             location:req.body.location,
             inserted_by:req.body.inserted_by,
+            company_logo:req.body.company_logo,
             inserted_date:new Date()
         }
         create_company_service(request_body)
@@ -58,6 +59,7 @@ company_router.put("/update/:id",validate({ body: company_update_schema }),(req,
         company_name:req.body.company_name,
         location:req.body.location,
         access:req.body.access,
+        company_logo:req.body.company_logo, 
         updated_by:req.body.updated_by,
         updated_date:new Date()
     }

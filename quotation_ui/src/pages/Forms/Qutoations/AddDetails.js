@@ -216,7 +216,6 @@ const AddDetails = (props) => {
             for(let i=0;i<val.data.values.length;i++){
                 add_line_items(val.data.values[i])
             }
-            console.log(val.data.values)
             setLineItemsQutation(val.data.values)
             
           }).catch(err=>{
@@ -268,7 +267,6 @@ useEffect(()=>{
         discsum+=Number(lineItemsQutation[i]?.disc_price)
         netsums+=Number(lineItemsQutation[i]?.net_price)
         }
-        console.log(line)
         itemsInside=mainItemsQutation.map(item=>(
                 {
                     ...item,
@@ -281,6 +279,7 @@ useEffect(()=>{
         discsum+=Number(mainItemsQutation[i]?.disc_price)
         netsums+=Number(mainItemsQutation[i]?.net_price)
                 }
+                console.log()
             setItems(itemsInside)
             setTotalSum(sum)
             setDescountSum(discsum)
@@ -293,6 +292,8 @@ useEffect(()=>{
         setmodal(!modal)
     }
     const addLineItems = (row) => {
+        setDefaultLineVal({})
+        setFormType("Add")
         setmodal(true)
         setform("Line")
         setSeqNo(row.seq_no)
@@ -316,14 +317,63 @@ useEffect(()=>{
     }
     const onDeleteMainButton = (row) => {
         axios.post(DELETE_MAIN_QUTOATION_URL+row.quotation_id,{
-            seq_no:row.seq_no
+            "seq_no":row.seq_no,
+            "room_type":row.room_type,
+            "main_item_id":Number(row.main_item_id),
+            "main_item_title":row.main_item_title,
+            "main_item_desc":row.main_item_desc,
+            "length":row.length,
+            "height":row.height,
+            "depth":Number(row.depth),
+            "tot_area":row.tot_area,
+            "quantity":row.quantity,
+            "unit_price":row.unit_price,
+            "tot_price":row.tot_price,
+            "disc_price":row.disc_price?row.disc_price:0,
+            "net_price":row.net_price,
+            "cgst":row.cgst,
+            "sgst":row.sgst,
+            "igst":row.igst,
+            "tax_type":row.tax_type,
+            "main_item_depth":Number(row.main_item_depth),
+            "org_unit_price":0,
+            "updated_by":login.employee_id
         }).then((val)=>{
-    
-            props.setAlert({
-              message:val.data.msg,
-              type:"SUCCESS"
-            })
-            fetchDetails()
+            console.log(row.lineItems)
+            for(let i=0;i<row.lineItems.length;i++){
+                axios.post(DELETE_LINE_QUTOATION_URL+row.quotation_id,{
+                    "seq_no":row.lineItems[i].seq_no,
+                    "line_seq_no":row.lineItems[i].line_seq_no,
+                "room_type":row.lineItems[i].room_type,
+                "line_item_id":Number(row.lineItems[i].line_item_id),
+                "line_item_title":row.lineItems[i].line_item_title,
+                "line_item_desc":row.lineItems[i].line_item_desc,
+                "quantity":row.lineItems[i].quantity,
+                "unit_price":row.lineItems[i].unit_price,
+                "tot_price":row.lineItems[i].tot_price,
+                "disc_price":row.lineItems[i].disc_price?row.lineItems[i].disc_price:0,
+                "net_price":row.lineItems[i].net_price,
+                "cgst":row.lineItems[i].cgst,
+                "sgst":row.lineItems[i].sgst,
+                "igst":row.lineItems[i].igst,
+                "tax_type":row.lineItems[i].tax_type,
+                "org_unit_price":row.lineItems[i].org_unit_price,
+                "updated_by":login.employee_id
+                }).then((val)=>{
+            
+                    props.setAlert({
+                      message:val.data.msg,
+                      type:"SUCCESS"
+                    })
+                }).catch(err=>{
+                  props.setAlert({
+                    message:String(err),
+                    type:"ERROR"
+                  })
+                })
+            }
+            
+              fetchDetails()
         }).catch(err=>{
           props.setAlert({
             message:String(err),
@@ -332,29 +382,67 @@ useEffect(()=>{
         })
     }
     const confirmAndPrint=()=>{
-        axios.post(CHANGE_STATUS_ACTIVE_URL+quotation_id,{
-            quot_status:cacheDetails.status_code[1],
-            company_detail_id:login.company_id,
-            "updated_by":login.employee_id
-        }).then((val)=>{
-    
-            props.setAlert({
-              message:val.data.msg,
-              type:"SUCCESS"
+        if(details.quot_status===cacheDetails.status_code[0]){
+            axios.post(CHANGE_STATUS_ACTIVE_URL+quotation_id,{
+                quot_status:cacheDetails.status_code[1],
+                "customer_name":details.customer_name,
+                "cust_profile":details.cust_profile,
+                "mail_id":details.mail_id,
+                "address_2":details?.address_2,
+                "quotation_date":details.quotation_date,
+                "customer_id":details.customer_id,
+                "lead_by":details.lead_by,
+                "lead_by_name":details.lead_by_name,
+                "shop_manager_id":details?.shop_manager_id,
+                "city":details.city,
+                "country":details.country,
+                "mobile_1":details.mobile_1,
+                "address_3":details.address_3,
+                "state":details.state,
+                "address_1":details.address_1,
+                "pin_code":Number(details.pin_code),
+                company_detail_id:login.company_id,
+                "updated_by":login.employee_id
+            }).then((val)=>{
+        
+                props.setAlert({
+                  message:val.data.msg,
+                  type:"SUCCESS"
+                })
+                setquotation_id(quotation_id)
+                changeTab(3)
+            }).catch(err=>{
+              props.setAlert({
+                message:String(err),
+                type:"ERROR"
+              })
             })
-            setquotation_id(quotation_id)
+        }
+        else{
             changeTab(3)
-        }).catch(err=>{
-          props.setAlert({
-            message:String(err),
-            type:"ERROR"
-          })
-        })
+
+        }
+      
     }
     const onDeleteLineButton = (row) => {
         axios.post(DELETE_LINE_QUTOATION_URL+row.quotation_id,{
-            seq_no:row.seq_no,
-            line_seq_no:row.line_seq_no
+            "seq_no":row.seq_no,
+            "line_seq_no":row.line_seq_no,
+        "room_type":row.room_type,
+        "line_item_id":Number(row.line_item_id),
+        "line_item_title":row.line_item_title,
+        "line_item_desc":row.line_item_desc,
+        "quantity":row.quantity,
+        "unit_price":row.unit_price,
+        "tot_price":row.tot_price,
+        "disc_price":row.disc_price?row.disc_price:0,
+        "net_price":row.net_price,
+        "cgst":row.cgst,
+        "sgst":row.sgst,
+        "igst":row.igst,
+        "tax_type":row.tax_type,
+        "org_unit_price":row.org_unit_price,
+        "updated_by":login.employee_id
         }).then((val)=>{
     
             props.setAlert({
@@ -383,7 +471,7 @@ useEffect(()=>{
 
                                         <div className="col-3">
                                             <div className="mb-4">
-                                                <img src={logoLight} className="logo-dark" alt="logo dark" height="40" />
+                                                <img src={'data:image/png;base64,' +login?.company_logo} className="logo-dark" alt="logo dark" height="40" />
                                                 {/* <img src={logoLight} className="logo-light" alt="logo light" height="20" /> */}
                                             </div>
                                         </div>
@@ -482,7 +570,7 @@ useEffect(()=>{
                                                             <td>{item?.quantity}</td>
                                                             <td>&#8377; {item.unit_price}</td>
                                                             {/* <td>&#8377; {item.disc_price}</td> */}
-                                                            <td className="text-end">&#8377; {item?.net_price}</td>{console.log(details)}
+                                                            <td className="text-end">&#8377; {item?.net_price}</td>
                                                            {!confirmDetails&&details.quot_status=="Drafted" && <td className="text-end" hidden={confirmDetails}>
                                                                 <button className="btn " onClick={() => onEditMainButton(item)}>
                                                                     <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
@@ -510,7 +598,7 @@ useEffect(()=>{
                                                                     <tr>
                                                                         <td>{index + 1}. {line?.line_item_title}</td>
                                                                         <td>{line?.tot_area} Sqft</td>
-                                                                        <td>{line?.qty}</td>
+                                                                        <td>{line?.quantity}</td>
                                                                         <td>&#8377; {line.unit_price}</td>
                                                                         {/* <td >&#8377; {line.disc_price}</td> */}
                                                                         <td className="text-end">&#8377; {line.net_price}</td>

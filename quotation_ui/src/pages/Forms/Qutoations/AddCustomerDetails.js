@@ -3,20 +3,11 @@ import PropTypes from 'prop-types'
 
 
 import {
-    Card,
-    CardBody,
     Col,
-    Form,
-    Input,
-    Label,
-    NavItem,
-    NavLink,
     Row,
-    TabContent,
-    TabPane
   } from "reactstrap"
   import Select from "react-select";
-  import {setAlert} from "../../../store/genric/genericAction"
+  import {setAlert,clearAlert} from "../../../store/genric/genericAction"
   import {VIEW_EMPLOYEE_URL,VIEW_CUSTOMERS_URL,UPDATE_CUSTOMER_QUTOATION_URL,ADD_CUSTOMER_QUTOATION_URL, GET_CUSTOMER_QUTOATION_URL} from "../../../Constonts/api"
   import { connect } from "react-redux"
   import axios from "axios"
@@ -28,9 +19,9 @@ const AddCustomerDetails=(props)=> {
   // const [selectedcustGroup, setselectedcustGroup] = useState(null);
   const [selectedempGroup1, setselectedempGroup1] = useState(null);
   const [selectedcustGroup1, setselectedcustGroup1] = useState(null);
-  const [customerGroup, setcustomerGroup] = useState(null);
-  const [employeeGroup, setemployeeGroup] = useState(null);
-  const [customers, setCustomers] = useState(null);
+  const [customerGroup, setcustomerGroup] = useState([]);
+  const [employeeGroup, setemployeeGroup] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [employes, setemployes] = useState(null);
   const [fromCust,setFromCust]=useState(null)
   const [defalutValues,setdefalutValues]=useState(null)
@@ -72,6 +63,7 @@ const AddCustomerDetails=(props)=> {
         setemployes(val.data.values)
       fetchDetails(empgrup,custgrup)
     }).catch(err=>{
+      console.log(err)
       props.setAlert({
         message:String(err),
         type:"ERROR"
@@ -83,6 +75,7 @@ const AddCustomerDetails=(props)=> {
     setCustomers(val.data.values)
 
     }).catch(err=>{
+      console.log(err)
       props.setAlert({
         message:String(err),
         type:"ERROR"
@@ -100,12 +93,10 @@ const AddCustomerDetails=(props)=> {
 
   const fetchDetails=(empgrup,custgrup)=>{
     if(quotation_id || clone_id){
-      console.log(clone_id)
       var id=quotation_id?quotation_id:clone_id
       axios.get(GET_CUSTOMER_QUTOATION_URL+id).then((val)=>{
         
         // setDetails(val.da)
-        console.log(val.data,empgrup,custgrup)
         for(let i=0;i<empgrup.length;i++){
           if(empgrup[i].employee_id==val.data.values[0].lead_by){
             setselectedempGroup(empgrup[i])
@@ -114,7 +105,6 @@ const AddCustomerDetails=(props)=> {
         }
         for(let i=0;i<custgrup.length;i++){
           if(custgrup[i].customer_id==val.data.values[0].customer_id){
-            console.log("inside",)
             setselectedcustGroup(custgrup[i])
             setselectedcustGroup1(custgrup[i])
           }
@@ -122,6 +112,7 @@ const AddCustomerDetails=(props)=> {
         setFromCust(val.data.values[0])
         
       }).catch(err=>{
+      console.log(err)
         props.setAlert({
           message:String(err),
           type:"ERROR"
@@ -157,27 +148,29 @@ const AddCustomerDetails=(props)=> {
         "inserted_by":login.employee_id,
         "quotation_date":new Date(),
         "company_detail_id":login.company_id,
-        "quot_status":fromCust?.quot_status?fromCust?.quot_status:cacheDetails?.status_code[0]
+        "quot_status":clone_id?cacheDetails?.status_code[0]:fromCust?.quot_status?fromCust?.quot_status:cacheDetails?.status_code[0]
 
     }
      let url=quotation_id? UPDATE_CUSTOMER_QUTOATION_URL+quotation_id: ADD_CUSTOMER_QUTOATION_URL
       axios.post(url,body).then((val)=>{
         
-          // setAlert({
-          //   message:val.data.msg,
-          //   type:"SUCCESS"
-          // })
+          
           setDetails(body)
           setquotation_id(val.data.quotation_id?val.data.quotation_id:quotation_id)
-          console.log(details)
           if(details.quot_status!=cacheDetails?.status_code[0] && details.quot_status){
             changeTab(3)
           }
           else{
             changeTab(2)
           }
+          clearAlert()
+          setAlert({
+            message:val.data.msg,
+            type:"SUCCESS"
+          })
         
       }).catch(err=>{
+        console.log(err)
         setAlert({
           message:String(err),
           type:"ERROR"
@@ -576,9 +569,10 @@ const mapStateToProps = state => {
   const { cacheDetails } = state?.genricReducer
     return {login,cacheDetails}
   }
-export default connect(mapStateToProps, { setAlert })(AddCustomerDetails)
+export default connect(mapStateToProps, { setAlert ,clearAlert})(AddCustomerDetails)
 
 
 AddCustomerDetails.propTypes = {
   setAlert: PropTypes.func,
+  clearAlert:PropTypes.func
 }

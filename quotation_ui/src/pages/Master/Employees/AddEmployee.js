@@ -71,7 +71,6 @@ const fetchCompanyData=()=>{
 
   const addEmployees=(e,v)=>{
     e.preventDefault()
-    console.log(e,v)
     if(formType=="Add"){
       var body={
         "employee_name":v.employee_name,

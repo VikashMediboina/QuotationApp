@@ -16,6 +16,28 @@ import AvField from 'availity-reactstrap-validation/lib/AvField'
 const   AddcompanyComponent=(props) =>{
   const {formType,defaultval,onAddButtonClose,login,setAlert}=props
 const [defalutValues,setDefaultValues]=useState({})
+const [image,setImage]=useState(null)
+const getBase64=(file,func) =>{
+  let document = "";
+  // var files = file[0];
+  // console.log(file,files)
+  let reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function () {
+      func(reader.result);
+  };
+  reader.onerror = function (error) {
+      console.log('Error: ', error);
+  };
+
+}
+const onImageChange=(e)=>{
+  console.log(e.target.files[0])
+  getBase64(e.target.files[0],(doc)=>{
+    setImage(doc)
+    console.log(doc)
+  })
+}
 
 const addCompany=(e,v)=>{
     e.preventDefault()
@@ -25,7 +47,8 @@ const addCompany=(e,v)=>{
         "company_code":v.company_code,
         "company_name":v.company_name,
         "location":v.location,
-        "inserted_by":login.employee_id
+        "inserted_by":login.employee_id,
+        "company_logo":image.split(',')[1]
     }
      
       axios.post(ADD_COMPANY_URL,body).then((val)=>{
@@ -57,7 +80,8 @@ const addCompany=(e,v)=>{
         "company_code":v.company_code,
         "company_name":v.company_name,
         "location":v.location,
-        "updated_by":login.employee_id
+        "updated_by":login.employee_id,
+        "company_logo":image.split(',')[1]
     }
       axios.put(UPDATE_COMPANY_URL+defaultval.company_id,body).then((val)=>{
         
@@ -138,6 +162,22 @@ useEffect(()=>{
                           className="form-control"
                           placeholder="Enter Location"
                           type="text"
+                          required
+                        />
+        </div>
+      </Col>
+      <Col lg={4}>
+        <div className="mb-3">
+        <AvField
+                          name="company_logo"
+                          label="Logo"
+                          // value="admin@themesbrand.com"
+                          // value={defalutValues?.company_logo}
+                          onChange={(e)=>onImageChange(e)}
+                          className="form-control"
+                          placeholder="Logo"
+                          type="file"
+                          accept="image/png"
                           required
                         />
         </div>

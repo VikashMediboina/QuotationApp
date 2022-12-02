@@ -3,6 +3,8 @@ import { connect } from "react-redux"
 import {
   Alert,
 } from "reactstrap"
+import {clearAlert} from "../../store/genric/genericAction"
+import PropTypes from 'prop-types'
 
 const  Alerts=({alertDetails}) =>{
     const [visible,setvisible]=useState(true)
@@ -11,12 +13,24 @@ const  Alerts=({alertDetails}) =>{
     useEffect(()=>{
         if(alertDetails?.type=="ERROR"){
             setvisible(true)
+            setTimeout(()=>{
+                setvisible(false)
+                setSucessvisible(false)  
+            }, 5000);
         }
         if(alertDetails?.type=="SUCCESS"){
             setSucessvisible(true)
+            setTimeout(()=>{
+                setvisible(false)
+                setSucessvisible(false)  
+                clearAlert()
+            }, 5000);
+        }
+        if(!alertDetails){
+            setvisible(false)
+            setSucessvisible(false)
         }
         setalertDetailsState(alertDetails)
-
     },[alertDetails])
 const onDismiss=()=>{
     setvisible(!visible)
@@ -48,4 +62,9 @@ const mapStateToProps = state => {
     return {alertDetails}
 }
 
-export default connect(mapStateToProps)(Alerts)
+export default connect(mapStateToProps,{clearAlert})(Alerts)
+
+
+Alerts.propTypes = {
+    clearAlert:PropTypes.func
+  }

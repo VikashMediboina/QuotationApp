@@ -23,7 +23,6 @@ import ViewQuotationById from "./ViewQuotationById"
 
 const AddQuotation = ({quotation_props,formType,clone_props}) => {
   // let id  = match.params;
-
   const [activeTab, setactiveTab] = useState(1)
   const [selectedcustGroup, setselectedcustGroup] = useState(null);
   const [selectedempGroup, setselectedempGroup] = useState(null);
@@ -109,12 +108,12 @@ const AddQuotation = ({quotation_props,formType,clone_props}) => {
                       </TabPane>
                       <TabPane tabId={2}>
 
-                      {quotation_id&& <AddDetails    selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
+                      {quotation_id&& activeTab===2 && <AddDetails    selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
                       setselectedempGroup={setselectedempGroup} clone_id={clone_id} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} formType={type} quotation_id={quotation_id} changeTab={toggleTab}/>}
                       </TabPane>
                      
                       <TabPane tabId={3}>
-                      {quotation_id && activeTab==3 && <ViewQuotationById   quotation_id={quotation_id} />}
+                      {quotation_id && activeTab===3  && activeTab==3 && <ViewQuotationById   quotation_id={quotation_id} />}
                       </TabPane>
                     </TabContent>
                   </div>

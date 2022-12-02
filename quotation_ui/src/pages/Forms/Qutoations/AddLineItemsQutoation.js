@@ -124,7 +124,8 @@ const fetch_line_items=(id,value)=>{
         "sgst":v.net_price*fetch_tax()*0.5,
         "igst":0,
         "tax_type":selectedlineItems.tax_type,
-        "org_unit_price":0
+        "org_unit_price":0,
+        "updated_by":login.employee_id
     }
       axios.put(UPDATE_LINE_ITEMS_QUTOATION_URL+quotation_id,body).then((val)=>{
         
@@ -180,13 +181,13 @@ const onchangeLineItem=(e,v)=>{
 useEffect(()=>{
   let dropDownItems=[]
   setDefaultValues(defaultval)
-  console.log(defaultval)
+  setquantity(defaultval.quantity?defaultval.quantity:1)
+  setdisc_price(defaultval.disc_price?defaultval.disc_price:0)
   for(let i=0;i<lineItems.length;i++){
     if(lineItems[i].room_type==defaultval?.room_type){
       dropDownItems.push(lineItems[i])
     }
   }
-  console.log(dropDownItems)
   for(let i=0;i<dropDownItems.length;i++){
     if(dropDownItems[i].line_item_id==defaultval?.line_item_id){
       setselectedlineItems(dropDownItems[i])

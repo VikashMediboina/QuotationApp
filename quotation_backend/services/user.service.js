@@ -51,7 +51,10 @@ const create_user_service = (body) => new Promise((resolve, reject) => {
         
 
         
-     pool.query(`SELECT * from  employment c , company_dtl cd,login l Where c.employee_id=l.employee_id and cd.company_id=c.company_id and l.email=$1 and l.emp_status='ACTIVE' and l.password = crypt($2, password)`,
+     pool.query(`SELECT l.employee_id,l.email,c.access,l.updated_by,cd.company_code,cd.company_name,
+     cd.company_name,c.job_code,cd.company_id,encode(cd.company_logo, 'base64') as company_logo
+      from  employment c , company_dtl cd,login l Where c.employee_id=l.employee_id and cd.company_id=c.company_id 
+      and l.email=$1 and l.emp_status='ACTIVE' and l.password = crypt($2, password)`,
         [ body.employee_email,body.employee_password],)
         .then((results) => {
             if(results.rowCount==0){
@@ -71,7 +74,8 @@ const create_user_service = (body) => new Promise((resolve, reject) => {
                             "company_code": results.rows[i].company_code,
                             "company_name": results.rows[i].company_name,
                             "job_code":results.rows[i].job_code,
-                            "company_id":results.rows[i].company_id
+                            "company_id":results.rows[i].company_id,
+                            "company_logo":results.rows[i].company_logo
                         }
                     )
                 }

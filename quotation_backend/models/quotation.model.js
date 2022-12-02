@@ -134,7 +134,9 @@ const create_line_items=(quotation_id,body,new_line_seq_no)=>(
             body.inserted_by,
            new Date(),
            line.tax_type,
-           line.room_type
+           line.room_type,
+           0,
+          body.status 
     ])
 ))
 
@@ -179,7 +181,9 @@ const create_main_items=(quotation_id,body,new_seq_no)=>(
         body.inserted_by,
         new Date(),
         main.tax_type,
-        main.main_item_depth
+        main.main_item_depth,
+        0,
+        body.status 
     ])
 ))
 

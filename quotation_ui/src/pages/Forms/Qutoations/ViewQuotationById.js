@@ -16,7 +16,7 @@ import logoLight from "../../../assets/images/logo-light.png";
 import Pages404 from "../../Utility/pages-404";
 
 const ViewPrintQuotationById = (props) => {
-    const {   quotation_id, } = props
+    const {   quotation_id, login} = props
     const options = {
         orientation: 'landscape',
         unit: 'in',
@@ -144,7 +144,7 @@ useEffect(()=>{
 
                                         <div className="col-3">
                                             <div className="mb-4">
-                                                <img src={logoLight} className="logo-dark" alt="logo dark" height="40" />
+                                                <img src={'data:image/png;base64,' +login?.company_logo} className="logo-dark" alt="logo dark" height="40" />
                                                 {/* <img src={logoLight} className="logo-light" alt="logo light" height="20" /> */}
                                             </div>
                                         </div>
@@ -215,7 +215,7 @@ useEffect(()=>{
                                         </thead>
                                         <tbody>
 
-                                            {items.map((item, index) => {
+                                            {items?.map((item, index) => {
                                                 return (
                                                     <>
                                                         <tr>
@@ -233,7 +233,7 @@ useEffect(()=>{
 
                                                         </tr>
                                                         {
-                                                            item.lineItems.map((line, index) => {
+                                                            item?.lineItems.map((line, index) => {
                                                                 return (
                                                                     <tr>
                                                                         <td>{index + 1}. {line?.line_item_title}</td>

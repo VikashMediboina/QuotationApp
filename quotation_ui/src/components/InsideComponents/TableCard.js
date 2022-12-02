@@ -5,7 +5,7 @@ import { Row, Col, Card, CardBody, CardTitle, CardSubtitle,Button } from "reacts
 import { connect } from 'react-redux'
 
 function TableCard(props) {
-  const {data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEditButton,onDeleteButton,onViewButton,onCloneButton,cacheDetails}=props
+  const {data,addButton,tittle,onAddButton,editIcon,deleteIcon,onEditButton,onDeleteButton,onViewButton,onCloneButton,cacheDetails,onUpdateStatus}=props
     const [newData,setNewData]=useState({})
     useEffect(()=>{
       let dummy=data
@@ -21,7 +21,6 @@ function TableCard(props) {
           }
           
           dummy.rows=dummy.rows.map((row) => {
-            console.log(row,cacheDetails?.status_code[0])
             if(tittle=="Quotations"){
               return {
                 ...row,
@@ -40,6 +39,10 @@ function TableCard(props) {
               {<button  className="btn " onClick={()=>onCloneButton(row)}>
               <i className="bx bx-copy-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
               </button>}
+              {<button className="btn " onClick={()=>onUpdateStatus(row)}>
+              {/* <> */}
+              <i className="bx bx-right-top-arrow-circle font-size-20 align-middle text-primary"></i>{" "}
+              </button>}{" "}
                   </>
                 ),
               };

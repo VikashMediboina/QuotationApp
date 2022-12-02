@@ -11,9 +11,9 @@ const create_company_service = (body) => new Promise((resolve, reject) => {
                 new_company_id = Number(results.rows[0].company_id)+1
             }
         console.log(new_company_id)
-        pool.query(`Insert into company_dtl ("company_id", "company_code","company_name","location","inserted_by","inserted_date")  
-            VALUES ($1, $2,$3,$4,$5,$6)`,
-            [new_company_id, body.company_code, body.company_name, body.location, body.inserted_by, body.inserted_date],
+        pool.query(`Insert into company_dtl ("company_id", "company_code","company_name","location","inserted_by","inserted_date","company_logo")  
+            VALUES ($1, $2,$3,$4,$5,$6,decode($7,'base64'))`,
+            [new_company_id, body.company_code, body.company_name, body.location, body.inserted_by, body.inserted_date,body.company_logo],
         ).then((val) => {
 
             resolve("Inserted SucessFully")
@@ -42,8 +42,8 @@ const get_all_company=()=> new Promise((resolve,reject)=>{
 
 const update_company_service = (body) => new Promise((resolve, reject) => {
 
-    return pool.query(`UPDATE company_dtl SET "company_code"=$1 , "company_name"=$2,"location"=$3,"updated_by"=$4,"updated_date"=$5 WHERE "company_id" = $6`,
-    [ body.company_code, body.company_name, body.location, body.updated_by, body.updated_date,body.company_id],)
+    return pool.query(`UPDATE company_dtl SET "company_code"=$1 , "company_name"=$2,"location"=$3,"updated_by"=$4,"updated_date"=$5,"company_logo"=decode($6,'base64') WHERE "company_id" = $7`,
+    [ body.company_code, body.company_name, body.location, body.updated_by, body.updated_date,body.company_logo ,body.company_id],)
     .then((results) => {
         console.log(results)
             resolve("Update SucessFully")
