@@ -157,7 +157,8 @@ const AddCustomerDetails=(props)=> {
           
           setDetails(body)
           setquotation_id(val.data.quotation_id?val.data.quotation_id:quotation_id)
-          if(details.quot_status!=cacheDetails?.status_code[0] && details.quot_status){
+          console.log(!(details.quot_status==cacheDetails?.status_code[0] || details.quot_status=="Revised") , fromCust?.quot_status)
+          if(!(details.quot_status==cacheDetails?.status_code[0] || details.quot_status=="Revised") && details.quot_status){
             changeTab(3)
           }
           else{
@@ -187,7 +188,7 @@ const AddCustomerDetails=(props)=> {
    <Row>
       <Col md={6} >
 
-      {formType!="Edit"&&<Row  className="mb-3">
+      {formType!="Edit"?<Row  className="mb-3">
                     <label slot='start' className="col-lg-3 col-form-label">Customer</label>
                     <div className="col-lg-9">
                     <Select
@@ -200,7 +201,16 @@ const AddCustomerDetails=(props)=> {
                       classNamePrefix="select2-selection"
                     />
                     </div>
-                  </Row>}
+                  </Row>:
+                  <Row  className="mb-3">
+                  <label slot='start' className="col-lg-3 col-form-label">Customer ID :</label>
+                  <div className="col-lg-9">
+                    <h2>
+                    {selectedcustGroup1?.customer_id}
+                    </h2>
+                 
+                  </div>
+                </Row>}
         </Col>
         <Col md={6} >
 

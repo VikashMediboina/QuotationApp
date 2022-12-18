@@ -63,10 +63,10 @@ const cache_details = {
         "line_add":true,"line_edit":true,"line_view":true,"line_delete":true} },
     ],
     status_code: [
-        "Drafted", "Active", "In-active", "Completed", "Advance received"
+        "Drafted", "Active", "In-active", "Completed", "Advance received","Revised"
     ],
     status_code_options: {
-        "Drafted":["Active","In-active"], "Active":["Completed","Advance received"], "In-active":[], "Completed":[], "Advance received":["Completed"]
+        "Drafted":["Active","In-active"], "Active":["Completed","Advance received","Revised"], "In-active":[], "Completed":[], "Advance received":["Completed"]
     },
     tax_type: [
         { value: 10, key: "type_1" }, { value: 20, key: "type_2" }

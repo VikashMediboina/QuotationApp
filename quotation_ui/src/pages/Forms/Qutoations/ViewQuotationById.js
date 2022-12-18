@@ -80,7 +80,7 @@ useEffect(()=>{
     //        pdf.save("download.pdf");
     //    })
         const printableElements = document.getElementById('printme2').innerHTML;
-        const orderHtml = '<html><head><title></title></head><body><div style="padding:15px;margin:15px;border-style: solid;border-width:2px;border-color:red;">' + printableElements + '</div></body></html>'
+        const orderHtml = '<html><head><title></title></head><body><div style="padding:30px;border-style: solid;border-width:2px;border-color:red;">' + printableElements + '</div></body></html>'
         const oldPage = document.body.innerHTML;
         document.body.innerHTML = orderHtml;
         window.print();
@@ -132,7 +132,7 @@ useEffect(()=>{
            {details? <div style={{ border: 1, padding: "30px" }}>
                 <Row id="printme2"  >
                     <Col sm={12} >
-<div style={{width:"900px"}}>
+<div style={{width:"800px"}}>
 <Card>
 
 
@@ -160,9 +160,9 @@ useEffect(()=>{
                                                     Info@rochanaIndustries.com,<br></br>
                                                     venu@rochanaIndustries.com<br></br>
                                                     +(91) 8567887777, +(91) 8688887777<br></br>
-                                                    {details?.quotation_code!=null?  <h2>
+                                                    {/* {details?.quotation_code!=null?  <h2>
                                                         Q.No:{details.quotation_code}
-                                                    </h2>:""}
+                                                    </h2>:""} */}
                                                 </b>
                                             </div>
                                         </div>

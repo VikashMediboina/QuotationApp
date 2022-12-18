@@ -10,7 +10,8 @@ function* loginUser({ payload: { user, history } }) {
   
   try {
     
-      // localStorage.setItem("authUser", JSON.stringify(user))
+      sessionStorage.setItem("authUser", JSON.stringify(user))
+      // var item_value = sessionStorage.setItem("authUser")
       yield put(loginSuccess(user))
       if(user.email==user.last_user){
         history.push("/dashboard")
@@ -25,7 +26,7 @@ function* loginUser({ payload: { user, history } }) {
 
 function* logoutUser({ payload: { history } }) {
   try {
-    // localStorage.removeItem("authUser")
+    localStorage.removeItem("authUser")
 
    
       yield put(logoutUserSuccess(false))

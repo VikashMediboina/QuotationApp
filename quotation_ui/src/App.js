@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from "react"
+import React, { useEffect } from "react"
 
 import { Switch, BrowserRouter as Router } from "react-router-dom"
 import { connect } from "react-redux"
@@ -17,6 +17,7 @@ import "./App.css"
 import "./assets/scss/theme.scss"
 import VerticalLayout from './components/VerticalLayout'
 import Alerts from './pages/Utility/Alerts'
+import { loginUser } from './store/actions'
 
 
 
@@ -27,6 +28,12 @@ const App = props => {
     let layoutCls = VerticalLayout
     return layoutCls
   }
+  useEffect(()=>{
+    if(sessionStorage.getItem("authUser")){
+      console.log(JSON.parse(sessionStorage.getItem("authUser")))
+      loginUser(JSON.parse(sessionStorage.getItem("authUser")), props.history)
+    }
+  },[])
 
   const Layout = getLayout()
   return (
@@ -78,4 +85,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, null)(App)
+export default connect(mapStateToProps, {loginUser})(App)

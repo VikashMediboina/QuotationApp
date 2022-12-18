@@ -109,7 +109,7 @@ const AddQuotation = ({quotation_props,formType,clone_props}) => {
                       <TabPane tabId={2}>
 
                       {quotation_id&& activeTab===2 && <AddDetails    selectedcustGroup={selectedcustGroup}  setselectedcustGroup={setselectedcustGroup} details={details} setDetails={setDetails}
-                      setselectedempGroup={setselectedempGroup} clone_id={clone_id} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} formType={type} quotation_id={quotation_id} changeTab={toggleTab}/>}
+                      setselectedempGroup={setselectedempGroup} clone_id={clone_id} setclone_id={setclone_id} selectedempGroup={selectedempGroup}  setquotation_id={setquotation_id} formType={type} quotation_id={quotation_id} changeTab={toggleTab}/>}
                       </TabPane>
                      
                       <TabPane tabId={3}>

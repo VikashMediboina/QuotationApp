@@ -13,36 +13,47 @@ function TableCard(props) {
           if(deleteIcon || editIcon){
             dummy.columns.push(
               {
+                label: "Status",
+                field: "status",
+                sort: "asc",
+                width: 250
+              },
+              {
                 label: "Action",
                 field: "action",
                 sort: "asc",
                 width: 250
-              })
+              }
+
+              )
           }
           
-          dummy.rows=dummy.rows.map((row) => {
+          dummy.rows=dummy?.rows?.map((row) => {
             if(tittle=="Quotations"){
               return {
                 ...row,
-                'action': (
-                  <>
-              {<button className="btn " onClick={()=>onEditButton(row)}>
-              {/* <> */}
-              <i className="bx bx-edit-alt font-size-20 align-middle text-primary"></i>{" "}
-              </button>}{" "}
-              {( row?.quot_status==cacheDetails?.status_code[0])&&<button  className="btn " onClick={()=>onDeleteButton(row)}>
-              <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
-              </button>}
-              {( row?.quot_status!=cacheDetails?.status_code[0])&&<button  className="btn " onClick={()=>onViewButton(row)}>
-              <i className="bx bx-window-open font-size-20 align-middle me-2 text-primary"></i>{" "}
-              </button>}
-              {<button  className="btn " onClick={()=>onCloneButton(row)}>
-              <i className="bx bx-copy-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
-              </button>}
-              {<button className="btn " onClick={()=>onUpdateStatus(row)}>
+                'status':(<>
+                {row.quot_status}{<button className="btn " onClick={()=>onUpdateStatus(row)} data-toggle="tooltip" data-placement="bottom" title="Click to Update Status">
               {/* <> */}
               <i className="bx bx-right-top-arrow-circle font-size-20 align-middle text-primary"></i>{" "}
               </button>}{" "}
+                </>),
+                'action': (
+                  <>
+              {(row?.quot_status==cacheDetails?.status_code[0] || row?.quot_status=="Revised" ) && <button className="btn " onClick={()=>onEditButton(row)} data-toggle="tooltip" data-placement="bottom" title="Click to Edit">
+              {/* <> */}
+              <i className="bx bx-edit-alt font-size-20 align-middle text-primary" ></i>{" "}
+              </button>}{" "}
+              {( row?.quot_status==cacheDetails?.status_code[0])&&<button  className="btn " onClick={()=>onDeleteButton(row)} data-toggle="tooltip" data-placement="bottom" title="Click to Delete">
+              <i className="bx bx-trash-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
+              </button>}
+              {( row?.quot_status!=cacheDetails?.status_code[0])&&<button  className="btn " onClick={()=>onViewButton(row)} data-toggle="tooltip" data-placement="bottom" title="Click to View">
+              <i className="bx bx-window-open font-size-20 align-middle me-2 text-primary"></i>{" "}
+              </button>}
+              {<button  className="btn " onClick={()=>onCloneButton(row)} data-toggle="tooltip" data-placement="bottom" title="Click to Clone">
+              <i className="bx bx-copy-alt font-size-20 align-middle me-2 text-primary"></i>{" "}
+              </button>}
+              
                   </>
                 ),
               };
