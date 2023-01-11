@@ -15,9 +15,9 @@ const create_employment_service = (body) => new Promise((resolve, reject) => {
                 }
                 new_emp_id=emp.emp_id
                 console.log(new_employment_id,new_emp_id)
-                pool.query(`Insert into employment ("employment_id", "employee_id","company_id","job_code","start_date","stop_date","inserted_by","inserted_date")  
-            VALUES ($1, $2,$3,$4,$5,$6,$7,$8)`,
-                    [new_employment_id, new_emp_id, body.company_id, body.job_code, body.start_date, body.stop_date, body.inserted_by, body.inserted_date],
+                pool.query(`Insert into employment ("employment_id", "employee_id","company_id","job_code","start_date","stop_date","inserted_by","inserted_date","access")  
+            VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9)`,
+                    [new_employment_id, new_emp_id, body.company_id, body.job_code, body.start_date, body.stop_date, body.inserted_by, body.inserted_date,body.access],
                 ).then((val) => {
                     pool.query('COMMIT').then(()=>{
                         if(emp?.old){
