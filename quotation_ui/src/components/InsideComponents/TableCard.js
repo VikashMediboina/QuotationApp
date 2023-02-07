@@ -10,7 +10,7 @@ function TableCard(props) {
     useEffect(()=>{
       let dummy=data
         if(data.rows){
-          if(deleteIcon || editIcon){
+          if((deleteIcon || editIcon) && tittle=="Quotations"){
             dummy.columns.push(
               {
                 label: "Status",
@@ -18,6 +18,17 @@ function TableCard(props) {
                 sort: "asc",
                 width: 250
               },
+              {
+                label: "Action",
+                field: "action",
+                sort: "asc",
+                width: 250
+              }
+
+              )
+          }
+          if((deleteIcon || editIcon) && tittle!="Quotations"){
+            dummy.columns.push(
               {
                 label: "Action",
                 field: "action",

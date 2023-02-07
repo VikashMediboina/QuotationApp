@@ -57,8 +57,8 @@ const create_customer_service = (body) => new Promise((resolve, reject) => {
         update_address_service((body)).then(res=>{
 
         
-     pool.query(`UPDATE customer SET "customer_name"=$1 , "customer_email"=$2,"customer_phone_number"=$3,"customer_alt_phone_number"=$4,"updated_by"=$5,"updated_date"=$6,"cust_profile"=$7,"pin_code"=$8 WHERE "customer_id" = $9`,
-        [ body.customer_name, body.customer_email, body.customer_phone_number,body.customer_alt_phone_number, body.updated_by, body.updated_date,body.cust_profile,body.pin_code,body.customer_id],)
+     pool.query(`UPDATE customer SET "customer_name"=$1 , "customer_email"=$2,"customer_phone_number"=$3,"customer_alt_phone_number"=$4,"updated_by"=$5,"updated_date"=$6,"cust_profile"=$7 WHERE "customer_id" = $8`,
+        [ body.customer_name, body.customer_email, body.customer_phone_number,body.customer_alt_phone_number, body.updated_by, body.updated_date,body.cust_profile,body.customer_id],)
         .then((results) => {
             console.log(results)
                 resolve("Update SucessFully")
