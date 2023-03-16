@@ -61,13 +61,13 @@ server starts at http://localhost:3000
 
 #### step-1:Building the UI local
 
-cd quotation_ui
+   cd quotation_ui
 
-npm i
+   npm i
 
-npm run build
+   npm run build
 
-build file will be generated at quotation_ui/build
+   build file will be generated at quotation_ui/build
 
 #### step-2:- pushing to github / Copying the build file at quotation_ui/build
 
