@@ -63,7 +63,7 @@ server starts at http://localhost:3000
 
    cd quotation_ui
 
-   npm i
+   npm i  (If it dosent work please try with   -  npx yarn install  (or) yarn install )
 
    npm run build
 
