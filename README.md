@@ -14,7 +14,7 @@ node index.js
 ## For Frontend
 cd quotation_ui
 
-npm i
+npm i  (If it dosent work please try with - npx yarn install (or) yarn install )
 
 npm run start
 
